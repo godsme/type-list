@@ -13,6 +13,9 @@ TYPE_LIST_NS_BEGIN
 template <typename ... Ts>
 struct TypeList : TypeListSignature {
     constexpr static size_t size = sizeof...(Ts); // actually 0
+
+    template <template <typename ...> typename RESULT>
+    using exportTo = RESULT<Ts...>;
 };
 
 template <typename H, typename ... Ts>
@@ -20,6 +23,9 @@ struct TypeList<H, Ts...> : TypeListSignature {
     constexpr static size_t size = sizeof...(Ts) + 1;
     using Head = H;
     using Tail = TypeList<Ts...>;
+
+    template <template <typename ...> typename RESULT>
+    using exportTo = RESULT<H, Ts...>;
 };
 
 TYPE_LIST_NS_END

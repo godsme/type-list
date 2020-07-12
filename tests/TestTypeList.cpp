@@ -22,6 +22,11 @@ namespace {
     template<typename T> requires requires { typename T::Tail; }
     constexpr bool hasTail<T> = true;
 
+    template <typename ... Ts>
+    struct Result {
+        enum { Num_Of_Ts = sizeof...(Ts) };
+    };
+
     TEST_CASE("TypeList") {
         GIVEN("an empty TypeList") {
             using type = TypeList<>;
@@ -40,7 +45,12 @@ namespace {
             THEN("it should has a TypeListSignature") {
                 REQUIRE(std::is_base_of_v<TypeListSignature, type>);
             }
-
+            WHEN("export to a template") {
+                using result = type::template exportTo<Result>;
+                THEN("the num_of_Ts should be 0") {
+                    REQUIRE(0 == result::Num_Of_Ts);
+                }
+            }
         }
 
         WHEN("TypeList is initialized with 3 types") {
@@ -66,6 +76,18 @@ namespace {
             }
             THEN("it should has a TypeListSignature") {
                 REQUIRE(std::is_base_of_v<TypeListSignature, type>);
+            }
+            WHEN("export to a template") {
+                using result = type::template exportTo<Result>;
+                THEN("the num_of_Ts should be 3") {
+                    REQUIRE(3 == result::Num_Of_Ts);
+                }
+            }
+            WHEN("export it's tail to a template") {
+                using result = type::Tail::template exportTo<Result>;
+                THEN("the num_of_Ts should be 2") {
+                    REQUIRE(2 == result::Num_Of_Ts);
+                }
             }
             THEN("it has a Tail") {
                 REQUIRE(hasTail<type>);

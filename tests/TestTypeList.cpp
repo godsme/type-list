@@ -33,6 +33,10 @@ namespace {
             THEN("it does not have a Tail") {
                 REQUIRE(!hasTail<type>);
             }
+            THEN("it should has a TypeListSignature") {
+                REQUIRE(std::is_base_of_v<TypeListSignature, type>);
+            }
+
         }
 
         WHEN("TypeList is initialized with 3 types") {
@@ -55,6 +59,9 @@ namespace {
             }
             THEN("the head of its tail's tail should be long") {
                 REQUIRE(std::is_same_v<long, typename type::Tail::Tail::Head>);
+            }
+            THEN("it should has a TypeListSignature") {
+                REQUIRE(std::is_base_of_v<TypeListSignature, type>);
             }
             THEN("it has a Tail") {
                 REQUIRE(hasTail<type>);

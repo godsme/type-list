@@ -7,18 +7,17 @@
 
 #include <type-list/type-list-ns.h>
 #include <concepts>
-#include <type_traits>
 #include <type-list/Signatures.h>
+#include <type-list/concept/ListConcept.h>
 
 TYPE_LIST_NS_BEGIN
 
 template<typename T>
 concept NonEmptyListConcept =
-        std::is_base_of_v<ListSignature, T> &&
-        requires {
-            typename T::Head;
-            typename T::Tail;
-        };
+ListConcept<T> && requires {
+    typename T::Head;
+    typename T::Tail;
+};
 
 TYPE_LIST_NS_END
 

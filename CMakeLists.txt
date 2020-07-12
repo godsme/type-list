@@ -13,4 +13,4 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tests
 
 add_executable(type-list-test
         tests/catch.cpp
-        tests/TestTypeList.cpp include/type-list/Signatures.h include/type-list/concept/NonEmptyListConcept.h)
+        tests/TestTypeList.cpp include/type-list/Signatures.h include/type-list/concept/NonEmptyListConcept.h include/type-list/concept/ExportableListConcept.h include/type-list/concept/ListConcept.h)

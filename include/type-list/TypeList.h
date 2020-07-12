@@ -11,7 +11,7 @@
 TYPE_LIST_NS_BEGIN
 
 template <typename ... Ts>
-struct TypeList : TypeListSignature {
+struct TypeList : ExportableTypeListSignature {
     constexpr static size_t size = sizeof...(Ts); // actually 0
 
     template <template <typename ...> typename RESULT>
@@ -19,7 +19,7 @@ struct TypeList : TypeListSignature {
 };
 
 template <typename H, typename ... Ts>
-struct TypeList<H, Ts...> : TypeListSignature {
+struct TypeList<H, Ts...> : ExportableTypeListSignature {
     constexpr static size_t size = sizeof...(Ts) + 1;
     using Head = H;
     using Tail = TypeList<Ts...>;

@@ -5,6 +5,7 @@
 #include <catch.hpp>
 #include <type-list/TypeList.h>
 #include <type-list/concept/NonEmptyListConcept.h>
+#include <type-list/concept/ExportableListConcept.h>
 #include <type_traits>
 
 namespace {
@@ -42,8 +43,11 @@ namespace {
             THEN("it does not have a Tail") {
                 REQUIRE(!hasTail<type>);
             }
-            THEN("it should has a TypeListSignature") {
-                REQUIRE(std::is_base_of_v<TypeListSignature, type>);
+            THEN("it should satisfy ExportableListConcept") {
+                REQUIRE(ExportableListConcept<type>);
+            }
+            THEN("it should satisfy ListConcept") {
+                REQUIRE(ListConcept<type>);
             }
             WHEN("export to a template") {
                 using result = type::template exportTo<Result>;
@@ -88,6 +92,12 @@ namespace {
                 THEN("the num_of_Ts should be 2") {
                     REQUIRE(2 == result::Num_Of_Ts);
                 }
+            }
+            THEN("it should satisfy ExportableListConcept") {
+                REQUIRE(ExportableListConcept<type>);
+            }
+            THEN("it should satisfy ListConcept") {
+                REQUIRE(ListConcept<type>);
             }
             THEN("it has a Tail") {
                 REQUIRE(hasTail<type>);

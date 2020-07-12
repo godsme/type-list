@@ -11,6 +11,7 @@ TYPE_LIST_NS_BEGIN
 
 struct ListSignature {};
 struct TypeListSignature : ListSignature {};
+struct ExportableTypeListSignature : TypeListSignature {};
 struct ValueListSignature : ListSignature {};
 
 TYPE_LIST_NS_END

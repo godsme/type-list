@@ -12,9 +12,16 @@
 
 TYPE_LIST_NS_BEGIN
 
+struct TypeListAllSignatures
+        : TypeListSignature
+        , ExportableListSignature
+        , AppendableTypeList
+{};
+
 template <typename ... Ts>
-struct TypeList : TypeListSignature, ExportableListSignature, AppendableTypeList {
-    constexpr static size_t size = sizeof...(Ts); // actually 0
+struct TypeList : TypeListAllSignatures {
+    // actually 0
+    constexpr static size_t size = sizeof...(Ts);
 
     template <template <typename ...> typename RESULT>
     using exportTo = RESULT<Ts...>;
@@ -33,13 +40,11 @@ struct TypeList : TypeListSignature, ExportableListSignature, AppendableTypeList
 };
 
 template <typename H, typename ... Ts>
-struct TypeList<H, Ts...>
-        : TypeListSignature
-        , ExportableListSignature
-        , AppendableTypeList {
-    constexpr static size_t size = sizeof...(Ts) + 1;
+struct TypeList<H, Ts...> : TypeListAllSignatures {
     using Head = H;
     using Tail = TypeList<Ts...>;
+
+    constexpr static size_t size = sizeof...(Ts) + 1;
 
     template <template <typename ...> typename RESULT>
     using exportTo = RESULT<H, Ts...>;

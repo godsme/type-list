@@ -12,13 +12,13 @@
 TYPE_LIST_NS_BEGIN
 
 template<auto INIT, auto STEP = 1>
-struct InfiniteIntList : ValueListSignature {
+struct InfiniteIntList : ValueListSignature, InfiniteListSignature {
     constexpr static auto Head = INIT;
     using Tail = InfiniteIntList<INIT+STEP, STEP>;
 };
 
 template<auto V>
-struct RepeatValueList : ValueListSignature {
+struct RepeatValueList : ValueListSignature, InfiniteListSignature {
     constexpr static auto Head = V;
     using Tail = RepeatValueList<V>;
 };

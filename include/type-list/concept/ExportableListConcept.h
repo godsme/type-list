@@ -10,14 +10,9 @@
 
 TYPE_LIST_NS_BEGIN
 
-//namespace details {
-//    template<template<typename ...> typename >
-//    struct __SeCrEtE_aNd_StUpId_TyPe_LiSt_ReSuLt {};
-//}
-
 template<typename T>
-concept ExportableListConcept =
-        std::is_base_of_v<ExportableTypeListSignature, T>;
+concept ExportableListConcept = ListConcept<T> &&
+        std::is_base_of_v<ExportableListSignature, T>;
 
 TYPE_LIST_NS_END
 

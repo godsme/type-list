@@ -2,11 +2,13 @@
 // Created by godsme on 7/12/20.
 //
 
-#include <catch.hpp>
+
 #include <type-list/base/TypeList.h>
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/concept/ExportableListConcept.h>
 #include <type_traits>
+#include <cstdint>
+#include <catch.hpp>
 
 namespace {
     using namespace TYPE_LIST_NS;
@@ -55,6 +57,69 @@ namespace {
                     REQUIRE(0 == result::Num_Of_Ts);
                 }
             }
+
+            WHEN("append a type") {
+                using type1 = type::append<int>;
+                THEN("size is 1") {
+                    REQUIRE(type1::size == 1);
+                }
+                THEN("it has a head") {
+                    REQUIRE(hasHead<type1>);
+
+                    THEN("its head is appened type") {
+                        REQUIRE(std::is_same_v<int, type1::Head>);
+                    }
+                }
+                THEN("it has a tail") {
+                    REQUIRE(hasTail<type1>);
+                    THEN("its tail does not have a tail") {
+                        REQUIRE(!hasTail<type1::Tail>);
+                    }
+                }
+            }
+
+            WHEN("append 2 types") {
+                using type1 = type::append<float, double>;
+                THEN("size is 2") {
+                    REQUIRE(type1::size == 2);
+                }
+                THEN("it has a head") {
+                    REQUIRE(hasHead<type1>);
+
+                    THEN("its head is the 1st appened type") {
+                        REQUIRE(std::is_same_v<float, type1::Head>);
+                        THEN("it has a tail") {
+                            REQUIRE(hasTail<type1>);
+                            THEN("the head of its tail is double") {
+                                REQUIRE(std::is_same_v<double, type1::Tail::Head>);
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            WHEN("append another TypeList") {
+                using type1 = type::appendTypeList<TypeList<int, double>>;
+                THEN("size is 2") {
+                    REQUIRE(type1::size == 2);
+                    THEN("it has a head") {
+                        REQUIRE(hasHead<type1>);
+
+                        THEN("its head is the 1st appened type") {
+                            REQUIRE(std::is_same_v<int, type1::Head>);
+                            THEN("it has a tail") {
+                                REQUIRE(hasTail<type1>);
+                                THEN("the head of its tail is double") {
+                                    REQUIRE(std::is_same_v<double, type1::Tail::Head>);
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
         WHEN("TypeList is initialized with 3 types") {
@@ -69,6 +134,27 @@ namespace {
         }
         GIVEN("a TypeList initialized with 3 types") {
             using type = TypeList<char, double, long>;
+            WHEN("append another typelist") {
+                using type1 = type::appendTypeList<TypeList<float, char>>;
+                THEN("it has 5 types") {
+                    REQUIRE(type1::size == 5);
+                }
+                THEN("its 4th type is float") {
+                    REQUIRE(std::is_same_v<float, type1::Tail::Tail::Tail::Head>);
+                }
+            }
+            WHEN("prepend another typelist") {
+                using type1 = type::prependTypeList<TypeList<float, char>>;
+                THEN("it has 5 types") {
+                    REQUIRE(type1::size == 5);
+                }
+                THEN("its 1st type is float") {
+                    REQUIRE(std::is_same_v<float, type1::Head>);
+                }
+                THEN("its 4th type is double") {
+                    REQUIRE(std::is_same_v<double, type1::Tail::Tail::Tail::Head>);
+                }
+            }
             THEN("its head should be char") {
                 REQUIRE(std::is_same_v<char, typename type::Head>);
             }

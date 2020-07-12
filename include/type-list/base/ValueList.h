@@ -7,14 +7,16 @@
 
 #include <type-list/type-list-ns.h>
 #include <type-list/base/Signatures.h>
+#include <type-list/concept/ExportableListConcept.h>
+#include <type-list/concept/ValueListConcept.h>
 #include <cstddef>
 
 TYPE_LIST_NS_BEGIN
 
 struct ValueListAllSignatures
-        : ValueListSignature
-        , ExportableListSignature
-        , AppendableTypeList
+   : ValueListSignature
+   , ExportableListSignature
+   , AppendableTypeList
 {};
 
 template<auto ... Vs>
@@ -29,6 +31,12 @@ struct ValueList : ValueListAllSignatures {
 
     template<auto ... Vs2>
     using prepend = ValueList<Vs2..., Vs...>;
+
+    template<ValueListConcept T>
+    using appendList = T;
+
+    template<ValueListConcept T>
+    using prependList = T;
 };
 
 template<auto H, auto ... Vs>
@@ -46,6 +54,12 @@ struct ValueList<H, Vs...> : ValueListAllSignatures {
 
     template<auto ... Vs2>
     using prepend = ValueList<Vs2..., H, Vs...>;
+
+    template<ExportableValueListConcept T>
+    using appendList = typename T::template exportTo<append>;
+
+    template<ExportableValueListConcept T>
+    using prependList = typename T::template exportTo<prepend>;
 };
 
 ////////////////////////////////////////////////////////////////////

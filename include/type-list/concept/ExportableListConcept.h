@@ -7,12 +7,22 @@
 
 #include <type-list/base/Signatures.h>
 #include <type-list/concept/ListConcept.h>
+#include <type-list/concept/TypeListConcept.h>
+#include <type-list/concept/ValueListConcept.h>
 
 TYPE_LIST_NS_BEGIN
 
 template<typename T>
 concept ExportableListConcept = ListConcept<T> &&
         std::is_base_of_v<ExportableListSignature, T>;
+
+template<typename T>
+concept ExportableTypeListConcept= \
+TypeListConcept<T> && ExportableListConcept<T>;
+
+template<typename T>
+concept ExportableValueListConcept= \
+ValueListConcept<T> && ExportableListConcept<T>;
 
 TYPE_LIST_NS_END
 

@@ -100,7 +100,7 @@ namespace {
             }
 
             WHEN("append another TypeList") {
-                using type1 = type::appendTypeList<TypeList<int, double>>;
+                using type1 = type::appendList<TypeList<int, double>>;
                 THEN("size is 2") {
                     REQUIRE(type1::size == 2);
                     THEN("it has a head") {
@@ -135,7 +135,7 @@ namespace {
         GIVEN("a TypeList initialized with 3 types") {
             using type = TypeList<char, double, long>;
             WHEN("append another typelist") {
-                using type1 = type::appendTypeList<TypeList<float, char>>;
+                using type1 = type::appendList<TypeList<float, char>>;
                 THEN("it has 5 types") {
                     REQUIRE(type1::size == 5);
                 }
@@ -144,7 +144,7 @@ namespace {
                 }
             }
             WHEN("prepend another typelist") {
-                using type1 = type::prependTypeList<TypeList<float, char>>;
+                using type1 = type::prependList<TypeList<float, char>>;
                 THEN("it has 5 types") {
                     REQUIRE(type1::size == 5);
                 }

@@ -3,7 +3,7 @@
 //
 
 #include <catch.hpp>
-#include <type-list/TypeList.h>
+#include <type-list/base/TypeList.h>
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/concept/ExportableListConcept.h>
 #include <type_traits>

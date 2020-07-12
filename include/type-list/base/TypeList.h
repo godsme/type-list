@@ -6,7 +6,7 @@
 #define TYPE_LIST_2_TYPELIST_H
 
 #include <type-list/type-list-ns.h>
-#include <type-list/Signatures.h>
+#include <type-list/base/Signatures.h>
 
 TYPE_LIST_NS_BEGIN
 
@@ -26,6 +26,12 @@ struct TypeList<H, Ts...> : ExportableTypeListSignature {
 
     template <template <typename ...> typename RESULT>
     using exportTo = RESULT<H, Ts...>;
+};
+
+template<typename T>
+struct RepeatTypeList : TypeListSignature {
+    using Head = T;
+    using Tail = RepeatTypeList<T>;
 };
 
 TYPE_LIST_NS_END

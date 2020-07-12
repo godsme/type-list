@@ -4,6 +4,7 @@
 
 #include <catch.hpp>
 #include <type-list/TypeList.h>
+#include <type-list/concept/NonEmptyListConcept.h>
 #include <type_traits>
 
 namespace {
@@ -26,6 +27,9 @@ namespace {
             using type = TypeList<>;
             THEN("its size should be 0") {
                 REQUIRE(type::size == 0);
+            }
+            THEN("it does not satisfy NonEmptyListConcept") {
+                REQUIRE(!NonEmptyListConcept<type>);
             }
             THEN("it does not have a head") {
                 REQUIRE(!hasHead<type>);
@@ -71,6 +75,18 @@ namespace {
                         REQUIRE(hasTail<type::Tail::Tail>);
                         THEN("the tail of tail of its tail does not have a Tail") {
                             REQUIRE(!hasTail<type::Tail::Tail::Tail>);
+                        }
+                    }
+                }
+            }
+            THEN("it satisfy NonEmptyListConcept") {
+                REQUIRE(NonEmptyListConcept<type>);
+                THEN("its tail also satisfy") {
+                    REQUIRE(NonEmptyListConcept<type::Tail>);
+                    THEN("the tail of its tail also satisfy") {
+                        REQUIRE(NonEmptyListConcept<type::Tail::Tail>);
+                        THEN("the tail of tail of its tail does not satisfy") {
+                            REQUIRE(!NonEmptyListConcept<type::Tail::Tail::Tail>);
                         }
                     }
                 }

@@ -9,6 +9,8 @@
 #include <type-list/concept/FiniteListConcept.h>
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/base/TypeList.h>
+#include <type-list/base/Value.h>
+#include <type-list/base/ListWrapper.h>
 
 TYPE_LIST_NS_BEGIN
 
@@ -34,7 +36,20 @@ namespace detail {
     };
 }
 
-//    template<typename IN, template <auto> typename F>
+template<template <auto> typename F>
+struct MapperAdapter {
+    template<typename T>
+    struct Mapper {
+        using type = Value<F<T::value>::value>;
+    };
+};
+template<FiniteValueListConcept IN, template <auto> typename F>
+struct ValueTransform {
+    using type = typename detail::Transform
+            < List<IN>
+            , MapperAdapter<F>::template Mapper
+            >::type;
+};
 
 TYPE_LIST_NS_END
 

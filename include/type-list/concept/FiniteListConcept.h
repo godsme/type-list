@@ -7,6 +7,7 @@
 
 #include <type-list/base/Signatures.h>
 #include <type-list/concept/ListConcept.h>
+#include <type-list/concept/ValueListConcept.h>
 #include <type-list/concept/NonEmptyListConcept.h>
 
 TYPE_LIST_NS_BEGIN
@@ -14,6 +15,11 @@ TYPE_LIST_NS_BEGIN
 template<typename T>
 concept FiniteListConcept =
     ListConcept<T> &&
+    !std::is_base_of_v<InfiniteListSignature, T>;
+
+template<typename T>
+concept FiniteValueListConcept =
+    ValueListConcept<T> &&
     !std::is_base_of_v<InfiniteListSignature, T>;
 
 template<typename T>

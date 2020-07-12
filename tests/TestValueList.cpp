@@ -27,7 +27,7 @@ namespace {
     template<typename T> requires requires { typename T::Tail; }
     constexpr bool hasTail<T> = true;
 
-    template<typename ... Ts>
+    template<int ... Ts>
     struct Result {
         enum {
             Num_Of_Ts = sizeof...(Ts)
@@ -53,6 +53,12 @@ namespace {
         }
         THEN("it's not a InfiniteListConcept") {
             REQUIRE(!InfiniteListConcept<type>);
+        }
+        THEN("it satisfies ExportableListConcept") {
+            REQUIRE(ExportableListConcept<type>);
+        }
+        THEN("it can be export to a template") {
+            REQUIRE(0 == type::exportTo<Result>::Num_Of_Ts);
         }
     }
 
@@ -90,6 +96,12 @@ namespace {
         }
         THEN("it's not a InfiniteListConcept") {
             REQUIRE(!InfiniteListConcept<type>);
+        }
+        THEN("it satisfies ExportableListConcept") {
+            REQUIRE(ExportableListConcept<type>);
+        }
+        THEN("it can be export to a template") {
+            REQUIRE(3 == type::exportTo<Result>::Num_Of_Ts);
         }
     }
 }

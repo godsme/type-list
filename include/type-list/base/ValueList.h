@@ -20,15 +20,35 @@ struct ValueListAllSignatures
 template<auto ... Vs>
 struct ValueList : ValueListAllSignatures {
     constexpr static size_t size = sizeof...(Vs);
+
+    template <template <auto ...> typename RESULT>
+    using exportTo = RESULT<Vs...>;
+
+    template<auto ... Vs2>
+    using append = ValueList<Vs..., Vs2...>;
+
+    template<auto ... Vs2>
+    using prepend = ValueList<Vs2..., Vs...>;
 };
 
 template<auto H, auto ... Vs>
 struct ValueList<H, Vs...> : ValueListAllSignatures {
     constexpr static size_t size = sizeof...(Vs) + 1;
+
     constexpr static auto Head = H;
     using Tail = ValueList<Vs...>;
+
+    template <template <auto ...> typename RESULT>
+    using exportTo = RESULT<H, Vs...>;
+
+    template<auto ... Vs2>
+    using append = ValueList<H, Vs..., Vs2...>;
+
+    template<auto ... Vs2>
+    using prepend = ValueList<Vs2..., H, Vs...>;
 };
 
+////////////////////////////////////////////////////////////////////
 template<auto INIT, auto STEP = 1>
 struct InfiniteIntList : ValueListSignature, InfiniteListSignature {
     constexpr static auto Head = INIT;

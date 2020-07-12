@@ -34,7 +34,7 @@ namespace detail {
     };
 }
 
-    template<typename IN, template <auto> typename F>
+//    template<typename IN, template <auto> typename F>
 
 TYPE_LIST_NS_END
 

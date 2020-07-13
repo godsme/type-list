@@ -24,13 +24,12 @@ namespace detail {
        < NonEmptyListConcept    IN
        , size_t                 N
        , ListConcept            OUT>
-    struct Take<IN, N, OUT> {
-        using type = typename Take
-                < typename IN::Tail
+    struct Take<IN, N, OUT>
+            __return_apply_t(Take
+                , typename IN::Tail
                 , N-1
                 , typename OUT::template appendType<typename IN::Head>
-                >::type;
-    };
+                );
 
     template<ListConcept IN, ListConcept OUT>
     struct Take<IN, 0, OUT> __return_t(OUT);

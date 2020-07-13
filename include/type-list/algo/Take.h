@@ -32,12 +32,7 @@ namespace detail {
                 >::type;
     };
 
-    template<NonEmptyListConcept IN, ListConcept OUT>
-    struct Take<IN, 0, OUT> {
-        using type = OUT;
-    };
-
-    template<EmptyListConcept IN, ListConcept OUT>
+    template<ListConcept IN, ListConcept OUT>
     struct Take<IN, 0, OUT> {
         using type = OUT;
     };

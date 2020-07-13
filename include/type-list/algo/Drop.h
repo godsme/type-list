@@ -27,12 +27,7 @@ namespace detail {
                 >::type;
     };
 
-    template<NonEmptyListConcept IN>
-    struct Drop<IN, 0> {
-        using type = IN;
-    };
-
-    template<EmptyListConcept IN>
+    template<ListConcept IN>
     struct Drop<IN, 0> {
         using type = IN;
     };

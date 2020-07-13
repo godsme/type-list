@@ -16,5 +16,5 @@
 #define __TL_apply_v(f, ...) f<__VA_ARGS__>::value
 
 #define __TL_append_t(list, ...) typename list::template appendType<__VA_ARGS__>
-#define __TL_pattern(...) <__VA_ARGS__>
+#define __TL_pattern(name, ...) struct name <__VA_ARGS__>
 #endif //TYPE_LIST_LAMBDA_H

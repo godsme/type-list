@@ -15,11 +15,10 @@
 TYPE_LIST_NS_BEGIN
 
 namespace detail {
-    template
-       < ListConcept IN
+    __TL_lambda(Take
+       , ListConcept IN
        , size_t      N
-       , ListConcept OUT>
-    struct Take;
+       , ListConcept OUT);
 
     template
        < NonEmptyListConcept    IN
@@ -34,9 +33,7 @@ namespace detail {
     };
 
     template<ListConcept IN, ListConcept OUT>
-    struct Take<IN, 0, OUT> {
-        using type = OUT;
-    };
+    struct Take<IN, 0, OUT> __return_t(OUT);
 }
 
 namespace detail {

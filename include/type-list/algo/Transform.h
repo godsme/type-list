@@ -11,171 +11,140 @@
 #include <type-list/types/Value.h>
 #include <type-list/types/ListWrapper.h>
 #include <type-list/types/ValueList.h>
+#include <type-list/types/Lambda.h>
 
 TYPE_LIST_NS_BEGIN
 
 namespace detail {
-    template
-      < FiniteListConcept            IN
-      , template <typename> typename F
-      , typename                     OUT>
-    struct Transform {
-        using type = OUT;
-    };
+    __TL_lambda(Transform,
+       FiniteListConcept         IN,
+       __TL_lambda_t(__Set()) F,
+       typename                  OUT)
+    __return_t(OUT);
 
-    template
-       < NonEmptyFiniteListConcept    IN
-       , template <typename> typename F
-       , typename                     OUT>
-    struct Transform<IN, F, OUT> {
-        using type = typename Transform
-                < typename IN::Tail
-                , F
-                , typename OUT::template appendType<typename F<typename IN::Head>::type>
-                >::type;
-    };
-
+    __TL_lambda(Transform
+       , NonEmptyFiniteListConcept    IN
+       , __TL_lambda_t(__Set())    F
+       , __Set(OUT))
+    __TL_pattern(IN, F, OUT)
+    __return_t(__TL_apply_t(Transform
+            , __Set(IN::Tail)
+            , F
+            , __TL_append_t(OUT, __TL_apply_t(F, __Set(IN::Head)))));
 }
 
 namespace detail {
-    template<template <auto> typename F>
-    struct MapperAdapter {
-        template<typename T>
-        struct Mapper {
-            using type = Value<F<T::value>::value>;
-        };
+    template<__TL_lambda(F, auto)>
+    struct V2VAdapter {
+        __TL_lambda(Mapper, __Set(T))
+        __return_t(Value<__TL_apply_v(F, T::value)>);
     };
 
-    template<template <auto> typename F>
-    struct ValueToTypeMapperAdapter {
-        template<typename T>
-        struct Mapper {
-            using type = typename F<T::value>::type;
-        };
+    template<__TL_lambda(F, auto)>
+    struct V2TAdapter {
+        __TL_lambda(Mapper, __Set(T))
+        __return_t(__TL_apply_t(F, T::value));
     };
 
-    template<template <auto> typename F, auto V>
-    concept ValueToValueConcept = requires {
+    template<__TL_lambda(F, auto), auto V>
+    concept V2VConcept = requires {
         F<V>::value;
     };
 
-    template<template <auto> typename F, auto V>
-    concept ValueToTypeConcept = requires {
+    template<__TL_lambda(F, auto), auto V>
+    concept V2TConcept = requires {
         typename F<V>::type;
     };
 
-    template<FiniteValueListConcept IN, template <auto> typename F>
+    template<FiniteValueListConcept IN, __TL_lambda(F, auto)>
     struct ValueTransformer;
 
-    template<NonEmptyFiniteValueListConcept IN, template <auto> typename F>
-    requires ValueToValueConcept<F, IN::Head>
-    struct ValueTransformer<IN, F> {
-        using type = typename detail::Transform
-                < List<IN>
-                , MapperAdapter<F>::template Mapper
-                , ValueList<>
-                >::type;
-    };
+    template<NonEmptyFiniteValueListConcept IN, __TL_lambda(F, auto)>
+    requires V2VConcept<F, IN::Head>
+    struct ValueTransformer<IN, F>
+    __return_t(__TL_apply_t(detail::Transform
+                , List<IN>
+                , V2VAdapter<F>::template Mapper
+                , ValueList<>));
 
-    template<EmptyFiniteValueListConcept IN, template <auto> typename F>
-    requires ValueToValueConcept<F, 0>
-    struct ValueTransformer<IN, F> {
-        using type = ValueList<>;
-    };
+    template<EmptyFiniteValueListConcept IN, __TL_lambda(F, auto)>
+    requires V2VConcept<F, 0>
+    struct ValueTransformer<IN, F> __return_t(ValueList<>);
 
-    template<NonEmptyFiniteValueListConcept IN, template <auto> typename F>
-    requires ValueToTypeConcept<F, IN::Head>
-    struct ValueTransformer<IN, F> {
-        using type = typename detail::Transform
-                < List<IN>
-                , ValueToTypeMapperAdapter<F>::template Mapper
-                , TypeList<>
-                >::type;
-    };
+    template<NonEmptyFiniteValueListConcept IN, __TL_lambda(F, auto)>
+    requires V2TConcept<F, IN::Head>
+    struct ValueTransformer<IN, F>
+    __return_t(__TL_apply_t(detail::Transform
+            , List<IN>
+            , V2TAdapter<F>::template Mapper
+            , TypeList<>));
 
-    template<EmptyFiniteValueListConcept IN, template <auto> typename F>
-    requires ValueToTypeConcept<F, 0>
-    struct ValueTransformer<IN, F> {
-        using type = TypeList<>;
-    };
+    template<EmptyFiniteValueListConcept IN, __TL_lambda(F, auto)>
+    requires V2TConcept<F, 0>
+    struct ValueTransformer<IN, F> __return_t(TypeList<>);
 }
 
-template<FiniteValueListConcept IN, template <auto> typename F>
-using TransformValue_t = typename detail::ValueTransformer<IN, F>::type;
+template<FiniteValueListConcept IN, __TL_lambda(F, auto)>
+using TransformValue_t = __TL_apply_t(detail::ValueTransformer, IN, F);
 
 namespace detail {
-    template<auto F>
-    struct Value2ValueMapperAdapter {
-        template<typename T>
-        struct Mapper {
-            using type = Value<F(T::value)>;
-        };
-    };
+   template<auto F>
+   struct V2VFMapper {
+      __TL_lambda(Mapper, __Set(T)) __return_t(Value<F(T::value)>);
+   };
 
-    template<FiniteValueListConcept IN, auto F>
-    struct Value2ValueTransformer {
-        using type = typename detail::Transform
-                < List<IN>
-                , Value2ValueMapperAdapter<F>::template Mapper
-                , ValueList<>
-                >::type;
-    };
+   template<FiniteValueListConcept IN, auto F>
+   struct V2VFTransformer
+   __return_t(__TL_apply_t(detail::Transform,
+                           List<IN>,
+                           V2VFMapper<F>::template Mapper,
+                           ValueList<>));
 }
 
 template<FiniteValueListConcept IN, auto F>
-using TransformValueF_t = typename detail::Value2ValueTransformer<IN, F>::type;
+using TransformValueF_t = __TL_apply_t(detail::V2VFTransformer, IN, F);
 
 namespace detail {
-    template<template <typename> typename F>
-    struct Type2ValueMapperAdapter {
-        template<typename T>
-        struct Mapper {
-            using type = Value<F<T>::value>;
-        };
+    template<__TL_lambda(F, __Set())>
+    struct T2VAdapter {
+        __TL_lambda(Mapper, __Set(T)) __return_t(Value<F<T>::value>);
     };
 
-    template<template <typename T> typename F>
-    concept TypeToValueConcept = requires {
+    template<__TL_lambda(F, __Set())>
+    concept T2VConcept = requires {
         F<int>::value;
     };
 
-    template<template <typename T> typename F>
-    concept TypeToTypeConcept = requires {
+    template<__TL_lambda(F, __Set())>
+    concept T2TConcept = requires {
         typename F<int>::type;
     };
 
-    template<FiniteTypeListConcept IN, template <typename> typename F>
+    template<FiniteTypeListConcept IN, __TL_lambda(F, __Set())>
     struct TypeTransformer;
 
-    template<FiniteTypeListConcept IN, template <typename> typename F>
-    requires TypeToValueConcept<F>
-    struct TypeTransformer<IN, F> {
-        using type = typename detail::Transform
-                < IN
-                , Type2ValueMapperAdapter<F>::template Mapper
-                , ValueList<>
-                >::type;
-    };
+    template<FiniteTypeListConcept IN, __TL_lambda(F, __Set())>
+    requires T2VConcept<F>
+    struct TypeTransformer<IN, F>
+    __return_t(__TL_apply_t(detail::Transform,
+                            IN,
+                            T2VAdapter<F>::template Mapper,
+                            ValueList<>));
 
-    template<FiniteTypeListConcept IN, template <typename> typename F>
-    requires TypeToTypeConcept<F>
-    struct TypeTransformer<IN, F> {
-        using type = typename detail::Transform
-                < IN
-                , F
-                , TypeList<>
-                >::type;
-    };
+    template<FiniteTypeListConcept IN, __TL_lambda(F, __Set())>
+    requires T2TConcept<F>
+    struct TypeTransformer<IN, F>
+    __return_t(__TL_apply_t(detail::Transform, IN, F, TypeList<>));
 }
 
-template<FiniteTypeListConcept IN, template <typename > typename F>
-using Transform_t = typename detail::TypeTransformer< IN, F>::type;
+template<FiniteTypeListConcept IN, __TL_lambda(F, __Set())>
+using Transform_t = __TL_apply_t(detail::TypeTransformer, IN, F);
 
 namespace detail {
-    template<FiniteListConcept IN, template <typename > typename F>
+    template<FiniteListConcept IN, __TL_lambda(F, __Set())>
     auto DeductTransform() -> Transform_t<IN, F>;
 
-    template<FiniteListConcept IN, template <auto > typename F>
+    template<FiniteListConcept IN, __TL_lambda(F, auto)>
     auto DeductTransform() -> TransformValue_t<IN, F>;
 
     template<FiniteListConcept IN, auto F>

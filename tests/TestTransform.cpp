@@ -15,8 +15,8 @@
 namespace {
     using namespace TYPE_LIST_NS;
 
-    __TL_lambda(Some, __TL_lambda(F, __TL_Set(T)))
-    __return_t(F<int>);
+    __TL_lambda(Some, __TL_lambda(F, __Set(), int))
+    __return_t(F<int, 0>);
 
     __TL_lambda(Add, int I) __return_v(I + 10);
 
@@ -33,15 +33,15 @@ namespace {
         REQUIRE(std::is_same_v<TypeList<W<1>,W<2>,W<3>>, type>);
     }
 
-    __TL_lambda(WT, __TL_Set(T));
-    __TL_lambda(Wrap, __TL_Set(T)) __return_t(WT<T>);
+    __TL_lambda(WT, __Set(T));
+    __TL_lambda(Wrap, __Set(T)) __return_t(WT<T>);
 
     SCENARIO("Transform Type2Type") {
         using type = __TL_map(__TL_list(int, double), Wrap);
         REQUIRE(std::is_same_v<TypeList<WT<int>,WT<double>>, type>);
     }
 
-    __TL_lambda(IntTrait, __TL_Set(T)) __return_v(std::is_integral_v<T>);
+    __TL_lambda(IntTrait, __Set(T)) __return_v(std::is_integral_v<T>);
     SCENARIO("Transform Type2Value") {
         using type = __TL_map(__TL_list(int, double), IntTrait);
         REQUIRE(std::is_same_v<ValueList<true, false>, type>);

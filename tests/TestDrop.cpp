@@ -21,8 +21,15 @@ namespace {
 
         WHEN("drop 0 elem from value list") {
             using type = Drop_t<ValueList<>, 0>;
-            THEN("should return empty type list") {
+            THEN("should return an empty type list") {
                 REQUIRE(std::is_same_v<type, ValueList<>>);
+            }
+        }
+
+        WHEN("drop 0 elem from empty list") {
+            using type = Drop_t<__TL_list(), 0>;
+            THEN("should return an empty list") {
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
     }

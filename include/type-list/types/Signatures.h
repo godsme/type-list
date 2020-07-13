@@ -14,7 +14,7 @@ struct TypeListSignature : ListSignature {};
 struct ExportableListSignature {};
 struct InfiniteSignature {};
 struct ValueListSignature : ListSignature {};
-struct AppendableTypeList {};
+struct AppendableSignature {};
 
 TYPE_LIST_NS_END
 

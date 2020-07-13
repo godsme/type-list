@@ -17,7 +17,7 @@ TYPE_LIST_NS_BEGIN
 struct ValueListAllSignatures
    : ValueListSignature
    , ExportableListSignature
-   , AppendableTypeList
+   , AppendableSignature
 {};
 
 template<auto ... Vs>
@@ -89,6 +89,21 @@ struct RepeatValueList : ValueListSignature, InfiniteSignature {
     constexpr static auto Head = V;
     using HeadAsType = Value<Head>;
     using Tail = RepeatValueList<V>;
+};
+
+template<auto V, size_t times>
+struct LimitedRepeatValueList : ValueListSignature {
+    constexpr static size_t size = times;
+
+    constexpr static auto Head = V;
+    using Tail = LimitedRepeatValueList<V, times - 1>;
+
+    using HeadAsType = Value<Head>;
+};
+
+template<auto V>
+struct LimitedRepeatValueList<V, 0> : ValueListSignature {
+    constexpr static size_t size = 0;
 };
 
 TYPE_LIST_NS_END

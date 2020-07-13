@@ -17,11 +17,11 @@ concept ExportableListConcept = ListConcept<T> &&
         std::is_base_of_v<ExportableListSignature, T>;
 
 template<typename T>
-concept ExportableTypeListConcept= \
+concept ExportableTypeListConcept = \
 TypeListConcept<T> && ExportableListConcept<T>;
 
 template<typename T>
-concept ExportableValueListConcept= \
+concept ExportableValueListConcept = \
 ValueListConcept<T> && ExportableListConcept<T>;
 
 TYPE_LIST_NS_END

@@ -43,4 +43,6 @@ using Drop_t = typename detail::Drop<IN, N>::type;
 
 TYPE_LIST_NS_END
 
+#define __TL_drop(in, n) TYPE_LIST_NS::Drop_t<in, n>
+
 #endif //TYPE_LIST_DROP_H

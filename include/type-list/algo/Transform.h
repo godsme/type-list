@@ -38,63 +38,62 @@ namespace detail {
 
 }
 
-template<template <auto> typename F>
-struct MapperAdapter {
-    template<typename T>
-    struct Mapper {
-        using type = Value<F<T::value>::value>;
-    };
-};
-
-template<template <auto> typename F>
-struct ValueToTypeMapperAdapter {
-    template<typename T>
-    struct Mapper {
-        using type = typename F<T::value>::type;
-    };
-};
-
-template<template <auto> typename F>
-concept ValueToValueConcept = requires {
-    F<0>::value;
-};
-
-template<template <auto> typename F>
-concept ValueToTypeConcept = requires {
-    typename F<0>::type;
-};
-
 namespace detail {
-template<FiniteValueListConcept IN, template <auto> typename F>
-struct ValueTransformer;
+    template<template <auto> typename F>
+    struct MapperAdapter {
+        template<typename T>
+        struct Mapper {
+            using type = Value<F<T::value>::value>;
+        };
+    };
 
-template<FiniteValueListConcept IN, template <auto> typename F>
-requires ValueToValueConcept<F>
-struct ValueTransformer<IN, F> {
-    using type = typename detail::Transform
-            < List<IN>
-            , MapperAdapter<F>::template Mapper
-            , ValueList<>
-            >::type;
-};
+    template<template <auto> typename F>
+    struct ValueToTypeMapperAdapter {
+        template<typename T>
+        struct Mapper {
+            using type = typename F<T::value>::type;
+        };
+    };
 
-template<FiniteValueListConcept IN, template <auto> typename F>
-requires ValueToTypeConcept<F>
-struct ValueTransformer<IN, F> {
-    using type = typename detail::Transform
-            < List<IN>
-            , ValueToTypeMapperAdapter<F>::template Mapper
-            , TypeList<>
-            >::type;
-};
+    template<template <auto> typename F>
+    concept ValueToValueConcept = requires {
+        F<0>::value;
+    };
+
+    template<template <auto> typename F>
+    concept ValueToTypeConcept = requires {
+        typename F<0>::type;
+    };
+
+    template<FiniteValueListConcept IN, template <auto> typename F>
+    struct ValueTransformer;
+
+    template<FiniteValueListConcept IN, template <auto> typename F>
+    requires ValueToValueConcept<F>
+    struct ValueTransformer<IN, F> {
+        using type = typename detail::Transform
+                < List<IN>
+                , MapperAdapter<F>::template Mapper
+                , ValueList<>
+                >::type;
+    };
+
+    template<FiniteValueListConcept IN, template <auto> typename F>
+    requires ValueToTypeConcept<F>
+    struct ValueTransformer<IN, F> {
+        using type = typename detail::Transform
+                < List<IN>
+                , ValueToTypeMapperAdapter<F>::template Mapper
+                , TypeList<>
+                >::type;
+    };
 }
 
 template<FiniteValueListConcept IN, template <auto> typename F>
-using TransformValue_t  = typename detail::ValueTransformer<IN, F>::type;
+using TransformValue_t = typename detail::ValueTransformer<IN, F>::type;
 
 template<FiniteTypeListConcept IN, template <typename > typename F>
-using Transform_t  =
-typename detail::Transform< IN, F, TypeList<>>::type;
+using Transform_t = typename detail::Transform< IN, F, TypeList<>>::type;
 
 TYPE_LIST_NS_END
 

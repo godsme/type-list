@@ -89,4 +89,6 @@ struct RepeatValueList : ValueListSignature, InfiniteSignature {
 
 TYPE_LIST_NS_END
 
+#define __TL_infinite(...) TYPE_LIST_NS::InfiniteIntList<__VA_ARGS__>
+
 #endif //TYPE_LIST_VALUELIST_H

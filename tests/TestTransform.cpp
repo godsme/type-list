@@ -7,6 +7,7 @@
 #include <type-list/concept/ExportableListConcept.h>
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/base/List.h>
+
 #include <type_traits>
 #include <cstdint>
 #include <catch.hpp>
@@ -68,4 +69,10 @@ namespace {
         using type = __TL_transform(__TL_list(1, 2), l);
         REQUIRE(std::is_same_v<ValueList<11, 12>, type>);
     }
+
+//    SCENARIO("Transform Type2Value by indirect lambda") {
+//        constexpr auto l = [](int i) { return i + 10; };
+//        using type = __TL_transform(__TL_infinite(1), l);
+//        REQUIRE(std::is_same_v<ValueList<11, 12>, type>);
+//    }
 }

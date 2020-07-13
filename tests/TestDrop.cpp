@@ -61,20 +61,20 @@ namespace {
         using list = ValueList<0, 1>;
         WHEN("drop 0 elem") {
             using type = __TL_drop(list, 0);
-            THEN("should return original type list") {
+            THEN("should return original list") {
                 REQUIRE(std::is_same_v<type, ValueList<0, 1>>);
             }
         }
         WHEN("drop 1 elem") {
             using type = __TL_drop(list, 1);
-            THEN("should get a TypeList with the 1st elem dropped") {
+            THEN("should get a list with the 1st elem dropped") {
                 REQUIRE(std::is_same_v<type, ValueList<1>>);
             }
         }
 
         WHEN("drop 2 elem") {
             using type = Drop_t<list, 2>;
-            THEN("should get a TypeList with the 2 elems dropped") {
+            THEN("should get a list with the 2 elems dropped") {
                 REQUIRE(std::is_same_v<type, ValueList<>>);
             }
         }
@@ -90,14 +90,14 @@ namespace {
         }
         WHEN("drop 1 elem") {
             using type = Drop_t<list, 1>;
-            THEN("should get a TypeList with the 1st elem dropped") {
+            THEN("should get a list with the 1st elem dropped") {
                 REQUIRE(type::Head == 3);
             }
         }
 
         WHEN("drop 2 elem") {
             using type = Drop_t<list, 2>;
-            THEN("should get a TypeList with the 2 elems dropped") {
+            THEN("should get a list with the 2 elems dropped") {
                 REQUIRE(type::Head == 5);
             }
         }

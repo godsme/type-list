@@ -92,8 +92,51 @@ namespace detail {
 template<FiniteValueListConcept IN, template <auto> typename F>
 using TransformValue_t = typename detail::ValueTransformer<IN, F>::type;
 
+namespace detail {
+    template<template <typename> typename F>
+    struct Type2ValueMapperAdapter {
+        template<typename T>
+        struct Mapper {
+            using type = Value<F<T>::value>;
+        };
+    };
+
+    template<template <typename T> typename F>
+    concept TypeToValueConcept = requires {
+        F<int>::value;
+    };
+
+    template<template <typename T> typename F>
+    concept TypeToTypeConcept = requires {
+        typename F<int>::type;
+    };
+
+    template<FiniteTypeListConcept IN, template <typename> typename F>
+    struct TypeTransformer;
+
+    template<FiniteTypeListConcept IN, template <typename> typename F>
+    requires TypeToValueConcept<F>
+    struct TypeTransformer<IN, F> {
+        using type = typename detail::Transform
+                < IN
+                , Type2ValueMapperAdapter<F>::template Mapper
+                , ValueList<>
+                >::type;
+    };
+
+    template<FiniteTypeListConcept IN, template <typename> typename F>
+    requires TypeToTypeConcept<F>
+    struct TypeTransformer<IN, F> {
+        using type = typename detail::Transform
+                < IN
+                , F
+                , TypeList<>
+                >::type;
+    };
+}
+
 template<FiniteTypeListConcept IN, template <typename > typename F>
-using Transform_t = typename detail::Transform< IN, F, TypeList<>>::type;
+using Transform_t = typename detail::TypeTransformer< IN, F>::type;
 
 TYPE_LIST_NS_END
 

@@ -50,6 +50,7 @@ template <typename H, typename ... Ts>
 struct TypeList<H, Ts...> : TypeListAllSignatures {
     using Head = H;
     using Tail = TypeList<Ts...>;
+    using HeadAsType = Head;
 
     constexpr static size_t size = sizeof...(Ts) + 1;
 
@@ -79,6 +80,7 @@ template<typename T>
 struct RepeatTypeList : TypeListSignature, InfiniteSignature {
     using Head = T;
     using Tail = RepeatTypeList<T>;
+    using HeadAsType = Head;
 };
 
 TYPE_LIST_NS_END

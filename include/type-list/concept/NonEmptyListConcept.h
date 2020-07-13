@@ -15,25 +15,25 @@
 TYPE_LIST_NS_BEGIN
 
 template<typename T>
-concept NonEmptyConcept =
+concept IsNonEmptyTypeList =
 requires {
     typename T::Head;
     typename T::Tail;
 };
 
 template<typename T>
-concept NonEmptyListConcept =
-ListConcept<T> && NonEmptyConcept<T>;
-
-template<typename T>
-concept EmptyListConcept =
-ListConcept<T> && !NonEmptyConcept<T>;
-
-template<typename T>
 concept IsNonEmptyValueList = requires {
     T::Head;
     typename T::Tail;
 };
+
+template<typename T>
+concept EmptyListConcept =
+ListConcept<T> && !IsNonEmptyValueList<T> && !IsNonEmptyTypeList<T>;
+
+template<typename T>
+concept NonEmptyListConcept =
+ListConcept<T> && (IsNonEmptyValueList<T> || IsNonEmptyTypeList<T>);
 
 template<typename T>
 concept EmptyValueListConcept =

@@ -9,6 +9,7 @@
 #include <type-list/types/Signatures.h>
 #include <type-list/concept/ExportableListConcept.h>
 #include <type-list/concept/ValueListConcept.h>
+#include <type-list/types/Value.h>
 #include <cstddef>
 
 TYPE_LIST_NS_BEGIN
@@ -51,6 +52,7 @@ struct ValueList<H, Vs...> : ValueListAllSignatures {
 
     constexpr static auto Head = H;
     using Tail = ValueList<Vs...>;
+    using HeadAsType = Value<Head>;
 
     template <template <auto ...> typename RESULT>
     using exportTo = RESULT<H, Vs...>;
@@ -78,12 +80,14 @@ struct ValueList<H, Vs...> : ValueListAllSignatures {
 template<auto INIT, auto STEP = 1>
 struct InfiniteIntList : ValueListSignature, InfiniteSignature {
     constexpr static auto Head = INIT;
+    using HeadAsType = Value<Head>;
     using Tail = InfiniteIntList<INIT+STEP, STEP>;
 };
 
 template<auto V>
 struct RepeatValueList : ValueListSignature, InfiniteSignature {
     constexpr static auto Head = V;
+    using HeadAsType = Value<Head>;
     using Tail = RepeatValueList<V>;
 };
 

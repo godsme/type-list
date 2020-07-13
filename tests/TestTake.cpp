@@ -80,4 +80,64 @@ namespace {
             }
         }
     }
+
+    SCENARIO("take from an infnite value-list") {
+        using list = __TL_infinite(1, 2);
+        WHEN("drop 0 elem") {
+            using type = __TL_take(list, 0);
+            THEN("should return an empty list") {
+                REQUIRE(std::is_same_v<type, ValueList<>>);
+            }
+        }
+        WHEN("take 1 elem") {
+            using type = __TL_take(list, 1);
+            THEN("should get a list with the 1st elem taken") {
+                REQUIRE(std::is_same_v<type, ValueList<1>>);
+            }
+        }
+
+        WHEN("take 2 elems") {
+            using type = __TL_take(list, 2);
+            THEN("should get a list with the 2 elems taken") {
+                REQUIRE(std::is_same_v<type, ValueList<1, 3>>);
+            }
+        }
+
+        WHEN("take 3 elems") {
+            using type = __TL_take(list, 3);
+            THEN("should get a list with the 2 elems taken") {
+                REQUIRE(std::is_same_v<type, ValueList<1, 3, 5>>);
+            }
+        }
+    }
+
+    SCENARIO("take from an infnite type-list") {
+        using list = __TL_repeat(int);
+        WHEN("drop 0 elem") {
+            using type = __TL_take(list, 0);
+            THEN("should return an empty list") {
+                REQUIRE(std::is_same_v<type, TypeList<>>);
+            }
+        }
+        WHEN("take 1 elem") {
+            using type = __TL_take(list, 1);
+            THEN("should get a list with the 1st elem taken") {
+                REQUIRE(std::is_same_v<type, TypeList<int>>);
+            }
+        }
+
+        WHEN("take 2 elems") {
+            using type = __TL_take(list, 2);
+            THEN("should get a list with the 2 elems taken") {
+                REQUIRE(std::is_same_v<type, TypeList<int, int>>);
+            }
+        }
+
+        WHEN("take 3 elems") {
+            using type = __TL_take(list, 3);
+            THEN("should get a list with the 2 elems taken") {
+                REQUIRE(std::is_same_v<type, TypeList<int, int, int>>);
+            }
+        }
+    }
 }

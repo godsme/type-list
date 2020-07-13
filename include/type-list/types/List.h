@@ -5,8 +5,8 @@
 #ifndef TYPE_LIST_LIST_H
 #define TYPE_LIST_LIST_H
 
-#include <type-list/base/TypeList.h>
-#include <type-list/base/ValueList.h>
+#include <type-list/types/TypeList.h>
+#include <type-list/types/ValueList.h>
 
 TYPE_LIST_NS_BEGIN
 

@@ -7,10 +7,10 @@
 
 #include <type-list/type-list-ns.h>
 #include <type-list/concept/NonEmptyListConcept.h>
-#include <type-list/base/TypeList.h>
-#include <type-list/base/Value.h>
-#include <type-list/base/ListWrapper.h>
-#include <type-list/base/ValueList.h>
+#include <type-list/types/TypeList.h>
+#include <type-list/types/Value.h>
+#include <type-list/types/ListWrapper.h>
+#include <type-list/types/ValueList.h>
 
 TYPE_LIST_NS_BEGIN
 

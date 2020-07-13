@@ -6,7 +6,7 @@
 #define TYPE_LIST_VALUELIST_H
 
 #include <type-list/type-list-ns.h>
-#include <type-list/base/Signatures.h>
+#include <type-list/types/Signatures.h>
 #include <type-list/concept/ExportableListConcept.h>
 #include <type-list/concept/ValueListConcept.h>
 #include <cstddef>

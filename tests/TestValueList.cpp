@@ -6,7 +6,7 @@
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/concept/ValueListConcept.h>
 #include <type-list/concept/ExportableListConcept.h>
-#include <type-list/base/ValueList.h>
+#include <type-list/types/ValueList.h>
 #include <type_traits>
 #include <cstdint>
 #include <catch.hpp>

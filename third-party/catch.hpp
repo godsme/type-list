@@ -6095,7 +6095,7 @@ namespace Catch {
 #endif // CATCH_CONFIG_DISABLE
 
 // end catch_reporter_registrars.hpp
-// Allow users to base their work off existing reporters
+// Allow users to types their work off existing reporters
 // start catch_reporter_compact.h
 
 namespace Catch {

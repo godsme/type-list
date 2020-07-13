@@ -8,7 +8,7 @@
 #include <type-list/type-list-ns.h>
 #include <type-list/concept/ValueListConcept.h>
 #include <type-list/concept/NonEmptyListConcept.h>
-#include <type-list/base/Value.h>
+#include <type-list/types/Value.h>
 
 #include <cstddef>
 
@@ -48,7 +48,7 @@ namespace detail {
 
     template<InfiniteValueListConcept LIST>
     struct ListTrait<LIST> {
-        //using type = InfiniteValueListWrapper<LIST>;
+        using type = InfiniteValueListWrapper<LIST>;
     };
 }
 

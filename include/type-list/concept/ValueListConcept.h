@@ -5,7 +5,7 @@
 #ifndef TYPE_LIST_VALUELISTCONCEPT_H
 #define TYPE_LIST_VALUELISTCONCEPT_H
 
-#include <type-list/base/Signatures.h>
+#include <type-list/types/Signatures.h>
 #include <type_traits>
 
 TYPE_LIST_NS_BEGIN

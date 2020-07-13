@@ -5,7 +5,7 @@
 #ifndef TYPE_LIST_EXPORTABLELISTCONCEPT_H
 #define TYPE_LIST_EXPORTABLELISTCONCEPT_H
 
-#include <type-list/base/Signatures.h>
+#include <type-list/types/Signatures.h>
 #include <type-list/concept/ListConcept.h>
 #include <type-list/concept/TypeListConcept.h>
 #include <type-list/concept/ValueListConcept.h>

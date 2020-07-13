@@ -2,11 +2,11 @@
 // Created by godsme on 7/12/20.
 //
 
-#include <type-list/base/ListWrapper.h>
+#include <type-list/types/ListWrapper.h>
 #include <type-list/concept/ValueListConcept.h>
 #include <type-list/concept/ExportableListConcept.h>
 #include <type-list/concept/NonEmptyListConcept.h>
-#include <type-list/base/ValueList.h>
+#include <type-list/types/ValueList.h>
 #include <type_traits>
 #include <cstdint>
 #include <catch.hpp>

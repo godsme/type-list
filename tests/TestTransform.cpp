@@ -23,9 +23,18 @@ namespace {
         using type = Wrapper<T>;
     };
     template <typename T> struct S;
-    SCENARIO("Transform ValueList") {
+    SCENARIO("Transform ValueToValue") {
         using type = TransformValue_t<ValueList<1,2,3>, Add>;
-        //using type = Transform_t<TypeList<int, double>, Identity>;
         REQUIRE(std::is_same_v<ValueList<11,12,13>, type>);
+    }
+
+    template<auto I> struct W;
+    template<auto I> struct ToType {
+        using type = W<I>;
+    };
+
+    SCENARIO("Transform ValueToType") {
+        using type = TransformValue_t<ValueList<1,2,3>, ToType>;
+        REQUIRE(std::is_same_v<TypeList<W<1>,W<2>,W<3>>, type>);
     }
 }

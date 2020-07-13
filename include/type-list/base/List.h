@@ -16,11 +16,20 @@ namespace detail {
 
     template<auto ... Vs>
     auto DeduceListType() -> ValueList<Vs...>;
+
+    template<typename T>
+    auto DeduceRepeatListType() -> RepeatTypeList<T>;
+
+    template<auto V>
+    auto DeduceRepeatListType() -> RepeatValueList<V>;
 }
 
 TYPE_LIST_NS_END
 
 #define __TL_list(p, ...) \
 decltype(TYPE_LIST_NS::detail::DeduceListType<p, __VA_ARGS__>())
+
+#define __TL_repeat(p) \
+decltype(TYPE_LIST_NS::detail::DeduceRepeatListType<p>())
 
 #endif //TYPE_LIST_LIST_H

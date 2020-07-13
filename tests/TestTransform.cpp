@@ -20,7 +20,7 @@ namespace {
 
     template <typename T> struct S;
     SCENARIO("Transform ValueToValue") {
-        using type = TransformValue_t<ValueList<1,2,3>, Add>;
+        using type = __TL_transform(__TL_list(1,2,3), Add);
         REQUIRE(std::is_same_v<ValueList<11,12,13>, type>);
     }
 
@@ -30,7 +30,7 @@ namespace {
     };
 
     SCENARIO("Transform ValueToType") {
-        using type = TransformValue_t<ValueList<1,2,3>, ToType>;
+        using type = __TL_transform(__TL_list(1,2,3), ToType);
         REQUIRE(std::is_same_v<TypeList<W<1>,W<2>,W<3>>, type>);
     }
 
@@ -39,7 +39,7 @@ namespace {
         using type = WT<T>;
     };
     SCENARIO("Transform Type2Type") {
-        using type = Transform_t<TypeList<int, double>, Identity>;
+        using type = __TL_transform(__TL_list(int, double), Identity);
         REQUIRE(std::is_same_v<TypeList<WT<int>,WT<double>>, type>);
     }
 

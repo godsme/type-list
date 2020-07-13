@@ -138,6 +138,14 @@ namespace detail {
 template<FiniteTypeListConcept IN, template <typename > typename F>
 using Transform_t = typename detail::TypeTransformer< IN, F>::type;
 
+template<FiniteTypeListConcept IN, template <typename > typename F>
+auto DeductTransform() -> Transform_t<IN, F>;
+
+template<FiniteTypeListConcept IN, template <auto > typename F>
+auto DeductTransform() -> TransformValue_t<IN, F>;
+
+#define __TL_transform(IN, F) decltype(DeductTransform<IN, F>())
+
 TYPE_LIST_NS_END
 
 #endif //TYPE_LIST_TRANSFORM_H

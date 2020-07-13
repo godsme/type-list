@@ -15,15 +15,13 @@ TYPE_LIST_NS_BEGIN
 namespace detail {
     __TL_lambda(Drop, ListConcept IN, size_t N);
 
-    template< NonEmptyListConcept IN, size_t N>
-    struct Drop<IN, N>
-        __return_apply_t(Drop
+    __TL_lambda(Drop, NonEmptyListConcept IN, size_t N)
+    <IN, N> __return_apply_t(Drop
             , typename IN::Tail
             , N-1);
 
-    template<ListConcept IN>
-    struct Drop<IN, 0>
-        __return_t(IN);
+    __TL_lambda(Drop, ListConcept IN)
+    <IN, 0> __return_t(IN);
 }
 
 template<ListConcept IN, size_t N>

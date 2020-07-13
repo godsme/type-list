@@ -51,6 +51,7 @@ namespace detail {
     struct TakeTrait<IN, 0>
             __return_t(EmptyList);
 }
+
 template<ListConcept IN, size_t N>
 using Take_t = __TL_apply_t(detail::TakeTrait, IN, N);
 

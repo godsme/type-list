@@ -7,34 +7,27 @@
 
 #include <type-list/type-list-ns.h>
 #include <type-list/concept/NonEmptyListConcept.h>
+#include <type-list/types/Lambda.h>
 #include <cstddef>
 
 TYPE_LIST_NS_BEGIN
 
 namespace detail {
-    template
-        < ListConcept IN
-        , size_t      N>
-    struct Drop;
+    __TL_lambda(Drop, ListConcept IN, size_t N);
 
-    template
-        < NonEmptyListConcept    IN
-        , size_t                 N>
-    struct Drop<IN, N> {
-        using type = typename Drop
-                < typename IN::Tail
-                , N-1
-                >::type;
-    };
+    template< NonEmptyListConcept IN, size_t N>
+    struct Drop<IN, N>
+        __return_apply_t(Drop
+            , typename IN::Tail
+            , N-1);
 
     template<ListConcept IN>
-    struct Drop<IN, 0> {
-        using type = IN;
-    };
+    struct Drop<IN, 0>
+        __return_t(IN);
 }
 
 template<ListConcept IN, size_t N>
-using Drop_t = typename detail::Drop<IN, N>::type;
+using Drop_t = __TL_apply_t(detail::Drop, IN, N);
 
 TYPE_LIST_NS_END
 

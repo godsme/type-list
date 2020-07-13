@@ -50,4 +50,6 @@ decltype(TYPE_LIST_NS::detail::DeduceListType<0, ##__VA_ARGS__>())
 #define __TL_repeat(p, ...) \
 decltype(TYPE_LIST_NS::detail::DeduceRepeatListType<p, ##__VA_ARGS__>())
 
+#define __TL_infinite(...) TYPE_LIST_NS::InfiniteIntList<__VA_ARGS__>
+
 #endif //TYPE_LIST_LIST_H

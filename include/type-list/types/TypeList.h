@@ -83,7 +83,7 @@ struct RepeatTypeList : TypeListSignature, InfiniteSignature {
     using HeadAsType = Head;
 };
 
-template<typename T, size_t TIMES>
+template<typename T, size_t TIMES> requires (TIMES <= 200)
 struct LimitedRepeatTypeList : TypeListSignature {
     constexpr static size_t size = TIMES;
     using Head = T;

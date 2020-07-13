@@ -91,23 +91,66 @@ struct RepeatValueList : ValueListSignature, InfiniteSignature {
     using Tail = RepeatValueList<V>;
 };
 
-template<auto V, size_t times>
-struct LimitedRepeatValueList : ValueListSignature {
-    constexpr static size_t size = times;
+namespace detail {
+    template<auto V, size_t TIMES, auto ... Vs>
+    struct RepeatValueGenerator {
+        using type = typename RepeatValueGenerator<V, TIMES-1, Vs..., V>::type;
+    };
+
+    template<auto V, auto ... Vs>
+    struct RepeatValueGenerator<V, 0, Vs...> {
+        using type = ValueList<Vs...>;
+    };
+}
+template<auto V, size_t TIMES> requires (TIMES <= 200)
+class LimitedRepeatValueList : ValueListAllSignatures {
+    using list = typename detail::RepeatValueGenerator<V, TIMES>::type;
+public:
+    constexpr static size_t size = TIMES;
 
     constexpr static auto Head = V;
-    using Tail = LimitedRepeatValueList<V, times - 1>;
+    using Tail = LimitedRepeatValueList<V, TIMES - 1>;
 
     using HeadAsType = Value<Head>;
+
+    template <template <auto ...> typename RESULT>
+    using exportTo = typename list::template exportTo<RESULT>;
+
+    template<auto ... Vs2>
+    using append = typename list::template append<Vs2...>;
+
+    template<auto ... Vs2>
+    using prepend = typename list::template prepend<Vs2...>;
+
+    template<ExportableValueListConcept T>
+    using appendList = typename T::template exportTo<append>;
+
+    template<ExportableValueListConcept T>
+    using prependList = typename T::template exportTo<prepend>;
 };
 
 template<auto V>
-struct LimitedRepeatValueList<V, 0> : ValueListSignature {
+struct LimitedRepeatValueList<V, 0> : ValueListAllSignatures {
     constexpr static size_t size = 0;
+
+    template <template <auto ...> typename RESULT>
+    using exportTo = RESULT<>;
+
+    template<auto ... Vs2>
+    using append = ValueList<Vs2...>;
+
+    template<auto ... Vs2>
+    using prepend = ValueList<Vs2...>;
+
+    template<ValueListConcept T>
+    using appendList = T;
+
+    template<ValueListConcept T>
+    using prependList = T;
 };
 
 TYPE_LIST_NS_END
 
-#define __TL_infinite(...) TYPE_LIST_NS::InfiniteIntList<__VA_ARGS__>
+
 
 #endif //TYPE_LIST_VALUELIST_H

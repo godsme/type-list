@@ -10,6 +10,7 @@
 #include <type-list/types/List.h>
 #include <type-list/types/ListWrapper.h>
 #include <cstddef>
+#include <type-list/types/Lambda.h>
 
 TYPE_LIST_NS_BEGIN
 
@@ -39,27 +40,22 @@ namespace detail {
 }
 
 namespace detail {
-    template<typename IN, size_t N>
-    class TakeTrait;
-
+    __TL_lambda(TakeTrait, __Set(IN), size_t N);
 
     template<ValueListConcept IN, size_t N>
-    struct TakeTrait<IN, N> {
-        using type = typename detail::Take<List<IN>, N, ValueList<>>::type;
-    };
+    struct TakeTrait<IN, N>
+    __return_t(__TL_apply_t(detail::Take, List<IN>, N, ValueList<>));
 
     template<TypeListConcept IN, size_t N>
-    struct TakeTrait<IN, N> {
-        using type = typename detail::Take<IN, N, TypeList<>>::type;
-    };
+    struct TakeTrait<IN, N>
+    __return_t(__TL_apply_t(detail::Take, IN, N, TypeList<>));
 
     template<typename IN> requires std::is_same_v<EmptyList, IN>
-    struct TakeTrait<IN, 0> {
-        using type = EmptyList;
-    };
+    struct TakeTrait<IN, 0>
+    __return_t(EmptyList);
 }
 template<ListConcept IN, size_t N>
-using Take_t = typename detail::TakeTrait<IN, N>::type;
+using Take_t = __TL_apply_t(detail::TakeTrait, IN, N);
 
 TYPE_LIST_NS_END
 

@@ -19,7 +19,7 @@ namespace detail {
     __TL_lambda(Transform,
        FiniteListConcept         IN,
        __TL_lambda_t(__Set()) F,
-       typename                  OUT)
+       __Set(OUT))
     __return_t(OUT);
 
     __TL_lambda(Transform
@@ -56,8 +56,7 @@ namespace detail {
         typename F<V>::type;
     };
 
-    template<FiniteValueListConcept IN, __TL_lambda(F, auto)>
-    struct ValueTransformer;
+    __TL_lambda(ValueTransformer, FiniteValueListConcept IN, __TL_lambda(F, auto));
 
     template<NonEmptyFiniteValueListConcept IN, __TL_lambda(F, auto)>
     requires V2VConcept<F, IN::Head>

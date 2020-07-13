@@ -16,19 +16,20 @@
 TYPE_LIST_NS_BEGIN
 
 namespace detail {
-    template< FiniteListConcept, __TL_lambda_t(typename), typename OUT>
-    struct Transform
-            __return_t(OUT);
+    __TL_lambda(Transform
+            , FiniteListConcept
+            , __TL_lambda_t(typename)
+            , typename OUT)
+    __return_t(OUT);
 
-    template
-       < NonEmptyFiniteListConcept IN
-       , __TL_lambda_t(typename)    F
-       , typename                  OUT>
-    __TL_pattern(Transform, IN, F, OUT)
-        __return_apply_t(Transform
-            , typename IN::Tail
-            , F
-            , __TL_append_t(OUT, __TL_apply_t(F, typename IN::Head)));
+    __TL_lambda(Transform
+       , NonEmptyFiniteListConcept IN
+       , __TL_lambda_t(typename)   F
+       , typename                  OUT)
+    <IN, F, OUT> __return_apply_t(Transform
+                    , typename IN::Tail
+                    , F
+                    , __TL_append_t(OUT, __TL_apply_t(F, typename IN::Head)));
 }
 
 namespace detail {

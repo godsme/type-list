@@ -15,25 +15,16 @@
 TYPE_LIST_NS_BEGIN
 
 namespace detail {
-    __TL_lambda(Take
-       , ListConcept IN
-       , size_t      N
-       , ListConcept OUT);
+    __TL_lambda(Take, ListConcept IN, size_t N, ListConcept OUT);
 
-    template
-       < NonEmptyListConcept    IN
-       , size_t                 N
-       , ListConcept            OUT>
-    struct Take<IN, N, OUT>
-            __return_apply_t(Take
-                , typename IN::Tail
-                , N-1
-                , typename OUT::template appendType<typename IN::Head>
-                );
+    __TL_lambda(Take, NonEmptyListConcept IN, size_t N, ListConcept OUT)
+    <IN, N, OUT> __return_apply_t(Take
+                    , typename IN::Tail
+                    , N-1
+                    , typename OUT::template appendType<typename IN::Head>);
 
-    template<ListConcept IN, ListConcept OUT>
-    struct Take<IN, 0, OUT>
-            __return_t(OUT);
+    __TL_lambda(Take, ListConcept IN, ListConcept OUT)
+    <IN, 0, OUT> __return_t(OUT);
 }
 
 namespace detail {

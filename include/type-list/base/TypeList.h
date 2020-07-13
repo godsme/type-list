@@ -76,7 +76,7 @@ struct TypeList<H, Ts...> : TypeListAllSignatures {
 };
 
 template<typename T>
-struct RepeatTypeList : TypeListSignature, InfiniteListSignature {
+struct RepeatTypeList : TypeListSignature, InfiniteSignature {
     using Head = T;
     using Tail = RepeatTypeList<T>;
 };

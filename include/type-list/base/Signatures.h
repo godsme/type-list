@@ -12,7 +12,7 @@ TYPE_LIST_NS_BEGIN
 struct ListSignature {};
 struct TypeListSignature : ListSignature {};
 struct ExportableListSignature {};
-struct InfiniteListSignature {};
+struct InfiniteSignature {};
 struct ValueListSignature : ListSignature {};
 struct AppendableTypeList {};
 

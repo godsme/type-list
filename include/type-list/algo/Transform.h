@@ -6,7 +6,6 @@
 #define TYPE_LIST_TRANSFORM_H
 
 #include <type-list/type-list-ns.h>
-#include <type-list/concept/FiniteListConcept.h>
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/base/TypeList.h>
 #include <type-list/base/Value.h>
@@ -55,21 +54,21 @@ namespace detail {
         };
     };
 
-    template<template <auto> typename F>
+    template<template <auto> typename F, auto V>
     concept ValueToValueConcept = requires {
-        F<0>::value;
+        F<V>::value;
     };
 
-    template<template <auto> typename F>
+    template<template <auto> typename F, auto V>
     concept ValueToTypeConcept = requires {
-        typename F<0>::type;
+        typename F<V>::type;
     };
 
     template<FiniteValueListConcept IN, template <auto> typename F>
     struct ValueTransformer;
 
-    template<FiniteValueListConcept IN, template <auto> typename F>
-    requires ValueToValueConcept<F>
+    template<NonEmptyFiniteValueListConcept IN, template <auto> typename F>
+    requires ValueToValueConcept<F, IN::Head>
     struct ValueTransformer<IN, F> {
         using type = typename detail::Transform
                 < List<IN>
@@ -78,8 +77,14 @@ namespace detail {
                 >::type;
     };
 
-    template<FiniteValueListConcept IN, template <auto> typename F>
-    requires ValueToTypeConcept<F>
+    template<EmptyFiniteValueListConcept IN, template <auto> typename F>
+    requires ValueToValueConcept<F, 0>
+    struct ValueTransformer<IN, F> {
+        using type = ValueList<>;
+    };
+
+    template<NonEmptyFiniteValueListConcept IN, template <auto> typename F>
+    requires ValueToTypeConcept<F, IN::Head>
     struct ValueTransformer<IN, F> {
         using type = typename detail::Transform
                 < List<IN>
@@ -87,10 +92,38 @@ namespace detail {
                 , TypeList<>
                 >::type;
     };
+
+    template<EmptyFiniteValueListConcept IN, template <auto> typename F>
+    requires ValueToTypeConcept<F, 0>
+    struct ValueTransformer<IN, F> {
+        using type = TypeList<>;
+    };
 }
 
 template<FiniteValueListConcept IN, template <auto> typename F>
 using TransformValue_t = typename detail::ValueTransformer<IN, F>::type;
+
+namespace detail {
+    template<auto F>
+    struct Value2ValueMapperAdapter {
+        template<typename T>
+        struct Mapper {
+            using type = Value<F(T::value)>;
+        };
+    };
+
+    template<FiniteValueListConcept IN, auto F>
+    struct Value2ValueTransformer {
+        using type = typename detail::Transform
+                < List<IN>
+                , Value2ValueMapperAdapter<F>::template Mapper
+                , ValueList<>
+                >::type;
+    };
+}
+
+template<FiniteValueListConcept IN, auto F>
+using TransformValueF_t = typename detail::Value2ValueTransformer<IN, F>::type;
 
 namespace detail {
     template<template <typename> typename F>
@@ -138,11 +171,14 @@ namespace detail {
 template<FiniteTypeListConcept IN, template <typename > typename F>
 using Transform_t = typename detail::TypeTransformer< IN, F>::type;
 
-template<FiniteTypeListConcept IN, template <typename > typename F>
+template<typename IN, template <typename > typename F>
 auto DeductTransform() -> Transform_t<IN, F>;
 
-template<FiniteTypeListConcept IN, template <auto > typename F>
+template<typename IN, template <auto > typename F>
 auto DeductTransform() -> TransformValue_t<IN, F>;
+
+template<typename IN, auto F>
+auto DeductTransform() -> TransformValueF_t<IN, F>;
 
 #define __TL_transform(IN, F) decltype(DeductTransform<IN, F>())
 

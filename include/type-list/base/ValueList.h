@@ -76,13 +76,13 @@ struct ValueList<H, Vs...> : ValueListAllSignatures {
 
 ////////////////////////////////////////////////////////////////////
 template<auto INIT, auto STEP = 1>
-struct InfiniteIntList : ValueListSignature, InfiniteListSignature {
+struct InfiniteIntList : ValueListSignature, InfiniteSignature {
     constexpr static auto Head = INIT;
     using Tail = InfiniteIntList<INIT+STEP, STEP>;
 };
 
 template<auto V>
-struct RepeatValueList : ValueListSignature, InfiniteListSignature {
+struct RepeatValueList : ValueListSignature, InfiniteSignature {
     constexpr static auto Head = V;
     using Tail = RepeatValueList<V>;
 };

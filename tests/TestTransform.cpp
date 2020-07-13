@@ -5,9 +5,8 @@
 #include <type-list/algo/Transform.h>
 #include <type-list/concept/ValueListConcept.h>
 #include <type-list/concept/ExportableListConcept.h>
-#include <type-list/concept/FiniteListConcept.h>
-#include <type-list/concept/InfiniteListConcept.h>
-#include <type-list/base/ValueList.h>
+#include <type-list/concept/NonEmptyListConcept.h>
+#include <type-list/base/List.h>
 #include <type_traits>
 #include <cstdint>
 #include <catch.hpp>
@@ -48,7 +47,25 @@ namespace {
         constexpr static bool value = std::is_integral_v<T>;
     };
     SCENARIO("Transform Type2Value") {
-        using type = Transform_t<TypeList<int, double>, IntTrait>;
+        using type = __TL_transform(__TL_list(int, double), IntTrait);
         REQUIRE(std::is_same_v<ValueList<true, false>, type>);
+    }
+
+    constexpr auto add(int i) { return i + 10; };
+
+    SCENARIO("Transform Type2Value by function") {
+        using type = __TL_transform(__TL_list(1, 2), add);
+        REQUIRE(std::is_same_v<ValueList<11, 12>, type>);
+    }
+
+    SCENARIO("Transform Type2Value by direct lambda") {
+        using type = __TL_transform(__TL_list(1, 2), [](int i) { return i + 10; });
+        REQUIRE(std::is_same_v<ValueList<11, 12>, type>);
+    }
+
+    SCENARIO("Transform Type2Value by indirect lambda") {
+        constexpr auto l = [](int i) { return i + 10; };
+        using type = __TL_transform(__TL_list(1, 2), l);
+        REQUIRE(std::is_same_v<ValueList<11, 12>, type>);
     }
 }

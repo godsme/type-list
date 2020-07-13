@@ -7,7 +7,6 @@
 
 #include <type-list/type-list-ns.h>
 #include <type-list/concept/ValueListConcept.h>
-#include <type-list/concept/InfiniteListConcept.h>
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/base/Value.h>
 
@@ -32,7 +31,7 @@ namespace detail {
     template<InfiniteValueListConcept LIST>
     struct InfiniteValueListWrapper
             : TypeListSignature
-            , InfiniteListSignature {
+            , InfiniteSignature {
         using Head = Value<LIST::Head>;
         using Tail = ValueListWrapper<typename LIST::Tail>;
     };

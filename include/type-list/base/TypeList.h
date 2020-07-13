@@ -33,6 +33,12 @@ struct TypeList : TypeListAllSignatures {
     template<typename ... Ts2>
     using prepend = TypeList<Ts2...,  Ts...>;
 
+    template<typename T>
+    using appendType = append<T>;
+
+    template<typename T>
+    using prependType = prepend<T>;
+
     template<TypeListConcept T>
     using appendList = T;
 
@@ -55,6 +61,12 @@ struct TypeList<H, Ts...> : TypeListAllSignatures {
 
     template<typename ... Ts2>
     using prepend = TypeList<Ts2..., H, Ts...>;
+
+    template<typename T>
+    using appendType = append<T>;
+
+    template<typename T>
+    using prependType = prepend<T>;
 
     template<ExportableTypeListConcept T>
     using appendList = typename T::template exportTo<append>;

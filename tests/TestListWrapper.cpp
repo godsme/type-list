@@ -2,7 +2,7 @@
 // Created by godsme on 7/12/20.
 //
 
-#include <type-list/algo/Transform.h>
+#include <type-list/base/ListWrapper.h>
 #include <type-list/concept/ValueListConcept.h>
 #include <type-list/concept/ExportableListConcept.h>
 #include <type-list/concept/FiniteListConcept.h>
@@ -23,9 +23,12 @@ namespace {
         using type = Wrapper<T>;
     };
     template <typename T> struct S;
-    SCENARIO("Transform ValueList") {
-        using type = TransformValue_t<ValueList<1,2,3>, Add>;
+    SCENARIO("ValueListWrapper") {
+        using type = List<ValueList<1,2,3>>;
         //using type = Transform_t<TypeList<int, double>, Identity>;
-        REQUIRE(std::is_same_v<ValueList<11,12,13>, type>);
+        //S<type> ss;
+        THEN("it has a head") {
+            REQUIRE(std::is_same_v<type::Head, Value<1>>);
+        }
     }
 }

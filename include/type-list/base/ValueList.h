@@ -32,6 +32,12 @@ struct ValueList : ValueListAllSignatures {
     template<auto ... Vs2>
     using prepend = ValueList<Vs2..., Vs...>;
 
+    template<typename T>
+    using appendType = append<T::value>;
+
+    template<typename T>
+    using prependType = prepend<T::value>;
+
     template<ValueListConcept T>
     using appendList = T;
 
@@ -54,6 +60,12 @@ struct ValueList<H, Vs...> : ValueListAllSignatures {
 
     template<auto ... Vs2>
     using prepend = ValueList<Vs2..., H, Vs...>;
+
+    template<typename T>
+    using appendType = append<T::value>;
+
+    template<typename T>
+    using prependType = prepend<T::value>;
 
     template<ExportableValueListConcept T>
     using appendList = typename T::template exportTo<append>;

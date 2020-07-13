@@ -9,13 +9,29 @@
 #include <concepts>
 #include <type-list/base/Signatures.h>
 #include <type-list/concept/ListConcept.h>
+#include <type-list/concept/ValueListConcept.h>
 
 TYPE_LIST_NS_BEGIN
 
 template<typename T>
-concept NonEmptyListConcept =
-ListConcept<T> && requires {
+concept NonEmptyConcept =
+requires {
     typename T::Head;
+    typename T::Tail;
+};
+
+template<typename T>
+concept NonEmptyListConcept =
+ListConcept<T> && NonEmptyConcept<T>;
+
+template<typename T>
+concept EmptyListConcept =
+ListConcept<T> && !NonEmptyConcept<T>;
+
+template<typename T>
+concept NonEmptyValueListConcept = \
+ValueListConcept<T> && requires {
+    T::Head;
     typename T::Tail;
 };
 

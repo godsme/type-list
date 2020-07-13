@@ -11,6 +11,7 @@
 #include <type-list/base/TypeList.h>
 #include <type-list/base/Value.h>
 #include <type-list/base/ListWrapper.h>
+#include <type-list/base/ValueList.h>
 
 TYPE_LIST_NS_BEGIN
 
@@ -18,22 +19,23 @@ namespace detail {
     template
       < FiniteListConcept            IN
       , template <typename> typename F
-      , typename                 ... OUT>
+      , typename                     OUT>
     struct Transform {
-        using type = TypeList<OUT...>;
+        using type = OUT;
     };
 
     template
        < NonEmptyFiniteListConcept    IN
        , template <typename> typename F
-       , typename                 ... OUT>
-    struct Transform<IN, F, OUT...> {
+       , typename                     OUT>
+    struct Transform<IN, F, OUT> {
         using type = typename Transform
                 < typename IN::Tail
                 , F
-                , OUT... , F<typename IN::Head>
+                , typename OUT::template appendType<typename F<typename IN::Head>::type>
                 >::type;
     };
+
 }
 
 template<template <auto> typename F>
@@ -43,13 +45,18 @@ struct MapperAdapter {
         using type = Value<F<T::value>::value>;
     };
 };
+
 template<FiniteValueListConcept IN, template <auto> typename F>
-struct ValueTransform {
-    using type = typename detail::Transform
+using TransformValue_t  =
+        typename detail::Transform
             < List<IN>
             , MapperAdapter<F>::template Mapper
+            , ValueList<>
             >::type;
-};
+
+template<FiniteTypeListConcept IN, template <typename > typename F>
+using Transform_t  =
+typename detail::Transform< IN, F, TypeList<>>::type;
 
 TYPE_LIST_NS_END
 

@@ -32,7 +32,8 @@ namespace detail {
                 );
 
     template<ListConcept IN, ListConcept OUT>
-    struct Take<IN, 0, OUT> __return_t(OUT);
+    struct Take<IN, 0, OUT>
+            __return_t(OUT);
 }
 
 namespace detail {
@@ -40,15 +41,15 @@ namespace detail {
 
     template<ValueListConcept IN, size_t N>
     struct TakeTrait<IN, N>
-    __return_t(__TL_apply_t(detail::Take, List<IN>, N, ValueList<>));
+            __return_apply_t(detail::Take, List<IN>, N, ValueList<>);
 
     template<TypeListConcept IN, size_t N>
     struct TakeTrait<IN, N>
-    __return_t(__TL_apply_t(detail::Take, IN, N, TypeList<>));
+            __return_apply_t(detail::Take, IN, N, TypeList<>);
 
     template<typename IN> requires std::is_same_v<EmptyList, IN>
     struct TakeTrait<IN, 0>
-    __return_t(EmptyList);
+            __return_t(EmptyList);
 }
 template<ListConcept IN, size_t N>
 using Take_t = __TL_apply_t(detail::TakeTrait, IN, N);

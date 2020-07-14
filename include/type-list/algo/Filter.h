@@ -84,11 +84,15 @@ template<FiniteTypeListConcept IN, __TL_lambda(PRED, typename)>
 using Filter_t = __TL_apply_t(detail::Filter, IN, PRED, TypeList<>, TypeList<>);
 
 namespace detail {
+    using __EmPtY_FilterResult = struct { using satisfied = EmptyList; using rest = EmptyList; };
     template<FiniteTypeListConcept IN, __TL_lambda(PRED, __Set())>
     auto DeductFilter() -> Filter_t<IN, PRED>;
 
     template<FiniteValueListConcept IN, __TL_lambda(PRED, auto)>
     auto DeductFilter() -> FilterValue_t<IN, PRED>;
+
+    template<typename IN, __TL_lambda(PRED, auto)> requires std::is_same_v<EmptyList, IN>
+    auto DeductFilter() -> __EmPtY_FilterResult;
 
     template<FiniteValueListConcept IN, auto PRED>
     auto DeductFilter() -> FilterValueF_t<IN, PRED>;

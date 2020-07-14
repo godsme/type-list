@@ -30,4 +30,16 @@ namespace {
         using type = __TL_sort(__TL_list(int, char, long double, short, long, double, bool), GreaterSize);
         REQUIRE(std::is_same_v<__TL_list(long double, long, double, int, short, char, bool), type>);
     }
+
+    __TL_lambda(LesserValue, int V1, int V2) __return_v(V1 < V2);
+    SCENARIO("sort a value list") {
+        using type = __TL_sort(__TL_list(18, 93, 2, 41, 1), LesserValue);
+        REQUIRE(std::is_same_v<__TL_list(1, 2, 18, 41, 93), type>);
+    }
+
+    __TL_lambda(GreaterValue, int V1, int V2) __return_v(V1 > V2);
+    SCENARIO("sort a value list in greater way") {
+        using type = __TL_sort(__TL_list(18, 93, 2, 41, 1), GreaterValue);
+        REQUIRE(std::is_same_v<__TL_list(93, 41, 18, 2, 1), type>);
+    }
 }

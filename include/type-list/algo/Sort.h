@@ -35,8 +35,39 @@ namespace detail {
 template<FiniteTypeListConcept IN, __TL_lambda(LT, typename, typename)>
 using Sort_t = __TL_apply_t(detail::Sort, IN, LT);
 
+namespace detail {
+    template<__TL_lambda(Compare, auto, auto)>
+    struct ValueCompareAdapter {
+        __TL_lambda(LessThan, typename T1, typename T2)
+            __return_apply_v(Compare, T1::value, T2::value);
+    };
+}
+
+template<FiniteValueListConcept IN, __TL_lambda(LT, auto, auto)>
+using SortValue_t = __TL_apply_t(detail::Sort,
+        List<IN>,
+        detail::ValueCompareAdapter<LT>::template LessThan);
+
+namespace detail {
+    template<FiniteTypeListConcept IN, __TL_lambda(LT, typename, typename)>
+    requires FiniteTypeListConcept<IN> && (!std::is_same_v<EmptyList, IN>)
+    auto DeduceSortType() -> Sort_t<IN, LT>;
+
+    template<typename IN, __TL_lambda(LT, auto, auto)>
+    requires FiniteValueListConcept<IN> && (!std::is_same_v<EmptyList, IN>)
+    auto DeduceSortType() -> SortValue_t<IN, LT>;
+
+    template<typename IN, __TL_lambda(LT, typename, typename)>
+    requires std::is_same_v<EmptyList, IN>
+    auto DeduceSortType() -> EmptyList;
+
+    template<typename IN, __TL_lambda(LT, auto, auto)>
+    requires std::is_same_v<EmptyList, IN>
+    auto DeduceSortType() -> EmptyList;
+}
 TYPE_LIST_NS_END
 
-#define __TL_sort(...) TYPE_LIST_NS::Sort_t<__VA_ARGS__>
+#define __TL_sort(...) \
+decltype(TYPE_LIST_NS::detail::DeduceSortType<__VA_ARGS__>())
 
 #endif //TYPE_LIST_SORT_H

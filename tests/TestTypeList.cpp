@@ -168,13 +168,13 @@ namespace {
                 REQUIRE(std::is_base_of_v<TypeListSignature, type>);
             }
             WHEN("export to a template") {
-                using result = type::template exportTo<Result>;
+                using result = decltype(type::template exportTo<Result>());
                 THEN("the num_of_Ts should be 3") {
                     REQUIRE(3 == result::Num_Of_Ts);
                 }
             }
             WHEN("export it's tail to a template") {
-                using result = type::Tail::template exportTo<Result>;
+                using result = decltype(type::Tail::template exportTo<Result>());
                 THEN("the num_of_Ts should be 2") {
                     REQUIRE(2 == result::Num_Of_Ts);
                 }

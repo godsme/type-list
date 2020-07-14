@@ -52,16 +52,17 @@ namespace detail {
 
 struct EmptyList
         : ListSignature
+        , ExportableListSignature
         , TypeListSignature
         , ValueListSignature
         , AppendableSignature {
     constexpr static size_t size = 0;
 
     template <template <auto ...> typename RESULT>
-    auto exportTo() -> RESULT<>;
+    static auto exportTo() -> RESULT<>;
 
     template <template <typename ...> typename RESULT>
-    auto exportTo() -> RESULT<>;
+    static auto exportTo() -> RESULT<>;
 
     template<ListConcept T>
     using appendList = T;

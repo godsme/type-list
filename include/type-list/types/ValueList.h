@@ -10,6 +10,7 @@
 #include <type-list/concept/ExportableListConcept.h>
 #include <type-list/concept/ValueListConcept.h>
 #include <type-list/types/Value.h>
+#include <type-list/types/TypeList.h>
 #include <cstddef>
 
 TYPE_LIST_NS_BEGIN
@@ -47,6 +48,19 @@ struct ValueList : ValueListAllSignatures {
     using prependList = T;
 };
 
+namespace detail {
+    template<typename LIST, auto ... Vs>
+    struct ToTypeList {
+        using type = LIST;
+    };
+
+    template<typename LIST, auto H, auto ... Vs>
+    struct ToTypeList<LIST, H, Vs...> {
+        using type = \
+        typename ToTypeList<typename LIST::template appendType<Value<H>>, Vs...>::type;
+    };
+}
+
 template<auto H, auto ... Vs>
 struct ValueList<H, Vs...> : ValueListAllSignatures {
     constexpr static size_t size = sizeof...(Vs) + 1;
@@ -56,7 +70,7 @@ struct ValueList<H, Vs...> : ValueListAllSignatures {
     using HeadAsType = Value<Head>;
 
     template <template <auto ...> typename RESULT>
-    using exportTo = RESULT<H, Vs...>;
+    static auto exportTo() -> RESULT<H, Vs...>;
 
     template<auto ... Vs2>
     using append = ValueList<H, Vs..., Vs2...>;
@@ -71,10 +85,10 @@ struct ValueList<H, Vs...> : ValueListAllSignatures {
     using prependType = prepend<T::value>;
 
     template<ExportableValueListConcept T>
-    using appendList = typename T::template exportTo<append>;
+    using appendList = decltype(T::template exportTo<append>());
 
     template<ExportableValueListConcept T>
-    using prependList = typename T::template exportTo<prepend>;
+    using prependList = decltype(T::template exportTo<prepend>());
 };
 
 ////////////////////////////////////////////////////////////////////
@@ -115,7 +129,7 @@ public:
     using HeadAsType = Value<Head>;
 
     template <template <auto ...> typename RESULT>
-    using exportTo = typename list::template exportTo<RESULT>;
+    static auto exportTo() -> decltype(list::template exportTo<RESULT>());
 
     template<auto ... Vs2>
     using append = typename list::template append<Vs2...>;
@@ -124,10 +138,10 @@ public:
     using prepend = typename list::template prepend<Vs2...>;
 
     template<ExportableValueListConcept T>
-    using appendList = typename T::template exportTo<append>;
+    using appendList = decltype(T::template exportTo<append>());
 
-    template<ExportableValueListConcept T>
-    using prependList = typename T::template exportTo<prepend>;
+    template<FiniteValueListConcept T>
+    using prependList = decltype(T::template exportTo<prepend>());
 };
 
 template<auto V>

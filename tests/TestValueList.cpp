@@ -212,7 +212,7 @@ namespace {
             REQUIRE(ExportableListConcept<type>);
         }
         THEN("it can be export to a template") {
-            REQUIRE(3 == type::exportTo<Result>::Num_Of_Ts);
+            REQUIRE(3 == decltype(type::exportTo<Result>())::Num_Of_Ts);
         }
     }
     SCENARIO("NonEmpty ValueList append") {

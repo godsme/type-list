@@ -57,7 +57,7 @@ struct TypeList<H, Ts...> : TypeListAllSignatures {
     constexpr static size_t size = sizeof...(Ts) + 1;
 
     template <template <typename ...> typename RESULT>
-    using exportTo = RESULT<H, Ts...>;
+    static auto exportTo() -> RESULT<H, Ts...>;
 
     template<typename ... Ts2>
     using append = TypeList<H, Ts..., Ts2...>;
@@ -71,11 +71,11 @@ struct TypeList<H, Ts...> : TypeListAllSignatures {
     template<typename T>
     using prependType = prepend<T>;
 
-    template<TypeListConcept T>
-    using appendList = exportTo<T::template prepend>;
+    template<ExportableTypeListConcept T>
+    using appendList = decltype(T::template exportTo<append>());
 
     template<FiniteTypeListConcept T>
-    using prependList = exportTo<T::template append>;
+    using prependList = decltype(T::template exportTo<prepend>());
 };
 
 template<typename T>

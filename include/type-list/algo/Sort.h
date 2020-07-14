@@ -66,16 +66,17 @@ namespace detail {
     template<typename T>
     concept IsEmptyList = std::is_same_v<EmptyList, T>;
 
+    template<typename T>
+    concept NonEmptyFiniteValueList = FiniteValueListConcept<T> && (!IsEmptyList<T>);
+
     template<typename IN, __TL_lambda(LT, typename, typename)>
     requires FiniteTypeListConcept<IN> && (!IsEmptyList<IN>)
     auto DeduceSortType() -> Sort_t<IN, LT>;
 
-    template<typename IN, __TL_lambda(LT, auto, auto)>
-    requires FiniteValueListConcept<IN> && (!IsEmptyList<IN>)
+    template<NonEmptyFiniteValueList IN, __TL_lambda(LT, auto, auto)>
     auto DeduceSortType() -> SortValue_t<IN, LT>;
 
-    template<typename IN, auto LT>
-    requires FiniteValueListConcept<IN> && (!IsEmptyList<IN>)
+    template<NonEmptyFiniteValueList IN, auto LT>
     auto DeduceSortType() -> SortValueF_t<IN, LT>;
 
     template<IsEmptyList IN, __TL_lambda(LT, typename, typename)>

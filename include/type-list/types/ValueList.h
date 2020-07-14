@@ -151,6 +151,4 @@ struct LimitedRepeatValueList<V, 0> : ValueListAllSignatures {
 
 TYPE_LIST_NS_END
 
-
-
 #endif //TYPE_LIST_VALUELIST_H

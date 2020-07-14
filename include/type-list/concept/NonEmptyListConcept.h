@@ -36,6 +36,14 @@ concept NonEmptyListConcept =
 ListConcept<T> && (IsNonEmptyValueList<T> || IsNonEmptyTypeList<T>);
 
 template<typename T>
+concept NonEmptyTypeListConcept =
+TypeListConcept<T> && IsNonEmptyTypeList<T>;
+
+template<typename T>
+concept EmptyTypeListConcept =
+ValueListConcept<T> && !IsNonEmptyTypeList<T>;
+
+template<typename T>
 concept EmptyValueListConcept =
 ValueListConcept<T> && !IsNonEmptyValueList<T>;
 
@@ -71,7 +79,6 @@ concept FiniteListConcept =
 ListConcept<T> && !InfiniteConcept<T>;
 
 
-
 template<typename T>
 concept FiniteTypeListConcept =
 TypeListConcept<T> && !InfiniteConcept<T>;
@@ -79,6 +86,10 @@ TypeListConcept<T> && !InfiniteConcept<T>;
 template<typename T>
 concept NonEmptyFiniteListConcept =
 NonEmptyListConcept<T> && FiniteListConcept<T>;
+
+template<typename T>
+concept NonEmptyFiniteTypeListConcept =
+NonEmptyTypeListConcept<T> && FiniteListConcept<T>;
 
 template<typename T>
 concept EmptyFiniteListConcept =

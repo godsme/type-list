@@ -28,7 +28,7 @@ namespace detail {
         using result  = __TL_filter(typename IN::Tail, LessThan);
         using lesser  = __TL_apply_t(Sort, typename result::satisfied, LT);
         using greater = __TL_apply_t(Sort, typename result::rest, LT);
-        __result_t(typename lesser::template appendType<IN::Head>::template appendList<greater>);
+        __result_t(typename lesser::template appendType<typename IN::Head>::template appendList<greater>);
     };
 }
 

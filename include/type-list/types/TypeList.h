@@ -8,6 +8,7 @@
 #include <type-list/type-list-ns.h>
 #include <type-list/types/Signatures.h>
 #include <type-list/concept/ExportableListConcept.h>
+#include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/concept/TypeListConcept.h>
 #include <cstddef>
 
@@ -70,11 +71,11 @@ struct TypeList<H, Ts...> : TypeListAllSignatures {
     template<typename T>
     using prependType = prepend<T>;
 
-    template<ExportableTypeListConcept T>
-    using appendList = typename T::template exportTo<append>;
+    template<TypeListConcept T>
+    using appendList = exportTo<T::template prepend>;
 
-    template<ExportableTypeListConcept T>
-    using prependList = typename T::template exportTo<prepend>;
+    template<FiniteTypeListConcept T>
+    using prependList = exportTo<T::template append>;
 };
 
 template<typename T>

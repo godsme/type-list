@@ -42,6 +42,12 @@ struct EmptyList
     template<ListConcept T>
     using prependList = T;
 
+    template<typename ... Ts>
+    using append = TypeList<Ts...>;
+
+    template<typename ... Ts>
+    using prepend = TypeList<Ts...>;
+
     template<typename T>
     using appendType = typename detail::EmptyValueWrapperTrait<T>::type;
 };

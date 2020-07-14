@@ -15,14 +15,14 @@ TYPE_LIST_NS_BEGIN
 
 namespace detail {
     __TL_lambda(Filter,
-            FiniteTypeListConcept IN,
-            __TL_lambda(PRED, typename),
-            ListConcept SATISFIED = TypeList<>,
-            ListConcept REST = TypeList<>,
-            typename = void)
+                FiniteListConcept IN,
+                __TL_lambda(PRED, typename),
+                ListConcept SATISFIED = TypeList<>,
+                ListConcept REST = TypeList<>,
+                typename = void)
         __return_t(struct {
-               using satisfied = SATISFIED;
-               using rest      = REST;
+               using satisfied = __TL_apply_t(detail::EmptyListTrait, SATISFIED);
+               using rest      = __TL_apply_t(detail::EmptyListTrait, REST);
            });
 
     __TL_lambda(Filter,
@@ -32,10 +32,10 @@ namespace detail {
                 ListConcept REST)
     <IN, PRED, SATISFIED, REST, std::enable_if_t<__TL_apply_v(PRED, typename IN::Head)>>
         __return_apply_t(Filter
-        , typename IN::Tail
-        , PRED
-        , typename SATISFIED::template appendType<typename IN::Head>
-        , REST);
+            , typename IN::Tail
+            , PRED
+            , typename SATISFIED::template appendType<typename IN::Head>
+            , REST);
 
     __TL_lambda(Filter,
                 FiniteTypeListConcept IN,
@@ -84,18 +84,23 @@ template<FiniteTypeListConcept IN, __TL_lambda(PRED, typename)>
 using Filter_t = __TL_apply_t(detail::Filter, IN, PRED, TypeList<>, TypeList<>);
 
 namespace detail {
-    using __EmPtY_FilterResult = struct { using satisfied = EmptyList; using rest = EmptyList; };
     template<FiniteTypeListConcept IN, __TL_lambda(PRED, __Set())>
     auto DeductFilter() -> Filter_t<IN, PRED>;
 
     template<FiniteValueListConcept IN, __TL_lambda(PRED, auto)>
     auto DeductFilter() -> FilterValue_t<IN, PRED>;
 
-    template<typename IN, __TL_lambda(PRED, auto)> requires std::is_same_v<EmptyList, IN>
-    auto DeductFilter() -> __EmPtY_FilterResult;
-
     template<FiniteValueListConcept IN, auto PRED>
     auto DeductFilter() -> FilterValueF_t<IN, PRED>;
+
+    template<typename IN, __TL_lambda(PRED, __Set())> requires std::is_same_v<EmptyList, IN>
+    auto DeductFilter() -> __TL_apply_t(detail::Filter, IN, PRED, EmptyList, EmptyList);
+
+    template<typename IN, __TL_lambda(PRED, auto)> requires std::is_same_v<EmptyList, IN>
+    auto DeductFilter() -> __TL_apply_t(detail::Filter, IN, ValuePredAdapter<PRED>::template Pred, EmptyList, EmptyList);
+
+    template<typename IN, auto PRED> requires std::is_same_v<EmptyList, IN>
+    auto DeductFilter() -> __TL_apply_t(detail::Filter, IN, PredFuncAdapter<PRED>::template Pred, EmptyList, EmptyList);
 }
 
 TYPE_LIST_NS_END

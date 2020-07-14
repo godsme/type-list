@@ -7,16 +7,40 @@
 
 #include <type-list/types/TypeList.h>
 #include <type-list/types/ValueList.h>
+#include <type-list/concept/NonEmptyListConcept.h>
 
 TYPE_LIST_NS_BEGIN
 
 struct EmptyList : ListSignature, AppendableSignature {
+    constexpr static size_t size = 0;
+
+    template <template <auto ...> typename RESULT>
+    auto exportTo() -> RESULT<>;
+
+    template <template <typename ...> typename RESULT>
+    auto exportTo() -> RESULT<>;
+
     template<ListConcept T>
     using appendList = T;
 
     template<ListConcept T>
     using prependList = T;
+
+    template<typename T>
+    using appendType = TypeList<T>;
 };
+
+namespace detail {
+    template<ListConcept T>
+    struct EmptyListTrait {
+        using type = T;
+    };
+
+    template<EmptyListConcept T>
+    struct EmptyListTrait<T> {
+        using type = EmptyList;
+    };
+}
 
 namespace detail {
 

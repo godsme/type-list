@@ -8,6 +8,7 @@
 #include <type-list/type-list-ns.h>
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/types/Lambda.h>
+#include <type-list/types/List.h>
 #include <cstddef>
 
 TYPE_LIST_NS_BEGIN
@@ -21,7 +22,7 @@ namespace detail {
             , N-1);
 
     __TL_lambda(Drop, ListConcept IN)
-    <IN, 0> __return_t(IN);
+    <IN, 0> __return_apply_t(detail::EmptyListTrait, IN);
 }
 
 template<ListConcept IN, size_t N>

@@ -15,14 +15,14 @@ namespace {
         WHEN("drop 0 elem from a type list") {
             using type = __TL_drop(TypeList<>, 0);
             THEN("should return empty type list") {
-                REQUIRE(std::is_same_v<type, TypeList<>>);
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
 
         WHEN("drop 0 elem from value list") {
             using type = __TL_drop(ValueList<>, 0);
             THEN("should return an empty type list") {
-                REQUIRE(std::is_same_v<type, ValueList<>>);
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
 
@@ -52,7 +52,7 @@ namespace {
         WHEN("drop 2 elem") {
             using type = __TL_drop(list, 2);
             THEN("should get a TypeList with the 2 elems dropped") {
-                REQUIRE(std::is_same_v<type, TypeList<>>);
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
     }
@@ -75,7 +75,7 @@ namespace {
         WHEN("drop 2 elem") {
             using type = __TL_drop(list, 2);
             THEN("should get a list with the 2 elems dropped") {
-                REQUIRE(std::is_same_v<type, ValueList<>>);
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
     }

@@ -5,6 +5,7 @@
 #ifndef TYPE_LIST_LIST_H
 #define TYPE_LIST_LIST_H
 
+#include <type-list/types/Signatures.h>
 #include <type-list/types/TypeList.h>
 #include <type-list/types/ValueList.h>
 #include <type-list/concept/NonEmptyListConcept.h>
@@ -20,6 +21,32 @@ namespace detail {
     template<typename T> requires std::is_base_of_v<ValueSignature, T>
     struct EmptyValueWrapperTrait<T> {
         using type = ValueList<T::value>;
+    };
+
+    template<typename LIST, typename ... Ts>
+    struct ToValueList {
+        using type = LIST;
+    };
+
+    template<typename LIST, typename H, typename ... Ts>
+    struct ToValueList<LIST, H, Ts...> {
+        using type = typename LIST::template append<H::value>;
+    };
+
+    template<typename ... Ts>
+    struct AppendTrait {
+        using type = void;
+    };
+
+    template<typename H, typename ... Ts>
+    requires std::is_base_of_v<ValueSignature, H>
+    struct AppendTrait<H, Ts...> {
+        using type = ToValueList<ValueList<>, Ts...>;
+    };
+
+    template<typename H, typename ... Ts>
+    struct AppendTrait<H, Ts...> {
+        using type = TypeList<H, Ts...>;
     };
 }
 
@@ -43,10 +70,12 @@ struct EmptyList
     using prependList = T;
 
     template<typename ... Ts>
-    using append = TypeList<Ts...>;
+    using append = std::conditional_t<sizeof...(Ts) == 0,
+        EmptyList,
+        typename detail::AppendTrait<Ts...>::type>;
 
     template<typename ... Ts>
-    using prepend = TypeList<Ts...>;
+    using prepend = append<Ts...>;
 
     template<typename T>
     using appendType = typename detail::EmptyValueWrapperTrait<T>::type;

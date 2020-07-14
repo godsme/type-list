@@ -49,6 +49,20 @@ using SortValue_t = __TL_apply_t(detail::Sort,
         detail::ValueCompareAdapter<LT>::template LessThan);
 
 namespace detail {
+    template<auto LT>
+    struct CompareFuncAdapter {
+        __TL_lambda(LessThan, typename T1, typename T2)
+        __return_v(LT(T1::value, T2::value));
+    };
+}
+
+template<FiniteValueListConcept IN, auto LT>
+using SortValueF_t =
+        __TL_apply_t(detail::Sort,
+              List<IN>,
+              detail::CompareFuncAdapter<LT>::template LessThan);
+
+namespace detail {
     template<FiniteTypeListConcept IN, __TL_lambda(LT, typename, typename)>
     requires FiniteTypeListConcept<IN> && (!std::is_same_v<EmptyList, IN>)
     auto DeduceSortType() -> Sort_t<IN, LT>;
@@ -57,11 +71,19 @@ namespace detail {
     requires FiniteValueListConcept<IN> && (!std::is_same_v<EmptyList, IN>)
     auto DeduceSortType() -> SortValue_t<IN, LT>;
 
+    template<typename IN, auto LT>
+    requires FiniteValueListConcept<IN> && (!std::is_same_v<EmptyList, IN>)
+    auto DeduceSortType() -> SortValueF_t<IN, LT>;
+
     template<typename IN, __TL_lambda(LT, typename, typename)>
     requires std::is_same_v<EmptyList, IN>
     auto DeduceSortType() -> EmptyList;
 
     template<typename IN, __TL_lambda(LT, auto, auto)>
+    requires std::is_same_v<EmptyList, IN>
+    auto DeduceSortType() -> EmptyList;
+
+    template<typename IN, auto LT>
     requires std::is_same_v<EmptyList, IN>
     auto DeduceSortType() -> EmptyList;
 }

@@ -84,22 +84,28 @@ template<FiniteTypeListConcept IN, __TL_lambda(PRED, typename)>
 using Filter_t = __TL_apply_t(detail::Filter, IN, PRED, TypeList<>, TypeList<>);
 
 namespace detail {
-    template<FiniteTypeListConcept IN, __TL_lambda(PRED, __Set())>
+    template<typename IN, __TL_lambda(PRED, __Set())>
+    requires (FiniteTypeListConcept<IN> && !std::is_same_v<EmptyList, IN>)
     auto DeductFilter() -> Filter_t<IN, PRED>;
 
-    template<FiniteValueListConcept IN, __TL_lambda(PRED, auto)>
+    template<typename IN, __TL_lambda(PRED, auto)>
+    requires (FiniteValueListConcept<IN> && !std::is_same_v<EmptyList, IN>)
     auto DeductFilter() -> FilterValue_t<IN, PRED>;
 
-    template<FiniteValueListConcept IN, auto PRED>
+    template<typename IN, auto PRED>
+    requires (FiniteValueListConcept<IN> && !std::is_same_v<EmptyList, IN>)
     auto DeductFilter() -> FilterValueF_t<IN, PRED>;
 
-    template<typename IN, __TL_lambda(PRED, __Set())> requires std::is_same_v<EmptyList, IN>
+    template<typename IN, __TL_lambda(PRED, __Set())>
+    requires std::is_same_v<EmptyList, IN>
     auto DeductFilter() -> __TL_apply_t(detail::Filter, IN, PRED, EmptyList, EmptyList);
 
-    template<typename IN, __TL_lambda(PRED, auto)> requires std::is_same_v<EmptyList, IN>
+    template<typename IN, __TL_lambda(PRED, auto)>
+    requires std::is_same_v<EmptyList, IN>
     auto DeductFilter() -> __TL_apply_t(detail::Filter, IN, ValuePredAdapter<PRED>::template Pred, EmptyList, EmptyList);
 
-    template<typename IN, auto PRED> requires std::is_same_v<EmptyList, IN>
+    template<typename IN, auto PRED>
+    requires std::is_same_v<EmptyList, IN>
     auto DeductFilter() -> __TL_apply_t(detail::Filter, IN, PredFuncAdapter<PRED>::template Pred, EmptyList, EmptyList);
 }
 

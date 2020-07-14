@@ -10,10 +10,10 @@
 TYPE_LIST_NS_BEGIN
 
 struct ListSignature {};
-struct TypeListSignature : ListSignature {};
+struct TypeListSignature {};
 struct ExportableListSignature {};
 struct InfiniteSignature {};
-struct ValueListSignature : ListSignature {};
+struct ValueListSignature {};
 struct AppendableSignature {};
 
 TYPE_LIST_NS_END

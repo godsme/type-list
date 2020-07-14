@@ -14,7 +14,8 @@
 TYPE_LIST_NS_BEGIN
 
 struct TypeListAllSignatures
-        : TypeListSignature
+        : ListSignature
+        , TypeListSignature
         , ExportableListSignature
         , AppendableSignature
 {};
@@ -77,14 +78,14 @@ struct TypeList<H, Ts...> : TypeListAllSignatures {
 };
 
 template<typename T>
-struct RepeatTypeList : TypeListSignature, InfiniteSignature {
+struct RepeatTypeList : ListSignature, TypeListSignature, InfiniteSignature {
     using Head = T;
     using Tail = RepeatTypeList<T>;
     using HeadAsType = Head;
 };
 
 template<typename T, size_t TIMES> requires (TIMES <= 200)
-struct LimitedRepeatTypeList : TypeListSignature {
+struct LimitedRepeatTypeList : TypeListAllSignatures {
     constexpr static size_t size = TIMES;
     using Head = T;
     using Tail = LimitedRepeatTypeList<T, TIMES-1>;
@@ -92,7 +93,7 @@ struct LimitedRepeatTypeList : TypeListSignature {
 };
 
 template<typename T>
-struct LimitedRepeatTypeList<T, 0> : TypeListSignature {
+struct LimitedRepeatTypeList<T, 0> : TypeListAllSignatures {
     constexpr static size_t size = 0;
 };
 

@@ -16,12 +16,12 @@ TYPE_LIST_NS_BEGIN
 
 namespace detail {
     template<ValueListConcept LIST>
-    struct ValueListWrapper : TypeListSignature {
+    struct ValueListWrapper : ListSignature, TypeListSignature {
         constexpr static size_t size = LIST::size;
     };
 
     template<NonEmptyValueListConcept LIST>
-    struct ValueListWrapper<LIST> : TypeListSignature {
+    struct ValueListWrapper<LIST> : ListSignature, TypeListSignature {
         constexpr static size_t size = LIST::size;
 
         using Head = Value<LIST::Head>;
@@ -30,7 +30,8 @@ namespace detail {
 
     template<InfiniteValueListConcept LIST>
     struct InfiniteValueListWrapper
-            : TypeListSignature
+            : ListSignature
+            , TypeListSignature
             , InfiniteSignature {
         using Head = Value<LIST::Head>;
         using Tail = ValueListWrapper<typename LIST::Tail>;

@@ -8,8 +8,10 @@
 #define __Set(...) typename __VA_ARGS__
 #define __TL_lambda_t(p, ...) template <p, ##__VA_ARGS__> typename
 #define __TL_lambda(name, ...) template <__VA_ARGS__> class name
-#define __return_t(...) { public: using type = __VA_ARGS__; }
-#define __return_v(...) { public: constexpr static auto value = __VA_ARGS__; }
+#define __result_t(...) public: using type = __VA_ARGS__
+#define __return_t(...) { __result_t(__VA_ARGS__); }
+#define __result_v(...) public: constexpr static auto value = __VA_ARGS__
+#define __return_v(...) { __result_v(__VA_ARGS__); }
 
 #define __TL_apply(f, ...) f<__VA_ARGS__>
 #define __TL_apply_t(f, ...) typename f<__VA_ARGS__>::type

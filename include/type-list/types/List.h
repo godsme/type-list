@@ -11,7 +11,23 @@
 
 TYPE_LIST_NS_BEGIN
 
-struct EmptyList : ListSignature, AppendableSignature {
+namespace detail {
+    template<typename T>
+    struct EmptyValueWrapperTrait {
+        using type = TypeList<T>;
+    };
+
+    template<typename T> requires std::is_base_of_v<ValueSignature, T>
+    struct EmptyValueWrapperTrait<T> {
+        using type = ValueList<T::value>;
+    };
+}
+
+struct EmptyList
+        : ListSignature
+        , TypeListSignature
+        , ValueListSignature
+        , AppendableSignature {
     constexpr static size_t size = 0;
 
     template <template <auto ...> typename RESULT>
@@ -27,7 +43,7 @@ struct EmptyList : ListSignature, AppendableSignature {
     using prependList = T;
 
     template<typename T>
-    using appendType = TypeList<T>;
+    using appendType = typename detail::EmptyValueWrapperTrait<T>::type;
 };
 
 namespace detail {

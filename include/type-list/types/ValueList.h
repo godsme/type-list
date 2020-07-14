@@ -15,7 +15,8 @@
 TYPE_LIST_NS_BEGIN
 
 struct ValueListAllSignatures
-   : ValueListSignature
+   : ListSignature
+   , ValueListSignature
    , ExportableListSignature
    , AppendableSignature
 {};
@@ -78,14 +79,14 @@ struct ValueList<H, Vs...> : ValueListAllSignatures {
 
 ////////////////////////////////////////////////////////////////////
 template<auto INIT, auto STEP = 1>
-struct InfiniteIntList : ValueListSignature, InfiniteSignature {
+struct InfiniteIntList : ListSignature, ValueListSignature, InfiniteSignature {
     constexpr static auto Head = INIT;
     using HeadAsType = Value<Head>;
     using Tail = InfiniteIntList<INIT+STEP, STEP>;
 };
 
 template<auto V>
-struct RepeatValueList : ValueListSignature, InfiniteSignature {
+struct RepeatValueList : ListSignature, ValueListSignature, InfiniteSignature {
     constexpr static auto Head = V;
     using HeadAsType = Value<Head>;
     using Tail = RepeatValueList<V>;

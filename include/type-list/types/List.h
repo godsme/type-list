@@ -9,45 +9,39 @@
 #include <type-list/types/TypeList.h>
 #include <type-list/types/ValueList.h>
 #include <type-list/concept/NonEmptyListConcept.h>
+#include <type-list/types/Lambda.h>
 
 TYPE_LIST_NS_BEGIN
 
 namespace detail {
     template<typename T>
-    struct EmptyValueWrapperTrait {
-        using type = TypeList<T>;
-    };
+    concept ValueConcept =  std::is_base_of_v<ValueSignature, T>;
 
-    template<typename T> requires std::is_base_of_v<ValueSignature, T>
-    struct EmptyValueWrapperTrait<T> {
-        using type = ValueList<T::value>;
-    };
+    ///////////////////////////////////////////////////////////////////
+    __TL_lambda(EmptyValueWrapperTrait, typename T)
+    __return_t(TypeList<T>);
 
-    template<typename LIST, typename ... Ts>
-    struct ToValueList {
-        using type = LIST;
-    };
+    __TL_lambda(EmptyValueWrapperTrait, ValueConcept T)
+    <T> __return_t(ValueList<T::value>);
 
-    template<typename LIST, typename H, typename ... Ts>
-    struct ToValueList<LIST, H, Ts...> {
-        using type = typename LIST::template append<H::value>;
-    };
+    ///////////////////////////////////////////////////////////////////
+    __TL_lambda(ToValueList, typename LIST, typename ... Ts)
+    __return_t(LIST);
 
-    template<typename ... Ts>
-    struct AppendTrait {
-        using type = void;
-    };
+    __TL_lambda(ToValueList, typename LIST, typename H, typename ... Ts)
+    <LIST, H, Ts...>
+    __return_t(typename LIST::template append<H::value>);
 
-    template<typename H, typename ... Ts>
-    requires std::is_base_of_v<ValueSignature, H>
-    struct AppendTrait<H, Ts...> {
-        using type = ToValueList<ValueList<>, Ts...>;
-    };
+    ///////////////////////////////////////////////////////////////////
+    __TL_lambda(AppendTrait, typename ... Ts)
+    __return_t(void);
 
-    template<typename H, typename ... Ts>
-    struct AppendTrait<H, Ts...> {
-        using type = TypeList<H, Ts...>;
-    };
+    __TL_lambda(AppendTrait, ValueConcept H, typename ... Ts)
+    <H, Ts...> __return_t(__TL_apply(ToValueList, ValueList<>, Ts...));
+
+
+    __TL_lambda(AppendTrait, typename H, typename ... Ts)
+    <H, Ts...> __return_t(__TL_apply(TypeList, H, Ts...));
 }
 
 struct EmptyList

@@ -13,8 +13,6 @@
 namespace {
     using namespace TYPE_LIST_NS;
 
-    template<typename T> struct S;
-
     SCENARIO("pipe line") {
         using type = __TL_pipeline(__TL_infinite(1), __TL_Take(3));
         REQUIRE(std::is_same_v<__TL_list(1,2,3), type>);

@@ -28,13 +28,13 @@ namespace detail {
         using Tail = ValueListWrapper<typename LIST::Tail>;
     };
 
-    template<InfiniteValueListConcept LIST>
+    template<InfiniteValueListConcept T>
     struct InfiniteValueListWrapper
             : ListSignature
             , TypeListSignature
             , InfiniteSignature {
-        using Head = Value<LIST::Head>;
-        using Tail = ValueListWrapper<typename LIST::Tail>;
+        using Head = Value<T::Head>;
+        using Tail = ValueListWrapper<typename T::Tail>;
     };
 
     template<typename LIST>
@@ -42,14 +42,14 @@ namespace detail {
         using type = LIST;
     };
 
-    template<ValueListConcept LIST>
-    struct ListTrait<LIST> {
-        using type = ValueListWrapper<LIST>;
+    template<ValueListConcept T>
+    struct ListTrait<T> {
+        using type = ValueListWrapper<T>;
     };
 
-    template<InfiniteValueListConcept LIST>
-    struct ListTrait<LIST> {
-        using type = InfiniteValueListWrapper<LIST>;
+    template<InfiniteValueListConcept T>
+    struct ListTrait<T> {
+        using type = InfiniteValueListWrapper<T>;
     };
 }
 

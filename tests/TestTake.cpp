@@ -16,14 +16,14 @@ namespace {
         WHEN("take 0 elem from a type list") {
             using type = __TL_take(TypeList<>, 0);
             THEN("should return empty type list") {
-                REQUIRE(std::is_same_v<type, TypeList<>>);
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
 
         WHEN("take 0 elem from value list") {
             using type = __TL_take(ValueList<>, 0);
             THEN("should return an empty type list") {
-                REQUIRE(std::is_same_v<type, ValueList<>>);
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
 
@@ -40,7 +40,7 @@ namespace {
         WHEN("take 0 elem") {
             using type = __TL_take(list, 0);
             THEN("should return an empty type list") {
-                REQUIRE(std::is_same_v<type, TypeList<>>);
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
         WHEN("take 1 elem") {
@@ -63,7 +63,7 @@ namespace {
         WHEN("drop 0 elem") {
             using type = __TL_take(list, 0);
             THEN("should return an empty list") {
-                REQUIRE(std::is_same_v<type, ValueList<>>);
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
         WHEN("take 1 elem") {
@@ -86,7 +86,7 @@ namespace {
         WHEN("drop 0 elem") {
             using type = __TL_take(list, 0);
             THEN("should return an empty list") {
-                REQUIRE(std::is_same_v<type, ValueList<>>);
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
         WHEN("take 1 elem") {
@@ -116,7 +116,7 @@ namespace {
         WHEN("drop 0 elem") {
             using type = __TL_take(list, 0);
             THEN("should return an empty list") {
-                REQUIRE(std::is_same_v<type, TypeList<>>);
+                REQUIRE(std::is_same_v<type, __TL_list()>);
             }
         }
         WHEN("take 1 elem") {

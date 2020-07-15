@@ -30,24 +30,25 @@ namespace detail {
 namespace detail {
     __TL_lambda(TakeTrait, __Set(IN), size_t N);
 
-    template<ValueListConcept IN, size_t N>
-    struct TakeTrait<IN, N>
-            __return_apply_t(detail::Take, List<IN>, N, ValueList<>);
+//    __TL_lambda(TakeTrait, TypeListConcept IN, size_t N)
+//    <IN, N> __return_apply_t(detail::Take, IN, N, TypeList<>);
 
-    template<TypeListConcept IN, size_t N>
-    struct TakeTrait<IN, N>
-            __return_apply_t(detail::Take, IN, N, TypeList<>);
+    __TL_lambda(TakeTrait, ListConcept IN, size_t N)
+    <IN, N> __return_apply_t(detail::Take, List<IN>, N, EmptyList);
 
-    template<typename IN> requires std::is_same_v<EmptyList, IN>
-    struct TakeTrait<IN, 0>
-            __return_t(EmptyList);
+    __TL_lambda(TakeTrait, EmptyListConcept IN)
+    <IN, 0> __return_t(EmptyList);
 }
 
 template<ListConcept IN, size_t N>
 using Take_t = __TL_apply_t(detail::TakeTrait, IN, N);
 
+__TL_lambda(Take, size_t N)
+__return_lambda_t(__TL_params(ListConcept IN), __TL_apply(Take_t, IN, N));
+
 TYPE_LIST_NS_END
 
 #define __TL_take(in, n) TYPE_LIST_NS::Take_t<in, n>
+#define __TL_Take(n) TYPE_LIST_NS::Take<n>
 
 #endif //TYPE_LIST_TAKE_H

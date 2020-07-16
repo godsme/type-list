@@ -115,7 +115,7 @@ namespace detail {
 }
 
 #define __TL_sort(...) \
-decltype(TYPE_LIST_NS::detail::DeduceSortType_<__VA_ARGS__>())
+decltype(TYPE_LIST_NS::detail::DeduceSortType_<(__VA_ARGS__)>())
 
 TYPE_LIST_NS_END
 

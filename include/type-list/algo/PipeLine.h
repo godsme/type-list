@@ -12,6 +12,7 @@
 #include <type-list/concept/TypeListConcept.h>
 #include <type-list/algo/Sort.h>
 #include <type-list/algo/Take.h>
+#include <type-list/algo/Drop.h>
 
 TYPE_LIST_NS_BEGIN
 

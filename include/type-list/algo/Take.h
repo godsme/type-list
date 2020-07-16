@@ -48,7 +48,7 @@ __return_lambda_t(__TL_params(ListConcept IN), __TL_apply(Take_t, IN, N));
 
 TYPE_LIST_NS_END
 
-#define __TL_take(in, n) TYPE_LIST_NS::Take_t<in, n>
-#define __TL_Take(n) TYPE_LIST_NS::Take<n>
+#define __TL_Take(in, n) TYPE_LIST_NS::Take_t<in, n>
+#define __TL_take(n) TYPE_LIST_NS::Take<n>
 
 #endif //TYPE_LIST_TAKE_H

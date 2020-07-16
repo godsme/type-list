@@ -91,18 +91,18 @@ namespace detail {
     auto DeduceSortType() -> EmptyList;
 }
 
-#define __TL_sort(...) \
+#define __TL_Sort(...) \
 decltype(TYPE_LIST_NS::detail::DeduceSortType<__VA_ARGS__>())
 
 namespace detail {
     __TL_lambda(SortType_P, __TL_lambda(LT, typename, typename))
-    __return_lambda_t(__TL_params(typename IN), __TL_sort(IN, LT));
+    __return_lambda_t(__TL_params(typename IN), __TL_Sort(IN, LT));
 
     __TL_lambda(SortValue_P, __TL_lambda(LT, auto, auto))
-    __return_lambda_t(__TL_params(typename IN), __TL_sort(IN, LT));
+    __return_lambda_t(__TL_params(typename IN), __TL_Sort(IN, LT));
 
     __TL_lambda(SortValueF_P, auto LT)
-    __return_lambda_t(__TL_params(typename IN), __TL_sort(IN, LT));
+    __return_lambda_t(__TL_params(typename IN), __TL_Sort(IN, LT));
 
     template<__TL_lambda(LT, typename, typename)>
     auto DeduceSortType_() -> SortType_P<LT>;
@@ -114,7 +114,7 @@ namespace detail {
     auto DeduceSortType_() -> SortValueF_P<LT>;
 }
 
-#define __TL_Sort(...) \
+#define __TL_sort(...) \
 decltype(TYPE_LIST_NS::detail::DeduceSortType_<__VA_ARGS__>())
 
 TYPE_LIST_NS_END

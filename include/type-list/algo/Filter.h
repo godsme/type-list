@@ -47,7 +47,7 @@ namespace detail {
             , typename IN::Tail
             , PRED
             , SATISFIED
-            , typename REST::template appendType<typename IN::Head>);
+            , __TL_scope_apply(REST, appendType, typename IN::Head));
 }
 
 namespace detail {

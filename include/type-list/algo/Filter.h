@@ -20,10 +20,10 @@ namespace detail {
                 ListConcept SATISFIED = TypeList<>,
                 ListConcept REST = TypeList<>,
                 typename = void)
-        __return_t(struct {
-               using satisfied = __TL_apply_t(detail::EmptyListTrait, SATISFIED);
-               using rest      = __TL_apply_t(detail::EmptyListTrait, REST);
-           });
+    __return_t(struct {
+           using satisfied = __TL_apply_t(detail::EmptyListTrait, SATISFIED);
+           using rest      = __TL_apply_t(detail::EmptyListTrait, REST);
+       });
 
     __TL_lambda(Partition,
                 FiniteTypeListConcept IN,
@@ -31,11 +31,11 @@ namespace detail {
                 ListConcept SATISFIED,
                 ListConcept REST)
     <IN, PRED, SATISFIED, REST, std::enable_if_t<__TL_apply_v(PRED, typename IN::Head)>>
-        __return_apply_t(Partition
-            , typename IN::Tail
-            , PRED
-            , typename SATISFIED::template appendType<typename IN::Head>
-            , REST);
+    __return_apply_t(Partition
+        , typename IN::Tail
+        , PRED
+        , typename SATISFIED::template appendType<typename IN::Head>
+        , REST);
 
     __TL_lambda(Partition,
                 FiniteTypeListConcept IN,
@@ -43,11 +43,11 @@ namespace detail {
                 ListConcept SATISFIED,
                 ListConcept REST)
     <IN, PRED, SATISFIED, REST, std::enable_if_t<!__TL_apply_v(PRED, typename IN::Head)>>
-        __return_apply_t(Partition
-            , typename IN::Tail
-            , PRED
-            , SATISFIED
-            , __TL_scope_apply(REST, appendType, typename IN::Head));
+    __return_apply_t(Partition
+        , typename IN::Tail
+        , PRED
+        , SATISFIED
+        , __TL_scope_apply(REST, appendType, typename IN::Head));
 }
 
 namespace detail {

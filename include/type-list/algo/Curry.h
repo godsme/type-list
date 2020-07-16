@@ -6,10 +6,6 @@
 #define TYPE_LIST_CURRY_H
 
 #include <type-list/type-list-ns.h>
-#include <type-list/concept/NonEmptyListConcept.h>
-#include <type-list/types/Lambda.h>
-#include <type-list/types/List.h>
-#include <cstddef>
 
 TYPE_LIST_NS_BEGIN
 

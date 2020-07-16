@@ -165,7 +165,7 @@ namespace {
                 REQUIRE(std::is_same_v<long, typename type::Tail::Tail::Head>);
             }
             THEN("it should has a TypeListSignature") {
-                REQUIRE(std::is_base_of_v<TypeListSignature, type>);
+                REQUIRE(std::is_base_of_v<detail::TypeListSignature, type>);
             }
             WHEN("export to a template") {
                 using result = decltype(type::template exportTo<Result>());

@@ -9,12 +9,14 @@
 
 TYPE_LIST_NS_BEGIN
 
-struct ListSignature {};
-struct TypeListSignature {};
-struct ExportableListSignature {};
-struct InfiniteSignature {};
-struct ValueListSignature {};
-struct AppendableSignature {};
+namespace detail {
+    struct ListSignature {};
+    struct TypeListSignature {};
+    struct ExportableListSignature {};
+    struct InfiniteSignature {};
+    struct ValueListSignature {};
+    struct AppendableSignature {};
+}
 
 TYPE_LIST_NS_END
 

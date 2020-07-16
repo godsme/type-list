@@ -11,7 +11,7 @@
 TYPE_LIST_NS_BEGIN
 
 template<typename T>
-concept ListConcept = std::is_base_of_v<ListSignature, T>;
+concept ListConcept = std::is_base_of_v<detail::ListSignature, T>;
 
 TYPE_LIST_NS_END
 

@@ -45,11 +45,11 @@ namespace detail {
 }
 
 struct EmptyList
-        : ListSignature
-        , ExportableListSignature
-        , TypeListSignature
-        , ValueListSignature
-        , AppendableSignature {
+        : detail::ListSignature
+        , detail::ExportableListSignature
+        , detail::TypeListSignature
+        , detail::ValueListSignature
+        , detail::AppendableSignature {
     constexpr static size_t size = 0;
 
     template <template <auto ...> typename RESULT>

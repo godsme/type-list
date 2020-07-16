@@ -16,15 +16,19 @@
 TYPE_LIST_NS_BEGIN
 
 struct ValueListAllSignatures
-   : ListSignature
-   , ValueListSignature
-   , ExportableListSignature
-   , AppendableSignature
+   : detail::ListSignature
+   , detail::ValueListSignature
+   , detail::ExportableListSignature
+   , detail::AppendableSignature
 {};
 
 template<auto ... Vs>
-struct ValueList : ValueListAllSignatures {
+struct ValueListBase : ValueListAllSignatures {
     constexpr static size_t size = sizeof...(Vs);
+};
+
+template<auto ... Vs>
+struct ValueList : ValueListBase<Vs...> {
 
     template <template <auto ...> typename RESULT>
     using exportTo = RESULT<Vs...>;
@@ -62,9 +66,7 @@ namespace detail {
 }
 
 template<auto H, auto ... Vs>
-struct ValueList<H, Vs...> : ValueListAllSignatures {
-    constexpr static size_t size = sizeof...(Vs) + 1;
-
+struct ValueList<H, Vs...> : ValueListBase<H, Vs...> {
     constexpr static auto Head = H;
     using Tail = ValueList<Vs...>;
     using HeadAsType = Value<Head>;
@@ -93,14 +95,20 @@ struct ValueList<H, Vs...> : ValueListAllSignatures {
 
 ////////////////////////////////////////////////////////////////////
 template<auto INIT, auto STEP = 1>
-struct InfiniteIntList : ListSignature, ValueListSignature, InfiniteSignature {
+struct InfiniteIntList
+        : detail::ListSignature
+        , detail::ValueListSignature
+        , detail::InfiniteSignature {
     constexpr static auto Head = INIT;
     using HeadAsType = Value<Head>;
     using Tail = InfiniteIntList<INIT+STEP, STEP>;
 };
 
 template<auto V>
-struct RepeatValueList : ListSignature, ValueListSignature, InfiniteSignature {
+struct RepeatValueList
+        : detail::ListSignature
+        , detail::ValueListSignature
+        , detail::InfiniteSignature {
     constexpr static auto Head = V;
     using HeadAsType = Value<Head>;
     using Tail = RepeatValueList<V>;
@@ -145,23 +153,7 @@ public:
 };
 
 template<auto V>
-struct LimitedRepeatValueList<V, 0> : ValueListAllSignatures {
-    constexpr static size_t size = 0;
-
-    template <template <auto ...> typename RESULT>
-    using exportTo = RESULT<>;
-
-    template<auto ... Vs2>
-    using append = ValueList<Vs2...>;
-
-    template<auto ... Vs2>
-    using prepend = ValueList<Vs2...>;
-
-    template<ValueListConcept T>
-    using appendList = T;
-
-    template<ValueListConcept T>
-    using prependList = T;
+struct LimitedRepeatValueList<V, 0> : ValueList<> {
 };
 
 TYPE_LIST_NS_END

@@ -48,7 +48,7 @@ concept EmptyValueListConcept =
 ValueListConcept<T> && !IsNonEmptyValueList<T>;
 
 template<typename T>
-concept InfiniteConcept = std::is_base_of_v<InfiniteSignature, T>;
+concept InfiniteConcept = std::is_base_of_v<detail::InfiniteSignature, T>;
 
 template<typename T>
 concept InfiniteListConcept =

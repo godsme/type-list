@@ -6,8 +6,6 @@
 #define TYPE_LIST_BIND_H
 
 #include <type-list/type-list-ns.h>
-#include <type-list/concept/NonEmptyListConcept.h>
-#include <type-list/types/Lambda.h>
 #include <type-list/types/List.h>
 #include <cstddef>
 
@@ -72,6 +70,36 @@ namespace detail {
     struct DoBind<C, 4, ARGS> {
         template<typename T0, typename T1, typename T2, typename T4, typename ... Ts>
         using apply = typename Combine<C, TypeList<T0, T1, T2, T4>, ARGS>::template type<Ts...>;
+    };
+
+    template<template<typename ...> typename C, typename ARGS>
+    struct DoBind<C, 5, ARGS> {
+        template<typename T0, typename T1, typename T2, typename T4, typename T5, typename ... Ts>
+        using apply = typename Combine<C, TypeList<T0, T1, T2, T4, T5>, ARGS>::template type<Ts...>;
+    };
+
+    template<template<typename ...> typename C, typename ARGS>
+    struct DoBind<C, 6, ARGS> {
+        template<typename T0, typename T1, typename T2, typename T4, typename T5, typename T6, typename ... Ts>
+        using apply = typename Combine<C, TypeList<T0, T1, T2, T4, T5, T6>, ARGS>::template type<Ts...>;
+    };
+
+    template<template<typename ...> typename C, typename ARGS>
+    struct DoBind<C, 7, ARGS> {
+        template<typename T0, typename T1, typename T2, typename T4, typename T5, typename T6, typename T7, typename ... Ts>
+        using apply = typename Combine<C, TypeList<T0, T1, T2, T4, T5, T6, T7>, ARGS>::template type<Ts...>;
+    };
+
+    template<template<typename ...> typename C, typename ARGS>
+    struct DoBind<C, 8, ARGS> {
+        template<typename T0, typename T1, typename T2, typename T4, typename T5, typename T6, typename T7, typename T8, typename ... Ts>
+        using apply = typename Combine<C, TypeList<T0, T1, T2, T4, T5, T6, T7, T8>, ARGS>::template type<Ts...>;
+    };
+
+    template<template<typename ...> typename C, typename ARGS>
+    struct DoBind<C, 9, ARGS> {
+        template<typename T0, typename T1, typename T2, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9, typename ... Ts>
+        using apply = typename Combine<C, TypeList<T0, T1, T2, T4, T5, T6, T7, T8, T9>, ARGS>::template type<Ts...>;
     };
 }
 

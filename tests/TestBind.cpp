@@ -90,7 +90,7 @@ namespace {
         }
 
         WHEN("pass it to a type list") {
-            using type = decltype(TypeList<char, float, long>::exportTo<Bound::template apply>());
+            using type = decltype(TypeList<char, float, long>::exportTo<__TL_bind(Foo, _1_, int, _3_, double)>());
             REQUIRE(std::is_same_v<type, Foo<char, int, float, double, long>>);
         }
     }

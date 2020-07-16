@@ -144,7 +144,7 @@ namespace detail {
     class Bind {
         using result = detail::CalcArgs<TypeList<>, 0, 0, ARGS...>;
     public:
-        using type = typename detail::DoBind<C, result::actualNum, typename result::args>;
+        using type = detail::DoBind<C, result::actualNum, typename result::args>;
     };
 }
 
@@ -170,5 +170,7 @@ using _8_ = detail::Parameter<8>;
 using _9_ = detail::Parameter<9>;
 
 TYPE_LIST_NS_END
+
+#define __TL_bind(...) TYPE_LIST_NS::Bind<__VA_ARGS__>::template apply
 
 #endif //TYPE_LIST_BIND_H

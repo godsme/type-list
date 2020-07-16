@@ -25,7 +25,7 @@ namespace detail {
             __TL_lambda(LT, typename, typename))
     <IN, LT> {
         __TL_lambda(LessThan, typename T) __return_apply_v(LT, T, typename IN::Head);
-        using result  = __TL_filter(typename IN::Tail, LessThan);
+        using result  = __TL_partition(typename IN::Tail, LessThan);
         using lesser  = __TL_apply_t(Sort, typename result::satisfied, LT);
         using greater = __TL_apply_t(Sort, typename result::rest, LT);
         __result_t(typename lesser::template appendType<typename IN::Head>::template appendList<greater>);

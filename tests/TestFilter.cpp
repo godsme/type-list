@@ -16,31 +16,31 @@ namespace {
     using namespace TYPE_LIST_NS;
 
     __TL_lambda(NonZero, auto V) __return_v(V != 0);
-    SCENARIO("Filter Value List With NonZERO") {
-        using type = __TL_filter(__TL_list(1, 2, 3), NonZero);
+    SCENARIO("Partition Value List With NonZERO") {
+        using type = __TL_partition(__TL_list(1, 2, 3), NonZero);
         REQUIRE(std::is_same_v<__TL_list(1, 2, 3), typename type::satisfied>);
         REQUIRE(std::is_same_v<__TL_list(), typename type::rest>);
     }
     __TL_lambda(Greater, auto V) __return_v(V > 1);
-    SCENARIO("Filter Value List") {
-        using type = __TL_filter(__TL_list(1, 2, 3), Greater);
+    SCENARIO("Partition Value List") {
+        using type = __TL_partition(__TL_list(1, 2, 3), Greater);
         REQUIRE(std::is_same_v<__TL_list(2, 3), typename type::satisfied>);
         REQUIRE(std::is_same_v<__TL_list(1), typename type::rest>);
     }
-    SCENARIO("Filter Empty List") {
-        using type = __TL_filter(__TL_list(), Greater);
+    SCENARIO("Partition Empty List") {
+        using type = __TL_partition(__TL_list(), Greater);
         REQUIRE(std::is_same_v<__TL_list(), type::satisfied>);
         REQUIRE(std::is_same_v<__TL_list(), type::rest>);
     }
 
     __TL_lambda(Int, typename T) __return_v(std::is_same_v<T, int>);
-    SCENARIO("Filter TypeList") {
-        using type = __TL_filter(__TL_list(int, double, int), Int);
+    SCENARIO("Partition TypeList") {
+        using type = __TL_partition(__TL_list(int, double, int), Int);
         REQUIRE(std::is_same_v<__TL_list(int, int), typename type::satisfied>);
         REQUIRE(std::is_same_v<__TL_list(double), typename type::rest>);
     }
-    SCENARIO("Filter Empty List With Type PRED") {
-        using type = __TL_filter(__TL_list(), Int);
+    SCENARIO("Partition Empty List With Type PRED") {
+        using type = __TL_partition(__TL_list(), Int);
         REQUIRE(std::is_same_v<__TL_list(), type::satisfied>);
         REQUIRE(std::is_same_v<__TL_list(), type::rest>);
     }

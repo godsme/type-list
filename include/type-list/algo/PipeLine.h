@@ -13,6 +13,7 @@
 #include <type-list/algo/Sort.h>
 #include <type-list/algo/Take.h>
 #include <type-list/algo/Drop.h>
+#include <type-list/algo/Filter.h>
 
 TYPE_LIST_NS_BEGIN
 

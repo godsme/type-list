@@ -13,8 +13,9 @@
 namespace {
     using namespace TYPE_LIST_NS;
 
+    constexpr auto Greater = [](auto lhs, auto rhs) -> bool { return lhs > rhs; };
     SCENARIO("pipe line") {
-        using type = __TL_pipeline(__TL_infinite(1), __TL_Take(3));
-        REQUIRE(std::is_same_v<__TL_list(1,2,3), type>);
+        using type = __TL_pipeline(__TL_infinite(1), __TL_Take(3), __TL_Sort(Greater));
+        REQUIRE(std::is_same_v<__TL_list(3,2,1), type>);
     }
 }

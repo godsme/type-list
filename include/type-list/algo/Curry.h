@@ -26,7 +26,8 @@ struct Curry<C, ARGS...> {
     using type = C<ARGS...>;
 };
 
-
 TYPE_LIST_NS_END
+
+#define __TL_curry(...) TYPE_LIST_NS::Curry<__VA_ARGS__>::template apply
 
 #endif //TYPE_LIST_CURRY_H

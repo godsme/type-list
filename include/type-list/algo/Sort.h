@@ -69,8 +69,10 @@ namespace detail {
     template<typename T>
     concept NonEmptyFiniteValueList = FiniteValueListConcept<T> && (!IsEmptyList<T>);
 
-    template<typename IN, __TL_lambda(LT, typename, typename)>
-    requires FiniteTypeListConcept<IN> && (!IsEmptyList<IN>)
+    template<typename T>
+    concept NonEmptyFiniteTypeList = FiniteTypeListConcept<T> && (!IsEmptyList<T>);
+
+    template<NonEmptyFiniteTypeList IN, __TL_lambda(LT, typename, typename)>
     auto DeduceSortType() -> Sort_t<IN, LT>;
 
     template<NonEmptyFiniteValueList IN, __TL_lambda(LT, auto, auto)>
@@ -89,9 +91,34 @@ namespace detail {
     auto DeduceSortType() -> EmptyList;
 }
 
-TYPE_LIST_NS_END
-
 #define __TL_sort(...) \
 decltype(TYPE_LIST_NS::detail::DeduceSortType<__VA_ARGS__>())
+
+namespace detail {
+    __TL_lambda(SortType_P, __TL_lambda(LT, typename, typename))
+    __return_lambda_t(__TL_params(typename IN), __TL_sort(IN, LT));
+
+    __TL_lambda(SortValue_P, __TL_lambda(LT, auto, auto))
+    __return_lambda_t(__TL_params(typename IN), __TL_sort(IN, LT));
+
+    __TL_lambda(SortValueF_P, auto LT)
+    __return_lambda_t(__TL_params(typename IN), __TL_sort(IN, LT));
+
+    template<__TL_lambda(LT, typename, typename)>
+    auto DeduceSortType_() -> SortType_P<LT>;
+
+    template<__TL_lambda(LT, auto, auto)>
+    auto DeduceSortType_() -> SortValue_P<LT>;
+
+    template<auto LT>
+    auto DeduceSortType_() -> SortValueF_P<LT>;
+}
+
+#define __TL_Sort(...) \
+decltype(TYPE_LIST_NS::detail::DeduceSortType_<__VA_ARGS__>())
+
+TYPE_LIST_NS_END
+
+
 
 #endif //TYPE_LIST_SORT_H

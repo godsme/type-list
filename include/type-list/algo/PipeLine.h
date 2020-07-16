@@ -10,6 +10,8 @@
 #include <type-list/types/Lambda.h>
 #include <type-list/types/List.h>
 #include <type-list/concept/TypeListConcept.h>
+#include <type-list/algo/Sort.h>
+#include <type-list/algo/Take.h>
 
 TYPE_LIST_NS_BEGIN
 

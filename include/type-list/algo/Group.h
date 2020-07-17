@@ -33,10 +33,6 @@ namespace detail {
     };
 }
 
-namespace detail {
-
-}
-
 TYPE_LIST_NS_END
 
 #endif //TYPE_LIST_GROUP_H

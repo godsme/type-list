@@ -104,17 +104,6 @@ namespace detail {
 template<typename F, typename IN>
 using Transform_t = __TL_apply_t(detail::TypeTransformer, F, IN);
 
-//namespace detail {
-//    template<FiniteListConcept IN, __TL_lambda(F, __Set())>
-//    auto DeductTransform() -> Transform_t<TypeTemplate<F>, IN>;
-//
-//    template<FiniteListConcept IN, __TL_lambda(F, auto)>
-//    auto DeductTransform() -> Transform_t<ValueTemplate<F>, IN>;
-//
-//    template<FiniteListConcept IN, auto F>
-//    auto DeductTransform() -> Transform_t<Value<F>, IN>;
-//}
-
 TYPE_LIST_NS_END
 
 #define __TL_Map(F, ...) \

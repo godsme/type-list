@@ -93,17 +93,6 @@ using Partition_t = typename detail::PartitionType<PRED, IN>::type;
 template<typename PRED, typename IN>
 using Filter_t = typename detail::PartitionType<PRED, IN>::type::satisfied;
 
-//namespace detail {
-//    template<__TL_lambda(PRED, __Set()), FiniteTypeListConcept IN>
-//    auto DeducePartition() -> Partition_t<__TL_toType(PRED), IN>;
-//
-//    template<__TL_lambda(PRED, auto), FiniteValueListConcept IN>
-//    auto DeducePartition() -> Partition_t<__TL_toType(PRED), IN>;
-//
-//    template<auto PRED, FiniteValueListConcept IN>
-//    auto DeducePartition() -> Partition_t<__TL_toType(PRED), IN>;
-//}
-
 #define __TL_Partition(pred, ...) Partition_t<__TL_toType(pred), __VA_ARGS__>
 //decltype(TYPE_LIST_NS::detail::DeducePartition<__TL_toType(in), __VA_ARGS__>())
 

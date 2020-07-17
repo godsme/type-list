@@ -15,8 +15,8 @@ namespace {
     using type = __TL_pipeline
     ( __TL_infinite(1)
     , __TL_take(10)
-    , __TL_sort([](auto lhs, auto rhs) {
-        return lhs > rhs; })
+    , __TL_sort(([](auto lhs, auto rhs) {
+        return lhs > rhs; }))
     , __TL_filter(([](auto v) {
         return v % 2 == 0; }))
     , __TL_drop(2)

@@ -25,42 +25,43 @@ namespace detail {
             __TL_lambda(LT, typename, typename))
     <IN, LT> {
         __TL_lambda(LessThan, typename T) __return_apply_v(LT, T, typename IN::Head);
-        using result  = __TL_partition(LessThan, typename IN::Tail);
+        using result  = __TL_Partition(LessThan, typename IN::Tail);
         using lesser  = __TL_apply_t(Sort, typename result::satisfied, LT);
         using greater = __TL_apply_t(Sort, typename result::rest, LT);
         __result_t(typename lesser::template appendType<typename IN::Head>::template appendList<greater>);
     };
 }
 
-template<FiniteTypeListConcept IN, __TL_lambda(LT, typename, typename)>
-using Sort_t = __TL_apply_t(detail::Sort, IN, LT);
+
 
 namespace detail {
-    template<__TL_lambda(Compare, auto, auto)>
-    struct ValueCompareAdapter {
+    template<typename LT, typename IN>
+    struct SortType;
+
+    template<TypeTemplateConcept LT, FiniteTypeListConcept IN>
+    struct SortType<LT, IN> {
+        using type = __TL_apply_t(Sort, IN, LT::template apply);
+    };
+
+    template<ValueTemplateConcept LT, FiniteValueListConcept IN>
+    class SortType<LT, IN> {
         __TL_lambda(LessThan, typename T1, typename T2)
-            __return_apply_v(Compare, T1::value, T2::value);
+        __return_apply_v(LT::template apply, T1::value, T2::value);
+    public:
+        using type = __TL_apply_t(Sort, List<IN>, LessThan);
+    };
+
+    template<ValueConcept LT, FiniteValueListConcept IN>
+    class SortType<LT, IN> {
+        __TL_lambda(LessThan, typename T1, typename T2)
+        __return_v(LT::value(T1::value, T2::value));
+    public:
+        using type = __TL_apply_t(Sort, List<IN>, LessThan);
     };
 }
 
-template<FiniteValueListConcept IN, __TL_lambda(LT, auto, auto)>
-using SortValue_t = __TL_apply_t(detail::Sort,
-        List<IN>,
-        detail::ValueCompareAdapter<LT>::template LessThan);
-
-namespace detail {
-    template<auto LT>
-    struct CompareFuncAdapter {
-        __TL_lambda(LessThan, typename T1, typename T2)
-        __return_v(LT(T1::value, T2::value));
-    };
-}
-
-template<FiniteValueListConcept IN, auto LT>
-using SortValueF_t =
-        __TL_apply_t(detail::Sort,
-              List<IN>,
-              detail::CompareFuncAdapter<LT>::template LessThan);
+template<typename PRED, typename IN>
+using Sort_t = typename detail::SortType<PRED, IN>::type;
 
 namespace detail {
     template<typename T>
@@ -72,53 +73,28 @@ namespace detail {
     template<typename T>
     concept NonEmptyFiniteTypeList = FiniteTypeListConcept<T> && (!IsEmptyList<T>);
 
-    template<NonEmptyFiniteTypeList IN, __TL_lambda(LT, typename, typename)>
-    auto DeduceSortType() -> Sort_t<IN, LT>;
+    template<__TL_lambda(LT, typename, typename), NonEmptyFiniteTypeList IN>
+    auto DeduceSortType() -> Sort_t<__TL_toType(LT), IN>;
 
-    template<NonEmptyFiniteValueList IN, __TL_lambda(LT, auto, auto)>
-    auto DeduceSortType() -> SortValue_t<IN, LT>;
+    template<__TL_lambda(LT, auto, auto), NonEmptyFiniteValueList IN>
+    auto DeduceSortType() -> Sort_t<__TL_toType(LT), IN>;
 
-    template<NonEmptyFiniteValueList IN, auto LT>
-    auto DeduceSortType() -> SortValueF_t<IN, LT>;
+    template<auto LT, NonEmptyFiniteValueList IN>
+    auto DeduceSortType() -> Sort_t<__TL_toType(LT), IN>;
 
-    template<IsEmptyList IN, __TL_lambda(LT, typename, typename)>
+    template<__TL_lambda(LT, typename, typename), IsEmptyList IN>
     auto DeduceSortType() -> EmptyList;
 
-    template<IsEmptyList IN, __TL_lambda(LT, auto, auto)>
+    template<__TL_lambda(LT, auto, auto), IsEmptyList IN>
     auto DeduceSortType() -> EmptyList;
 
-    template<IsEmptyList IN, auto LT>
+    template<auto LT, IsEmptyList IN>
     auto DeduceSortType() -> EmptyList;
 }
-
-#define __TL_Sort(...) \
-decltype(TYPE_LIST_NS::detail::DeduceSortType<__VA_ARGS__>())
-
-namespace detail {
-    __TL_lambda(SortType_P, __TL_lambda(LT, typename, typename))
-    __return_lambda_t(__TL_params(typename IN), __TL_Sort(IN, LT));
-
-    __TL_lambda(SortValue_P, __TL_lambda(LT, auto, auto))
-    __return_lambda_t(__TL_params(typename IN), __TL_Sort(IN, LT));
-
-    __TL_lambda(SortValueF_P, auto LT)
-    __return_lambda_t(__TL_params(typename IN), __TL_Sort(IN, LT));
-
-    template<__TL_lambda(LT, typename, typename)>
-    auto DeduceSortType_() -> SortType_P<LT>;
-
-    template<__TL_lambda(LT, auto, auto)>
-    auto DeduceSortType_() -> SortValue_P<LT>;
-
-    template<auto LT>
-    auto DeduceSortType_() -> SortValueF_P<LT>;
-}
-
-#define __TL_sort(...) \
-decltype(TYPE_LIST_NS::detail::DeduceSortType_<(__VA_ARGS__)>())
 
 TYPE_LIST_NS_END
 
-
+#define __TL_Sort(...) \
+decltype(TYPE_LIST_NS::detail::DeduceSortType<__VA_ARGS__>())
 
 #endif //TYPE_LIST_SORT_H

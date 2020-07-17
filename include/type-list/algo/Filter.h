@@ -113,10 +113,10 @@ namespace detail {
     auto DeducePartition() -> __EmPtY_LiSt_PaRtItIoN;
 }
 
-#define __TL_partition(...) \
-decltype(TYPE_LIST_NS::detail::DeducePartition<__VA_ARGS__>())
+#define __TL_Partition(in, ...) \
+decltype(TYPE_LIST_NS::detail::DeducePartition<in, __VA_ARGS__>())
 
-#define __TL_Filter(...) typename __TL_partition(__VA_ARGS__)::satisfied
+#define __TL_Filter(...) typename __TL_Partition(__VA_ARGS__)::satisfied
 
 
 TYPE_LIST_NS_END

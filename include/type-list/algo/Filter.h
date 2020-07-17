@@ -72,9 +72,7 @@ namespace detail {
 
     template<ValueTemplateConcept PRED, FiniteValueListConcept IN>
     struct PartitionType<PRED, IN> {
-        __TL_lambda(Pred, typename T)
-        __return_apply_v(PRED::template apply, T::value);
-
+        __TL_lambda(Pred, typename T) __return_apply_v(PRED::template apply, T::value);
         using type = __TL_apply_t(detail::Partition,
                          List<IN>,
                          Pred,

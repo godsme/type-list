@@ -21,10 +21,10 @@ concept ValueConcept = std::is_base_of_v<ValueSignature, T>;
 
 /////////////////////////////////////////////////////////////////////////
 struct TypeTemplateSignature{};
-template<template<typename> typename F>
+template<template<typename ...> typename F>
 struct TypeTemplate : TypeTemplateSignature {
-    template<typename Ts>
-    using apply = F<Ts>;
+    template<typename ... Ts>
+    using apply = F<Ts...>;
 };
 
 template<typename T>
@@ -33,10 +33,10 @@ std::is_base_of_v<TypeTemplateSignature, T>;
 
 /////////////////////////////////////////////////////////////////////////
 struct ValueTemplateSignature{};
-template<template<auto> typename F>
+template<template<auto ...> typename F>
 struct ValueTemplate : ValueTemplateSignature {
-    template<auto Vs>
-    using apply = F<Vs>;
+    template<auto ... Vs>
+    using apply = F<Vs...>;
 };
 
 template<typename T>

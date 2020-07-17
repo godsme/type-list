@@ -55,12 +55,15 @@ namespace detail {
     template<typename PRED, typename IN>
     struct PartitionType;
 
-    template<TypeTemplateConcept PRED, FiniteTypeListConcept IN>
+    template<TypeTemplateConcept PRED, NonEmptyFiniteTypeListConcept IN>
     struct PartitionType<PRED, IN> {
-        using type = __TL_apply_t(detail::Partition, IN, PRED::template apply, TypeList<>, TypeList<>);
+        using type = __TL_apply_t(detail::Partition,
+                IN,
+                PRED::template apply,
+                TypeList<>, TypeList<>);
     };
 
-    template<ValueConcept PRED, FiniteValueListConcept IN>
+    template<ValueConcept PRED, NonEmptyFiniteValueListConcept IN>
     struct PartitionType<PRED, IN> {
         __TL_lambda(Pred, typename T) __return_v(PRED::value(T::value));
         using type = __TL_apply_t(detail::Partition,
@@ -70,7 +73,7 @@ namespace detail {
                      ValueList<>);
     };
 
-    template<ValueTemplateConcept PRED, FiniteValueListConcept IN>
+    template<ValueTemplateConcept PRED, NonEmptyFiniteValueListConcept IN>
     struct PartitionType<PRED, IN> {
         __TL_lambda(Pred, typename T) __return_apply_v(PRED::template apply, T::value);
         using type = __TL_apply_t(detail::Partition,
@@ -78,6 +81,14 @@ namespace detail {
                          Pred,
                          ValueList<>,
                          ValueList<>);
+    };
+
+    template<typename PRED, EmptyListConcept IN>
+    struct PartitionType<PRED, IN> {
+        using type = struct {
+            using satisfied = EmptyList;
+            using rest      = EmptyList;
+        };
     };
 }
 
@@ -88,29 +99,14 @@ template<typename PRED, typename IN>
 using Filter_t = typename detail::PartitionType<PRED, IN>::type::satisfied;
 
 namespace detail {
-    template<__TL_lambda(PRED, __Set()), typename IN>
-    requires (FiniteTypeListConcept<IN> && !EmptyListConcept<IN>)
+    template<__TL_lambda(PRED, __Set()), FiniteTypeListConcept IN>
     auto DeducePartition() -> Partition_t<TypeTemplate<PRED>, IN>;
 
-    template<__TL_lambda(PRED, auto), typename IN>
-    requires (FiniteValueListConcept<IN> && !EmptyListConcept<IN>)
+    template<__TL_lambda(PRED, auto), FiniteValueListConcept IN>
     auto DeducePartition() -> Partition_t<ValueTemplate<PRED>, IN>;
 
-    template<auto PRED, typename IN>
-    requires (FiniteValueListConcept<IN> && !EmptyListConcept<IN>)
+    template<auto PRED, FiniteValueListConcept IN>
     auto DeducePartition() -> Partition_t<Value<PRED>, IN>;
-
-    ///////////////////////////////////////////////////////////////////////
-    using __EmPtY_LiSt_PaRtItIoN = struct { using satisfied = EmptyList; using rest = EmptyList; };
-
-    template<__TL_lambda(PRED, __Set()), EmptyListConcept IN>
-    auto DeducePartition() -> __EmPtY_LiSt_PaRtItIoN;
-
-    template<__TL_lambda(PRED, auto), EmptyListConcept IN>
-    auto DeducePartition() -> __EmPtY_LiSt_PaRtItIoN;
-
-    template<auto PRED, EmptyListConcept IN>
-    auto DeducePartition() -> __EmPtY_LiSt_PaRtItIoN;
 }
 
 #define __TL_Partition(in, ...) \

@@ -74,6 +74,9 @@ struct EmptyList
 
     template<typename T>
     using appendType = typename detail::EmptyValueWrapperTrait<T>::type;
+
+    template<typename T>
+    using prependType = typename detail::EmptyValueWrapperTrait<T>::type;
 };
 
 namespace detail {

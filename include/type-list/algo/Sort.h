@@ -10,6 +10,8 @@
 #include <type-list/types/Lambda.h>
 #include <type-list/types/List.h>
 #include <type-list/algo/Filter.h>
+#include <type-list/algo/Curry.h>
+#include <type-list/algo/Bind.h>
 #include <cstddef>
 
 TYPE_LIST_NS_BEGIN
@@ -24,15 +26,12 @@ namespace detail {
             NonEmptyFiniteListConcept IN,
             __TL_lambda(LT, typename, typename))
     <IN, LT> {
-        __TL_lambda(LessThan, typename T) __return_apply_v(LT, T, typename IN::Head);
-        using result  = __TL_Partition(LessThan, typename IN::Tail);
+        using result  = __TL_Partition(__TL_bind(LT, _1_, typename IN::Head), typename IN::Tail);
         using lesser  = __TL_apply_t(Sort, typename result::satisfied, LT);
         using greater = __TL_apply_t(Sort, typename result::rest, LT);
         __result_t(typename lesser::template appendType<typename IN::Head>::template appendList<greater>);
     };
 }
-
-
 
 namespace detail {
     template<typename LT, typename IN>

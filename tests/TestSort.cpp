@@ -37,21 +37,21 @@ namespace {
         REQUIRE(std::is_same_v<__TL_list(1, 2, 18, 41, 93), type>);
     }
 
-//    __TL_lambda(GreaterValue, int V1, int V2) __return_v(V1 > V2);
-//    SCENARIO("sort a value list in greater way") {
-//        using type = __TL_Sort(GreaterValue, __TL_list(18, 93, 2, 41, 1));
-//        REQUIRE(std::is_same_v<__TL_list(93, 41, 18, 2, 1), type>);
-//    }
-//
-//    constexpr auto GreaterValueF(int V1, int V2) -> bool { return V1 > V2; }
-//    SCENARIO("sort a value list in function") {
-//        using type = __TL_Sort(GreaterValueF, __TL_list(18, 93, 2, 41, 1));
-//        REQUIRE(std::is_same_v<__TL_list(93, 41, 18, 2, 1), type>);
-//    }
-//
-//    constexpr auto LesserValueF = [](int V1, int V2) { return V1 < V2; };
-//    SCENARIO("sort a value list in a lambda") {
-//        using type = __TL_Sort(LesserValueF, __TL_list(18, 93, 2, 41, 1));
-//        REQUIRE(std::is_same_v<__TL_list(1, 2, 18, 41, 93), type>);
-//    }
+    __TL_lambda(GreaterValue, int V1, int V2) __return_v(V1 > V2);
+    SCENARIO("sort a value list in greater way") {
+        using type = __TL_Sort(GreaterValue, __TL_list(18, 93, 2, 41, 1));
+        REQUIRE(std::is_same_v<__TL_list(93, 41, 18, 2, 1), type>);
+    }
+
+    constexpr auto GreaterValueF(int V1, int V2) -> bool { return V1 > V2; }
+    SCENARIO("sort a value list in function") {
+        using type = __TL_Sort(GreaterValueF, __TL_list(18, 93, 2, 41, 1));
+        REQUIRE(std::is_same_v<__TL_list(93, 41, 18, 2, 1), type>);
+    }
+
+    constexpr auto LesserValueF = [](int V1, int V2) { return V1 < V2; };
+    SCENARIO("sort a value list in a lambda") {
+        using type = __TL_Sort(LesserValueF, __TL_list(18, 93, 2, 41, 1));
+        REQUIRE(std::is_same_v<__TL_list(1, 2, 18, 41, 93), type>);
+    }
 }

@@ -18,8 +18,8 @@ namespace detail {
     __TL_lambda(Partition,
                 FiniteListConcept IN,
                 __TL_lambda(PRED, typename),
-                ListConcept SATISFIED = TypeList<>,
-                ListConcept REST = TypeList<>,
+                ListConcept SATISFIED = EmptyList,
+                ListConcept REST = EmptyList,
                 typename = void)
     __return_t(struct {
            using satisfied = __TL_apply_t(detail::EmptyListTrait, SATISFIED);
@@ -60,7 +60,6 @@ namespace detail {
         using type = __TL_apply_t(detail::Partition,
                 IN,
                 PRED::template apply);
-                //EmptyList, EmptyList);
     };
 
     template<ValueConcept PRED, NonEmptyFiniteValueListConcept IN>
@@ -68,9 +67,7 @@ namespace detail {
         __TL_lambda(Pred, typename T) __return_v(PRED::value(T::value));
         using type = __TL_apply_t(detail::Partition,
                      List<IN>,
-                     Pred,
-                     ValueList<>,
-                     ValueList<>);
+                     Pred);
     };
 
     template<ValueTemplateConcept PRED, NonEmptyFiniteValueListConcept IN>
@@ -78,9 +75,7 @@ namespace detail {
         __TL_lambda(Pred, typename T) __return_apply_v(PRED::template apply, T::value);
         using type = __TL_apply_t(detail::Partition,
                          List<IN>,
-                         Pred,
-                         ValueList<>,
-                         ValueList<>);
+                         Pred);
     };
 
     template<typename PRED, EmptyListConcept IN>
@@ -98,19 +93,19 @@ using Partition_t = typename detail::PartitionType<PRED, IN>::type;
 template<typename PRED, typename IN>
 using Filter_t = typename detail::PartitionType<PRED, IN>::type::satisfied;
 
-namespace detail {
-    template<__TL_lambda(PRED, __Set()), FiniteTypeListConcept IN>
-    auto DeducePartition() -> Partition_t<__TL_toType(PRED), IN>;
+//namespace detail {
+//    template<__TL_lambda(PRED, __Set()), FiniteTypeListConcept IN>
+//    auto DeducePartition() -> Partition_t<__TL_toType(PRED), IN>;
+//
+//    template<__TL_lambda(PRED, auto), FiniteValueListConcept IN>
+//    auto DeducePartition() -> Partition_t<__TL_toType(PRED), IN>;
+//
+//    template<auto PRED, FiniteValueListConcept IN>
+//    auto DeducePartition() -> Partition_t<__TL_toType(PRED), IN>;
+//}
 
-    template<__TL_lambda(PRED, auto), FiniteValueListConcept IN>
-    auto DeducePartition() -> Partition_t<__TL_toType(PRED), IN>;
-
-    template<auto PRED, FiniteValueListConcept IN>
-    auto DeducePartition() -> Partition_t<__TL_toType(PRED), IN>;
-}
-
-#define __TL_Partition(in, ...) \
-decltype(TYPE_LIST_NS::detail::DeducePartition<in, __VA_ARGS__>())
+#define __TL_Partition(pred, ...) Partition_t<__TL_toType(pred), __VA_ARGS__>
+//decltype(TYPE_LIST_NS::detail::DeducePartition<__TL_toType(in), __VA_ARGS__>())
 
 #define __TL_Filter(...) typename __TL_Partition(__VA_ARGS__)::satisfied
 

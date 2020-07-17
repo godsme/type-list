@@ -18,9 +18,9 @@ TYPE_LIST_NS_BEGIN
 
 namespace detail {
     __TL_lambda(Transform
-            , FiniteListConcept
+            , typename IN
             , __TL_lambda_t(typename)
-            , typename OUT)
+            , typename OUT = EmptyList)
     __return_t(OUT);
 
     __TL_lambda(Transform
@@ -66,8 +66,7 @@ namespace detail {
     public:
         using type = __TL_apply_t(Transform,
                                   List<IN>,
-                                  Mapper,
-                                  ValueList<>);
+                                  Mapper);
     };
 
     template<ValueTemplateConcept F, NonEmptyFiniteValueListConcept IN>
@@ -75,17 +74,14 @@ namespace detail {
     class TypeTransformer<F, IN> {
         __TL_lambda(Mapper, __Set(T)) __return_apply_t(F::template apply, T::value);
     public:
-        using type = __TL_apply_t(Transform, List<IN>, Mapper, TypeList<>);
+        using type = __TL_apply_t(Transform, List<IN>, Mapper);
     };
 
     template<ValueConcept F, NonEmptyFiniteValueListConcept IN>
     class TypeTransformer<F, IN> {
         __TL_lambda(Mapper, __Set(T)) __return_t(Value<F::value(T::value)>);
     public:
-        using type = __TL_apply_t(detail::Transform,
-                                  List<IN>,
-                                  Mapper,
-                                  ValueList<>);
+        using type = __TL_apply_t(detail::Transform, List<IN>, Mapper);
     };
 
     template<TypeTemplateConcept F, NonEmptyFiniteTypeListConcept IN>
@@ -93,40 +89,35 @@ namespace detail {
     class TypeTransformer<F, IN> {
         __TL_lambda(Mapper, __Set(T)) __return_t(Value<F::template apply<T>::value>);
     public:
-        using type = __TL_apply_t(Transform,
-                         IN,
-                         Mapper,
-                         ValueList<>);
+        using type = __TL_apply_t(Transform, IN, Mapper);
     };
 
     template<TypeTemplateConcept F, NonEmptyFiniteTypeListConcept IN>
     requires T2TConcept<F, typename IN::Head>
     struct TypeTransformer<F, IN>
-        __return_apply_t(detail::Transform, IN, F::template apply, TypeList<>);
+        __return_apply_t(detail::Transform, IN, F::template apply);
 
     template<typename F, EmptyFiniteListConcept IN>
-    struct TypeTransformer<F, IN> {
-        using type = EmptyList;
-    };
+    struct TypeTransformer<F, IN> __return_t(EmptyList);
 }
 
 template<typename F, typename IN>
 using Transform_t = __TL_apply_t(detail::TypeTransformer, F, IN);
 
-namespace detail {
-    template<FiniteListConcept IN, __TL_lambda(F, __Set())>
-    auto DeductTransform() -> Transform_t<TypeTemplate<F>, IN>;
-
-    template<FiniteListConcept IN, __TL_lambda(F, auto)>
-    auto DeductTransform() -> Transform_t<ValueTemplate<F>, IN>;
-
-    template<FiniteListConcept IN, auto F>
-    auto DeductTransform() -> Transform_t<Value<F>, IN>;
-}
+//namespace detail {
+//    template<FiniteListConcept IN, __TL_lambda(F, __Set())>
+//    auto DeductTransform() -> Transform_t<TypeTemplate<F>, IN>;
+//
+//    template<FiniteListConcept IN, __TL_lambda(F, auto)>
+//    auto DeductTransform() -> Transform_t<ValueTemplate<F>, IN>;
+//
+//    template<FiniteListConcept IN, auto F>
+//    auto DeductTransform() -> Transform_t<Value<F>, IN>;
+//}
 
 TYPE_LIST_NS_END
 
-#define __TL_Map(IN, F) \
-decltype(TYPE_LIST_NS::detail::DeductTransform<IN, F>())
+#define __TL_Map(F, ...) \
+TYPE_LIST_NS::Transform_t<__TL_toType(F), __VA_ARGS__>
 
 #endif //TYPE_LIST_TRANSFORM_H

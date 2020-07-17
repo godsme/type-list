@@ -10,13 +10,11 @@
 #include <type-list/types/ValueList.h>
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/types/Lambda.h>
+#include <type-list/types/Value.h>
 
 TYPE_LIST_NS_BEGIN
 
 namespace detail {
-    template<typename T>
-    concept ValueConcept =  std::is_base_of_v<ValueSignature, T>;
-
     ///////////////////////////////////////////////////////////////////
     __TL_lambda(EmptyValueWrapperTrait, typename T)
     __return_t(TypeList<T>);

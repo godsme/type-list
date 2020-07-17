@@ -33,17 +33,6 @@ namespace detail {
 }
 
 namespace detail {
-    template<__TL_lambda(F, auto)>
-    struct V2VAdapter {
-        __TL_lambda(Mapper, __Set(T))
-            __return_t(Value<__TL_apply_v(F, T::value)>);
-    };
-
-    template<__TL_lambda(F, auto)>
-    struct V2TAdapter {
-        __TL_lambda(Mapper, __Set(T))
-            __return_apply_t(F, T::value);
-    };
 
     template<__TL_lambda(F, auto), auto V>
     concept V2VConcept = requires {
@@ -60,11 +49,13 @@ namespace detail {
 
     template<NonEmptyFiniteValueListConcept IN, __TL_lambda(F, auto)>
     requires V2VConcept<F, IN::Head>
-    struct ValueTransformer<IN, F>
-        __return_apply_t(detail::Transform
-                , List<IN>
-                , V2VAdapter<F>::template Mapper
-                , ValueList<>);
+    struct ValueTransformer<IN, F> {
+        __TL_lambda(Mapper, __Set(T)) __return_t(Value<__TL_apply_v(F, T::value)>);
+        using type = __TL_apply_t(Transform,
+                        List<IN>,
+                        Mapper,
+                        ValueList<>);
+    };
 
     template<EmptyFiniteValueListConcept IN, __TL_lambda(F, auto)>
     requires V2VConcept<F, 0>
@@ -72,11 +63,14 @@ namespace detail {
 
     template<NonEmptyFiniteValueListConcept IN, __TL_lambda(F, auto)>
     requires V2TConcept<F, IN::Head>
-    struct ValueTransformer<IN, F>
-        __return_apply_t(detail::Transform
-            , List<IN>
-            , V2TAdapter<F>::template Mapper
-            , TypeList<>);
+    struct ValueTransformer<IN, F> {
+        __TL_lambda(Mapper, __Set(T)) __return_apply_t(F, T::value);
+
+        using type = __TL_apply_t(Transform
+                    , List<IN>
+                    , Mapper
+                    , TypeList<>);
+    };
 
     template<EmptyFiniteValueListConcept IN, __TL_lambda(F, auto)>
     requires V2TConcept<F, 0>
@@ -152,7 +146,7 @@ namespace detail {
 
 TYPE_LIST_NS_END
 
-#define __TL_map(IN, F) \
+#define __TL_Map(IN, F) \
 decltype(TYPE_LIST_NS::detail::DeductTransform<IN, F>())
 
 #endif //TYPE_LIST_TRANSFORM_H

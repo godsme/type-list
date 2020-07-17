@@ -25,15 +25,11 @@ namespace detail {
     <IN, 0> __return_apply_t(detail::EmptyListTrait, IN);
 }
 
-template<ListConcept IN, size_t N>
-using Drop_t = __TL_apply_t(detail::Drop, IN, N);
-
-__TL_lambda(Drop, size_t N)
-__return_lambda_t(__TL_params(ListConcept IN), __TL_apply(Drop_t, IN, N));
+template<typename N, ListConcept IN>
+using Drop_t = __TL_apply_t(detail::Drop, IN, N::value);
 
 TYPE_LIST_NS_END
 
-#define __TL_Drop(...) TYPE_LIST_NS::Drop_t<__VA_ARGS__>
-#define __TL_drop(...) TYPE_LIST_NS::Drop<__VA_ARGS__>
+#define __TL_Drop(n, ...) TYPE_LIST_NS::Drop_t<TYPE_LIST_NS::Value<n>, __VA_ARGS__>
 
 #endif //TYPE_LIST_DROP_H

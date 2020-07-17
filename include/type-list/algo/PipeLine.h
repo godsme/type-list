@@ -14,8 +14,12 @@
 #include <type-list/algo/Take.h>
 #include <type-list/algo/Drop.h>
 #include <type-list/algo/Filter.h>
+#include <type-list/algo/Curry.h>
 
 TYPE_LIST_NS_BEGIN
+
+#define __TL_take(n) __TL_curry_t(TYPE_LIST_NS::Take_t, TYPE_LIST_NS::Value<n>)
+#define __TL_drop(n) __TL_curry_t(TYPE_LIST_NS::Drop_t, TYPE_LIST_NS::Value<n>)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 template<typename IN, typename ... OPs>
@@ -31,14 +35,14 @@ class PipeLine final {
         struct Compose {
             template<typename INPUT>
             struct Result {
-                using output = typename TypeListTrait<typename OP::template type<INPUT>>::type;
+                using output = typename TypeListTrait<typename OP::template apply<INPUT>>::type;
                 using type = typename COMPOSED_OP::template Result<output>::type;
             };
         };
 
         template<typename INPUT>
         struct Result {
-            using type = typename OP::template type<INPUT>;
+            using type = typename OP::template apply<INPUT>;
         };
     };
 

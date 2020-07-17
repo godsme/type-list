@@ -40,15 +40,15 @@ namespace detail {
     <IN, 0> __return_t(EmptyList);
 }
 
-template<size_t N, ListConcept IN>
-using Take_t = __TL_apply_t(detail::TakeTrait, IN, N);
+template<typename N, ListConcept IN>
+using Take_t = __TL_apply_t(detail::TakeTrait, IN, N::value);
 
-__TL_lambda(Take, size_t N)
-__return_lambda_t(__TL_params(ListConcept IN), __TL_apply(Take_t, N, IN));
+//__TL_lambda(Take, size_t N)
+//__return_lambda_t(__TL_params(ListConcept IN), __TL_apply(Take_t, N, IN));
 
 TYPE_LIST_NS_END
 
-#define __TL_Take(n, in) TYPE_LIST_NS::Take_t<n, in>
-#define __TL_take(n) TYPE_LIST_NS::Take<n>
+#define __TL_Take(n, in) TYPE_LIST_NS::Take_t<TYPE_LIST_NS::Value<n>, in>
+
 
 #endif //TYPE_LIST_TAKE_H

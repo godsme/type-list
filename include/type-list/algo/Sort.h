@@ -63,32 +63,14 @@ template<typename PRED, typename IN>
 using Sort_t = typename detail::SortType<PRED, IN>::type;
 
 namespace detail {
-    template<typename T>
-    concept IsEmptyList = std::is_same_v<EmptyList, T>;
-
-    template<typename T>
-    concept NonEmptyFiniteValueList = FiniteValueListConcept<T> && (!IsEmptyList<T>);
-
-    template<typename T>
-    concept NonEmptyFiniteTypeList = FiniteTypeListConcept<T> && (!IsEmptyList<T>);
-
-    template<__TL_lambda(LT, typename, typename), NonEmptyFiniteTypeList IN>
+    template<__TL_lambda(LT, typename, typename), FiniteTypeListConcept IN>
     auto DeduceSortType() -> Sort_t<__TL_toType(LT), IN>;
 
-    template<__TL_lambda(LT, auto, auto), NonEmptyFiniteValueList IN>
+    template<__TL_lambda(LT, auto, auto), FiniteValueListConcept IN>
     auto DeduceSortType() -> Sort_t<__TL_toType(LT), IN>;
 
-    template<auto LT, NonEmptyFiniteValueList IN>
+    template<auto LT, FiniteValueListConcept IN>
     auto DeduceSortType() -> Sort_t<__TL_toType(LT), IN>;
-
-    template<__TL_lambda(LT, typename, typename), IsEmptyList IN>
-    auto DeduceSortType() -> EmptyList;
-
-    template<__TL_lambda(LT, auto, auto), IsEmptyList IN>
-    auto DeduceSortType() -> EmptyList;
-
-    template<auto LT, IsEmptyList IN>
-    auto DeduceSortType() -> EmptyList;
 }
 
 TYPE_LIST_NS_END

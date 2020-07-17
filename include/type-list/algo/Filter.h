@@ -59,8 +59,8 @@ namespace detail {
     struct PartitionType<PRED, IN> {
         using type = __TL_apply_t(detail::Partition,
                 IN,
-                PRED::template apply,
-                TypeList<>, TypeList<>);
+                PRED::template apply);
+                //EmptyList, EmptyList);
     };
 
     template<ValueConcept PRED, NonEmptyFiniteValueListConcept IN>

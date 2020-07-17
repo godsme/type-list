@@ -51,6 +51,16 @@ namespace detail {
         __return_apply_v(EQ::template apply, T1::value, T2::value);
         using type = typename detail::Group<List<IN>, Eq>::type;
     };
+
+    template<TypeTemplateConcept EQ, NonEmptyFiniteTypeListConcept IN>
+    struct GroupType<EQ, IN> {
+        using type = typename detail::Group<IN, EQ::template apply>::type;
+    };
+
+    template<typename EQ, EmptyListConcept IN>
+    struct GroupType<EQ, IN> {
+        using type = EmptyList;
+    };
 }
 template<typename EQ, typename IN>
 using Group_t = typename detail::GroupType<EQ, IN>::type;

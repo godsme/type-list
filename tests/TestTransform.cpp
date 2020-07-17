@@ -36,6 +36,7 @@ namespace {
     __TL_lambda(WT, __Set(T));
     __TL_lambda(Wrap, __Set(T)) __return_t(WT<T>);
 
+    template <typename T> struct S;
     SCENARIO("Transform Type2Type") {
         using type = __TL_Map(__TL_list(int, double), Wrap);
         REQUIRE(std::is_same_v<TypeList<WT<int>,WT<double>>, type>);

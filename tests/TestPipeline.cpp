@@ -18,15 +18,15 @@ namespace {
         using type = __TL_pipeline
             ( __TL_infinite(1)
             , __TL_take(10)
+            , __TL_filter([](auto v) {
+                return v % 2 == 0; })
             , __TL_sort([](auto lhs, auto rhs) {
                 return lhs > rhs; })
             , __TL_map([](auto v) {
-                return v + 2; })
-            , __TL_filter([](auto v) {
-                return v % 2 == 0; })
+                return v + 1; })
             , __TL_drop(2)
             );
 
-        REQUIRE(std::is_same_v<__TL_list(8,6,4), type>);
+        REQUIRE(std::is_same_v<__TL_list(7,5,3), type>);
     }
 }

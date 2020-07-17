@@ -65,11 +65,7 @@ namespace detail {
     requires V2TConcept<F, IN::Head>
     struct ValueTransformer<IN, F> {
         __TL_lambda(Mapper, __Set(T)) __return_apply_t(F, T::value);
-
-        using type = __TL_apply_t(Transform
-                    , List<IN>
-                    , Mapper
-                    , TypeList<>);
+        using type = __TL_apply_t(Transform, List<IN>, Mapper, TypeList<>);
     };
 
     template<EmptyFiniteValueListConcept IN, __TL_lambda(F, auto)>
@@ -99,11 +95,6 @@ using TransformValueF_t = __TL_apply_t(detail::V2VFTransformer, IN, F);
 
 namespace detail {
     template<__TL_lambda(F, typename)>
-    struct T2VAdapter {
-        __TL_lambda(Mapper, __Set(T)) __return_t(Value<F<T>::value>);
-    };
-
-    template<__TL_lambda(F, typename)>
     concept T2VConcept = requires {
         F<int>::value;
     };
@@ -118,11 +109,13 @@ namespace detail {
 
     template<FiniteTypeListConcept IN, __TL_lambda(F, __Set())>
     requires T2VConcept<F>
-    struct TypeTransformer<IN, F>
-        __return_apply_t(detail::Transform,
-                            IN,
-                            T2VAdapter<F>::template Mapper,
-                            ValueList<>);
+    struct TypeTransformer<IN, F> {
+        __TL_lambda(Mapper, __Set(T)) __return_t(Value<F<T>::value>);
+        using type = __TL_apply_t(Transform,
+                         IN,
+                         Mapper,
+                         ValueList<>);
+    };
 
     template<FiniteTypeListConcept IN, __TL_lambda(F, __Set())>
     requires T2TConcept<F>

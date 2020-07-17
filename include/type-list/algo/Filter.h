@@ -93,13 +93,9 @@ using Partition_t = typename detail::PartitionType<PRED, IN>::type;
 template<typename PRED, typename IN>
 using Filter_t = typename detail::PartitionType<PRED, IN>::type::satisfied;
 
-#define __TL_Partition(pred, ...) Partition_t<__TL_toType(pred), __VA_ARGS__>
-//decltype(TYPE_LIST_NS::detail::DeducePartition<__TL_toType(in), __VA_ARGS__>())
-
-#define __TL_Filter(...) typename __TL_Partition(__VA_ARGS__)::satisfied
-
-
 TYPE_LIST_NS_END
 
+#define __TL_Partition(pred, ...) TYPE_LIST_NS::Partition_t<__TL_toType(pred), __VA_ARGS__>
+#define __TL_Filter(...) typename __TL_Partition(__VA_ARGS__)::satisfied
 
 #endif //TYPE_LIST_FILTER_H

@@ -43,6 +43,21 @@ template<typename T>
 concept ValueTemplateConcept = \
 std::is_base_of_v<ValueTemplateSignature, T>;
 
+/////////////////////////////////////////////////////////
+template<typename T>
+auto DeduceType() -> T;
+
+template<template<typename ...> typename F>
+auto DeduceType() -> TypeTemplate<F>;
+
+template<template<auto ...> typename F>
+auto DeduceType() -> ValueTemplate<F>;
+
+template<auto V>
+auto DeduceType() -> Value<V>;
+
 TYPE_LIST_NS_END
+
+#define __TL_toType(...) decltype(TYPE_LIST_NS::DeduceType<__VA_ARGS__>())
 
 #endif //TYPE_LIST_VALUE_H

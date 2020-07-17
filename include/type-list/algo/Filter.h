@@ -84,6 +84,9 @@ namespace detail {
 template<typename PRED, typename IN>
 using Partition_t = typename detail::PartitionType<PRED, IN>::type;
 
+template<typename PRED, typename IN>
+using Filter_t = typename detail::PartitionType<PRED, IN>::type::satisfied;
+
 namespace detail {
     template<__TL_lambda(PRED, __Set()), typename IN>
     requires (FiniteTypeListConcept<IN> && !EmptyListConcept<IN>)
@@ -115,29 +118,8 @@ decltype(TYPE_LIST_NS::detail::DeducePartition<__VA_ARGS__>())
 
 #define __TL_Filter(...) typename __TL_partition(__VA_ARGS__)::satisfied
 
-namespace detail {
-    __TL_lambda(FilterType_P, __TL_lambda(PRED, typename))
-    __return_lambda_t(__TL_params(typename IN), __TL_Filter(PRED, IN));
-
-    __TL_lambda(FilterValue_P, __TL_lambda(PRED, auto))
-    __return_lambda_t(__TL_params(typename IN), __TL_Filter(PRED, IN));
-
-    __TL_lambda(FilterValueF_P, auto PRED)
-    __return_lambda_t(__TL_params(typename IN), __TL_Filter(PRED, IN));
-
-    template<__TL_lambda(PRED, __Set())>
-    auto DeduceFilter() -> FilterType_P<PRED>;
-
-    template<__TL_lambda(PRED, auto)>
-    auto DeduceFilter() -> FilterValue_P<PRED>;
-
-    template<auto PRED>
-    auto DeduceFilter() -> FilterValueF_P<PRED>;
-}
 
 TYPE_LIST_NS_END
 
-#define __TL_filter(...) \
-decltype(TYPE_LIST_NS::detail::DeduceFilter<__VA_ARGS__>())
 
 #endif //TYPE_LIST_FILTER_H

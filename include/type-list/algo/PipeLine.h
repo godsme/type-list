@@ -20,6 +20,7 @@ TYPE_LIST_NS_BEGIN
 
 #define __TL_take(n) __TL_curry_t(TYPE_LIST_NS::Take_t, TYPE_LIST_NS::Value<n>)
 #define __TL_drop(n) __TL_curry_t(TYPE_LIST_NS::Drop_t, TYPE_LIST_NS::Value<n>)
+#define __TL_filter(...) __TL_curry_t(TYPE_LIST_NS::Filter_t, __TL_toType(__VA_ARGS__))
 
 /////////////////////////////////////////////////////////////////////////////////////////
 template<typename IN, typename ... OPs>

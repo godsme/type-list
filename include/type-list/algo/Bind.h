@@ -8,20 +8,13 @@
 #include <type-list/type-list-ns.h>
 #include <type-list/types/List.h>
 #include <type-list/algo/Drop.h>
+#include <type-list/algo/Curry.h>
 #include <cstddef>
 
 TYPE_LIST_NS_BEGIN
 
 namespace detail {
-    template<template<typename ...> typename C,
-            typename ... ARGS>
-    struct Partial {
-        template<typename ... MORE>
-        using apply = C<ARGS..., MORE...>;
-    };
-
-    struct PlaceHolderSignature {
-    };
+    struct PlaceHolderSignature {};
 
     template<typename T>
     concept IsPlaceHolder = std::is_base_of_v<PlaceHolderSignature, T>;
@@ -37,12 +30,12 @@ namespace detail {
     template<template<typename ...> typename C, typename REST, IsPlaceHolder H, typename ... ARGS>
     struct DoBind<C, REST, H, ARGS...> {
         using T = typename __TL_Drop(H::value - 1, REST)::Head;
-        using type = typename DoBind<Partial<C, T>::template apply, REST, ARGS...>::type;
+        using type = typename DoBind<__TL_curry(C, T), REST, ARGS...>::type;
     };
 
     template<template<typename ...> typename C, typename REST, IsNotPlaceHolder H, typename ... ARGS>
     struct DoBind<C, REST, H, ARGS...> {
-        using type = typename DoBind<Partial<C, H>::template apply, REST, ARGS...>::type;
+        using type = typename DoBind<__TL_curry(C, H), REST, ARGS...>::type;
     };
 }
 

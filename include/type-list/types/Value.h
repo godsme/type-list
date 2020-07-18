@@ -20,38 +20,38 @@ template<typename T>
 concept ValueConcept = std::is_base_of_v<ValueSignature, T>;
 
 /////////////////////////////////////////////////////////////////////////
-struct TypeTemplateSignature{};
+struct TypeCallableSignature{};
 template<template<typename ...> typename F>
-struct TypeTemplate : TypeTemplateSignature {
+struct CallableT : TypeCallableSignature {
     template<typename ... Ts>
     using apply = F<Ts...>;
 };
 
 template<typename T>
 concept TypeTemplateConcept = \
-std::is_base_of_v<TypeTemplateSignature, T>;
+std::is_base_of_v<TypeCallableSignature, T>;
 
 /////////////////////////////////////////////////////////////////////////
-struct ValueTemplateSignature{};
+struct ValueCallableSignature{};
 template<template<auto ...> typename F>
-struct ValueTemplate : ValueTemplateSignature {
+struct CallableV : ValueCallableSignature {
     template<auto ... Vs>
     using apply = F<Vs...>;
 };
 
 template<typename T>
 concept ValueTemplateConcept = \
-std::is_base_of_v<ValueTemplateSignature, T>;
+std::is_base_of_v<ValueCallableSignature, T>;
 
 /////////////////////////////////////////////////////////
 template<typename T>
 auto DeduceType() -> T;
 
 template<template<typename ...> typename F>
-auto DeduceType() -> TypeTemplate<F>;
+auto DeduceType() -> CallableT<F>;
 
 template<template<auto ...> typename F>
-auto DeduceType() -> ValueTemplate<F>;
+auto DeduceType() -> CallableV<F>;
 
 template<auto V>
 auto DeduceType() -> Value<V>;

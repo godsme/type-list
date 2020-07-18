@@ -27,9 +27,9 @@ TYPE_LIST_NS_BEGIN
 #define __TL_map(...) __TL_curry_t(TYPE_LIST_NS::Transform_t, __TL_toType((__VA_ARGS__)))
 
 /////////////////////////////////////////////////////////////////////////////////////////
-template<typename IN, typename ... OPs>
+template<typename IN, typename H, typename ... OPs>
 struct PipeLine final {
-    using type = typename Compose<OPs...>::template apply<IN>;
+    using type = typename Compose<H, OPs...>::template apply<IN>;
 };
 
 TYPE_LIST_NS_END

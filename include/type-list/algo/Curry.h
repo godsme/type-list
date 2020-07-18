@@ -87,7 +87,7 @@ namespace detail {
 }
 
 template<template<typename ...> typename C, typename ... Ts>
-using Curry = detail::DoCurry<C, decltype(detail::SpecDeduceArgs<C>(detail::derived_sig{})), Ts...>;
+using Curry = detail::DoCurry<C, __DEDUCE_TEMPLATE_ARGS(C), Ts...>;
 
 TYPE_LIST_NS_END
 

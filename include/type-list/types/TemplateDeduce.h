@@ -21,7 +21,6 @@ namespace detail {
     struct number_signature {
     };
 
-
     template<size_t V>
     struct ParameterNumber : number_signature {
         constexpr static auto value = V;
@@ -29,7 +28,6 @@ namespace detail {
 
     template<typename T>
     concept NumberObjConcept = std::is_base_of_v<number_signature, T>;
-
 
     template<template<typename> typename>
     auto DeduceArgs() -> ParameterNumber<1>;
@@ -67,6 +65,8 @@ namespace detail {
     template<template<typename...> typename F>
     auto SpecDeduceArgs(derived_sig) -> decltype(DeduceArgs<F>());
 }
+
+#define __DEDUCE_TEMPLATE_ARGS(c) decltype(detail::SpecDeduceArgs<c>(detail::derived_sig{}))
 
 TYPE_LIST_NS_END
 

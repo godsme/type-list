@@ -21,9 +21,7 @@ __TL_lambda(Compose, CallableConcept H, CallableConcept ... OPs)
 <H, OPs...> {
 public:
     template<typename INPUT>
-    using apply = typename Compose<OPs...>::template apply<
-            typename H::template apply<INPUT>
-            >;
+    using apply = __TL_call(Compose<OPs...>, __TL_call(H, INPUT));
 };
 
 TYPE_LIST_NS_END

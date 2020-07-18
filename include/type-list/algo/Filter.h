@@ -51,39 +51,36 @@ namespace detail {
 }
 
 namespace detail {
-    template<typename PRED, typename IN>
-    struct PartitionType;
+    __TL_lambda(PartitionType, typename PRED, typename IN);
 
-    template<TypeTemplateConcept PRED, NonEmptyFiniteListConcept IN>
-    struct PartitionType<PRED, IN> {
-        using type = __TL_apply_t(detail::Partition,
+    __TL_lambda(PartitionType, TypeTemplateConcept PRED, NonEmptyFiniteListConcept IN)
+    <PRED, IN>
+    __return_apply_t(detail::Partition,
                 IN,
                 PRED::template apply);
-    };
 
-    template<ValueConcept PRED, NonEmptyFiniteListConcept IN>
-    struct PartitionType<PRED, IN> {
+    __TL_lambda(PartitionType, ValueConcept PRED, NonEmptyFiniteListConcept IN)
+    <PRED, IN> {
         __TL_lambda(Pred, typename T) __return_v(PRED::value(T::value));
-        using type = __TL_apply_t(detail::Partition,
+        __result_t(__TL_apply_t(detail::Partition,
                      IN,
-                     Pred);
+                     Pred));
     };
 
-    template<ValueTemplateConcept PRED, NonEmptyFiniteListConcept IN>
-    struct PartitionType<PRED, IN> {
+    __TL_lambda(PartitionType, ValueTemplateConcept PRED, NonEmptyFiniteListConcept IN)
+    <PRED, IN> {
         __TL_lambda(Pred, typename T) __return_apply_v(PRED::template apply, T::value);
-        using type = __TL_apply_t(detail::Partition,
-                         IN,
-                         Pred);
+        __result_t(__TL_apply_t(detail::Partition,
+                            IN,
+                            Pred));
     };
 
-    template<typename PRED, EmptyListConcept IN>
-    struct PartitionType<PRED, IN> {
-        using type = struct {
+    __TL_lambda(PartitionType, typename PRED, EmptyListConcept IN)
+    <PRED, IN>
+    __return_t( struct {
             using satisfied = EmptyList;
             using rest      = EmptyList;
-        };
-    };
+    });
 }
 
 template<typename PRED, typename IN>

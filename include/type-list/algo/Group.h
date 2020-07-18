@@ -36,21 +36,18 @@ namespace detail {
 namespace detail {
     __TL_lambda(GroupType, typename EQ, typename IN);
 
-    __TL_lambda(GroupType,
-            TypeTemplateConcept EQ, NonEmptyFiniteListConcept IN)
+    __TL_lambda(GroupType, TypeTemplateConcept EQ, NonEmptyFiniteListConcept IN)
     <EQ, IN>
     __return_apply_t(detail::Group, List<IN>, EQ::template apply);
 
-    __TL_lambda(GroupType,
-                ValueConcept EQ, NonEmptyFiniteListConcept IN)
+    __TL_lambda(GroupType, ValueConcept EQ, NonEmptyFiniteListConcept IN)
     <EQ, IN> {
         __TL_lambda(Eq, ValueConcept T1, ValueConcept T2)
         __return_v(EQ::value(T1::value, T2::value));
         __result_t(__TL_apply_t(detail::Group, List<IN>, Eq));
     };
 
-    __TL_lambda(GroupType,
-                ValueTemplateConcept EQ, NonEmptyFiniteListConcept IN)
+    __TL_lambda(GroupType, ValueTemplateConcept EQ, NonEmptyFiniteListConcept IN)
     <EQ, IN> {
         __TL_lambda(Eq, ValueConcept T1, ValueConcept T2)
         __return_apply_v(EQ::template apply, T1::value, T2::value);

@@ -19,7 +19,9 @@ __TL_lambda(Compose, typename H, typename ... OPs)
 <H, OPs...> {
 public:
     template<typename INPUT>
-    using apply = typename Compose<OPs...>::template apply<typename H::template apply<INPUT>>;
+    using apply = typename Compose<OPs...>::template apply<
+            typename H::template apply<INPUT>
+            >;
 };
 
 __TL_lambda(Compose, typename H)

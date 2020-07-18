@@ -84,10 +84,10 @@ namespace detail {
 }
 
 template<typename PRED, typename IN>
-using Partition_t = typename detail::PartitionType<PRED, List<IN>>::type;
+using Partition_t = __TL_apply_t(detail::PartitionType, PRED, List<IN>);
 
 template<typename PRED, typename IN>
-using Filter_t = typename detail::PartitionType<PRED, List<IN>>::type::satisfied;
+using Filter_t = typename Partition_t<PRED, List<IN>>::satisfied;
 
 TYPE_LIST_NS_END
 

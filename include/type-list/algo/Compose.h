@@ -10,12 +10,14 @@
 #include <type-list/types/Lambda.h>
 #include <type-list/types/List.h>
 #include <type-list/concept/TypeListConcept.h>
+#include <type-list/concept/CallableConcept.h>
 
 TYPE_LIST_NS_BEGIN
 
-__TL_lambda(Compose, typename ... OPs);
-
-__TL_lambda(Compose, typename H, typename ... OPs)
+__TL_lambda(Compose, CallableConcept ... OPs);
+__TL_lambda(Compose, CallableConcept H)
+<H> : public H {};
+__TL_lambda(Compose, CallableConcept H, CallableConcept ... OPs)
 <H, OPs...> {
 public:
     template<typename INPUT>
@@ -23,9 +25,6 @@ public:
             typename H::template apply<INPUT>
             >;
 };
-
-__TL_lambda(Compose, typename H)
-<H> : public H {};
 
 TYPE_LIST_NS_END
 

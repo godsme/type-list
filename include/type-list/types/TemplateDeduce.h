@@ -12,14 +12,9 @@
 TYPE_LIST_NS_BEGIN
 
 namespace detail {
-    struct base_sig {
-    };
-    struct derived_sig : base_sig {
-    };
-    struct not_me {
-    };
-    struct number_signature {
-    };
+    struct variadic_tag {};
+    struct fixed_tag : variadic_tag {};
+    struct number_signature {};
 
     template<size_t V>
     struct ParameterNumber : number_signature {
@@ -60,13 +55,13 @@ namespace detail {
     auto DeduceArgs() -> ParameterNumber<10>;
 
     template<template<typename...> typename F>
-    auto SpecDeduceArgs(base_sig) -> ParameterNumber<1000000000>; // a meaningless big number
+    auto DeduceTemplateArgs(variadic_tag) -> ParameterNumber<1000000000>; // a meaningless big number
 
     template<template<typename...> typename F>
-    auto SpecDeduceArgs(derived_sig) -> decltype(DeduceArgs<F>());
+    auto DeduceTemplateArgs(fixed_tag)    -> decltype(DeduceArgs<F>());
 }
 
-#define __DEDUCE_TEMPLATE_ARGS(c) decltype(detail::SpecDeduceArgs<c>(detail::derived_sig{}))
+#define __DEDUCE_TEMPLATE_ARGS(c) decltype(detail::DeduceTemplateArgs<c>(detail::fixed_tag{}))
 
 TYPE_LIST_NS_END
 

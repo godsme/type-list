@@ -18,11 +18,8 @@ __TL_lambda(Compose, CallableConcept ... OPs);
 __TL_lambda(Compose, CallableConcept H)
 <H> : public H {};
 __TL_lambda(Compose, CallableConcept H, CallableConcept ... OPs)
-<H, OPs...> {
-public:
-    template<typename INPUT>
-    using apply = __TL_call(Compose<OPs...>, __TL_call(H, INPUT));
-};
+<H, OPs...> __return_callable(typename INPUT,
+        __TL_call(Compose<OPs...>, __TL_call(H, INPUT)));
 
 TYPE_LIST_NS_END
 

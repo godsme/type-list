@@ -6,6 +6,7 @@
 #define TYPE_LIST_VALUE_H
 
 #include <type-list/type-list-ns.h>
+#include <type-list/algo/Curry.h>
 #include <type_traits>
 
 TYPE_LIST_NS_BEGIN
@@ -21,12 +22,8 @@ template<typename T>
 concept ValueConcept = std::is_base_of_v<ValueSignature, T>;
 
 /////////////////////////////////////////////////////////////////////////
-struct TypeCallableSignature{};
 template<template<typename ...> typename F>
-struct CallableT : TypeCallableSignature {
-    template<typename ... Ts>
-    using apply = F<Ts...>;
-};
+struct CallableT : Curry<F> {};
 
 template<typename T>
 concept TypeTemplateConcept = \

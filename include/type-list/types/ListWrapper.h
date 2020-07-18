@@ -34,7 +34,7 @@ namespace detail {
             , TypeListSignature
             , InfiniteSignature {
         using Head = Value<T::Head>;
-        using Tail = ValueListWrapper<typename T::Tail>;
+        using Tail = InfiniteValueListWrapper<typename T::Tail>;
     };
 
     template<typename LIST>

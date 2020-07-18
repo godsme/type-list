@@ -38,7 +38,7 @@ namespace {
     template<typename T1, typename T2>
     using Take_t = Take<T1, T2>;
 
-    SCENARIO("value pipe line") {
+    SCENARIO("value pipe line 1") {
         using type = __TL_pipeline
         ( __TL_list(1, 2, 3, 4, 5)
         , __TL_drop(2)

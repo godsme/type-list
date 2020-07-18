@@ -6,6 +6,7 @@
 #define TYPE_LIST_VALUE_H
 
 #include <type-list/type-list-ns.h>
+#include <type_traits>
 
 TYPE_LIST_NS_BEGIN
 

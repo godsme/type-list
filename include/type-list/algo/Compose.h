@@ -15,8 +15,8 @@
 TYPE_LIST_NS_BEGIN
 
 __TL_lambda(Compose, CallableConcept ... OPs);
-__TL_lambda(Compose, CallableConcept H)
-<H> : public H {};
+__TL_lambda(Compose, CallableConcept LAST)
+<LAST> : public LAST {};
 __TL_lambda(Compose, CallableConcept H, CallableConcept ... OPs)
 <H, OPs...> __return_callable(typename INPUT,
         __TL_call(Compose<OPs...>, __TL_call(H, INPUT)));

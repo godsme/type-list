@@ -14,33 +14,30 @@
 TYPE_LIST_NS_BEGIN
 
 namespace detail {
-    __TL_lambda(Take, ListConcept IN, size_t N, ListConcept OUT);
+    __TL_lambda(Take, size_t N, ListConcept IN, ListConcept OUT = EmptyList);
 
-    __TL_lambda(Take, NonEmptyListConcept IN, size_t N, ListConcept OUT)
-    <IN, N, OUT> __return_apply_t(Take
-                    , typename IN::Tail
+    __TL_lambda(Take, size_t N, NonEmptyListConcept IN, ListConcept OUT)
+    <N, IN, OUT> __return_apply_t(Take
                     , N-1
+                    , typename IN::Tail
                     , typename OUT::template appendType<typename IN::Head>);
 
     __TL_lambda(Take, ListConcept IN, ListConcept OUT)
-    <IN, 0, OUT> __return_t(OUT);
+    <0, IN, OUT> __return_t(OUT);
 }
 
 namespace detail {
-    __TL_lambda(TakeTrait, __Set(IN), size_t N);
+    __TL_lambda(TakeTrait, size_t N, __Set(IN));
 
-//    __TL_lambda(TakeTrait, TypeListConcept IN, size_t N)
-//    <IN, N> __return_apply_t(detail::Take, IN, N, TypeList<>);
-
-    __TL_lambda(TakeTrait, ListConcept IN, size_t N)
-    <IN, N> __return_apply_t(detail::Take, List<IN>, N, EmptyList);
+    __TL_lambda(TakeTrait, size_t N, ListConcept IN)
+    <N, IN> __return_apply_t(detail::Take, N, IN);
 
     __TL_lambda(TakeTrait, EmptyListConcept IN)
-    <IN, 0> __return_t(EmptyList);
+    <0, IN> __return_t(EmptyList);
 }
 
 template<typename N, ListConcept IN>
-using Take_t = __TL_apply_t(detail::TakeTrait, IN, N::value);
+using Take_t = __TL_apply_t(detail::TakeTrait, N::value, List<IN>);
 
 //__TL_lambda(Take, size_t N)
 //__return_lambda_t(__TL_params(ListConcept IN), __TL_apply(Take_t, N, IN));

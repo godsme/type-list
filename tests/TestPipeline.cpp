@@ -29,4 +29,20 @@ namespace {
 
         REQUIRE(std::is_same_v<__TL_list(7,5,3), type>);
     }
+
+    template<typename T1, typename T2>
+    struct Take {
+        constexpr static bool value = true;
+    };
+
+    template<typename T1, typename T2>
+    using Take_t = Take<T1, T2>;
+
+    SCENARIO("value pipe line") {
+        using type = __TL_pipeline
+        ( __TL_list(1, 2, 3, 4, 5)
+        , __TL_drop(2)
+        , __TL_take(1)
+        );
+    }
 }

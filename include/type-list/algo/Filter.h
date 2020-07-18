@@ -54,26 +54,26 @@ namespace detail {
     template<typename PRED, typename IN>
     struct PartitionType;
 
-    template<TypeTemplateConcept PRED, NonEmptyFiniteTypeListConcept IN>
+    template<TypeTemplateConcept PRED, NonEmptyFiniteListConcept IN>
     struct PartitionType<PRED, IN> {
         using type = __TL_apply_t(detail::Partition,
                 IN,
                 PRED::template apply);
     };
 
-    template<ValueConcept PRED, NonEmptyFiniteValueListConcept IN>
+    template<ValueConcept PRED, NonEmptyFiniteListConcept IN>
     struct PartitionType<PRED, IN> {
         __TL_lambda(Pred, typename T) __return_v(PRED::value(T::value));
         using type = __TL_apply_t(detail::Partition,
-                     List<IN>,
+                     IN,
                      Pred);
     };
 
-    template<ValueTemplateConcept PRED, NonEmptyFiniteValueListConcept IN>
+    template<ValueTemplateConcept PRED, NonEmptyFiniteListConcept IN>
     struct PartitionType<PRED, IN> {
         __TL_lambda(Pred, typename T) __return_apply_v(PRED::template apply, T::value);
         using type = __TL_apply_t(detail::Partition,
-                         List<IN>,
+                         IN,
                          Pred);
     };
 
@@ -87,10 +87,10 @@ namespace detail {
 }
 
 template<typename PRED, typename IN>
-using Partition_t = typename detail::PartitionType<PRED, IN>::type;
+using Partition_t = typename detail::PartitionType<PRED, List<IN>>::type;
 
 template<typename PRED, typename IN>
-using Filter_t = typename detail::PartitionType<PRED, IN>::type::satisfied;
+using Filter_t = typename detail::PartitionType<PRED, List<IN>>::type::satisfied;
 
 TYPE_LIST_NS_END
 

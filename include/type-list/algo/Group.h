@@ -34,35 +34,36 @@ namespace detail {
 }
 
 namespace detail {
-    template<typename EQ, typename IN>
-    struct GroupType;
+    __TL_lambda(GroupType, typename EQ, typename IN);
 
-    template<ValueConcept EQ, NonEmptyFiniteValueListConcept IN>
-    struct GroupType<EQ, IN> {
-        __TL_lambda(Eq, typename T1, typename T2)
+    __TL_lambda(GroupType,
+            TypeTemplateConcept EQ, NonEmptyFiniteListConcept IN)
+    <EQ, IN>
+    __return_apply_t(detail::Group, List<IN>, EQ::template apply);
+
+    __TL_lambda(GroupType,
+                ValueConcept EQ, NonEmptyFiniteListConcept IN)
+    <EQ, IN> {
+        __TL_lambda(Eq, ValueConcept T1, ValueConcept T2)
         __return_v(EQ::value(T1::value, T2::value));
-        using type = typename detail::Group<List<IN>, Eq>::type;
+        __result_t(__TL_apply_t(detail::Group, List<IN>, Eq));
     };
 
-    template<ValueTemplateConcept EQ, NonEmptyFiniteValueListConcept IN>
-    struct GroupType<EQ, IN> {
-        __TL_lambda(Eq, typename T1, typename T2)
+    __TL_lambda(GroupType,
+                ValueTemplateConcept EQ, NonEmptyFiniteListConcept IN)
+    <EQ, IN> {
+        __TL_lambda(Eq, ValueConcept T1, ValueConcept T2)
         __return_apply_v(EQ::template apply, T1::value, T2::value);
-        using type = typename detail::Group<List<IN>, Eq>::type;
+        __result_t(__TL_apply_t(detail::Group, List<IN>, Eq));
     };
 
-    template<TypeTemplateConcept EQ, NonEmptyFiniteTypeListConcept IN>
-    struct GroupType<EQ, IN> {
-        using type = typename detail::Group<IN, EQ::template apply>::type;
-    };
-
-    template<typename EQ, EmptyListConcept IN>
-    struct GroupType<EQ, IN> {
-        using type = EmptyList;
-    };
+    __TL_lambda(GroupType,
+                typename EQ, EmptyListConcept IN)
+    <EQ, IN> __return_t(EmptyList);
 }
+
 template<typename EQ, typename IN>
-using Group_t = typename detail::GroupType<EQ, IN>::type;
+using Group_t = typename detail::GroupType<EQ, List<IN>>::type;
 
 TYPE_LIST_NS_END
 

@@ -60,7 +60,7 @@ namespace detail {
     auto DeduceArgs() -> ParameterNumber<10>;
 
     template<template<typename...> typename F>
-    auto SpecDeduceArgs(base_sig) -> not_me;
+    auto SpecDeduceArgs(base_sig) -> ParameterNumber<1000000000>; // a meaningless big number
 
     template<template<typename...> typename F>
     auto SpecDeduceArgs(derived_sig) -> decltype(DeduceArgs<F>());

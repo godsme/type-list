@@ -75,15 +75,10 @@ namespace detail {
         using apply = C<Ts..., T1, T2, T3, T4, T5, T6, T7, T8, T9>;
     };
 
-    template<template<typename ...> typename C, typename Type, typename ... Ts>
-    struct DoCurry : TypeCallableSignature {
-        template<typename ... MORE>
-        using apply = C<Ts..., MORE...>;
-    };
-
     template<template<typename ...> typename C, NumberObjConcept Type, typename ... Ts>
-    struct DoCurry<C, Type, Ts...>
-            : CurryTrait<C, Type::value - sizeof...(Ts), Ts...> {};
+    struct DoCurry: CurryTrait<C, Type::value >= sizeof...(Ts) ? Type::value - sizeof...(Ts) : 0, Ts...> {
+        static_assert(Type::value >= sizeof...(Ts));
+    };
 }
 
 template<template<typename ...> typename C, typename ... Ts>

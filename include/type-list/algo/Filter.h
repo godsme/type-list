@@ -9,7 +9,6 @@
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/types/Lambda.h>
 #include <type-list/types/List.h>
-#include <type-list/types/ListWrapper.h>
 #include <type-list/types/Value.h>
 
 TYPE_LIST_NS_BEGIN

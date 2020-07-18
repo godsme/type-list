@@ -90,6 +90,50 @@ namespace detail {
 }
 
 namespace detail {
+    template<ValueListConcept LIST>
+    struct __ValueListWrapper {
+        using type = EmptyList;
+    };
+
+    template<NonEmptyValueListConcept LIST>
+    struct __ValueListWrapper<LIST> {
+        struct type : ListSignature, TypeListSignature {
+            constexpr static size_t size = LIST::size;
+
+            using Head = Value<LIST::Head>;
+            using Tail = typename __ValueListWrapper<typename LIST::Tail>::type;
+        };
+    };
+
+    template<InfiniteValueListConcept T>
+    struct InfiniteValueListWrapper
+            : ListSignature
+            , TypeListSignature
+            , InfiniteSignature {
+        using Head = Value<T::Head>;
+        using Tail = InfiniteValueListWrapper<typename T::Tail>;
+    };
+
+    template<typename LIST>
+    struct ListWrapperTrait {
+        using type = LIST;
+    };
+
+    template<ValueListConcept T>
+    struct ListWrapperTrait<T> {
+        using type = typename __ValueListWrapper<T>::type;
+    };
+
+    template<InfiniteValueListConcept T>
+    struct ListWrapperTrait<T> {
+        using type = InfiniteValueListWrapper<T>;
+    };
+}
+
+template <ListConcept LIST>
+using List = typename detail::ListWrapperTrait<LIST>::type;
+
+namespace detail {
 
     template<int, typename T, typename ... Ts>
     auto DeduceListType() -> TypeList<T, Ts...>;
@@ -112,6 +156,8 @@ namespace detail {
     template<typename T, size_t TIMES>
     auto DeduceRepeatListType() -> LimitedRepeatTypeList<T, TIMES>;
 }
+
+
 
 TYPE_LIST_NS_END
 

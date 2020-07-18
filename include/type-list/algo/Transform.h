@@ -7,10 +7,7 @@
 
 #include <type-list/type-list-ns.h>
 #include <type-list/concept/NonEmptyListConcept.h>
-#include <type-list/types/TypeList.h>
 #include <type-list/types/Value.h>
-#include <type-list/types/ListWrapper.h>
-#include <type-list/types/ValueList.h>
 #include <type-list/types/Lambda.h>
 #include <type-list/types/List.h>
 

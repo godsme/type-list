@@ -8,7 +8,6 @@
 #include <type-list/type-list-ns.h>
 #include <type-list/concept/NonEmptyListConcept.h>
 #include <type-list/types/List.h>
-#include <type-list/types/ListWrapper.h>
 #include <cstddef>
 #include <type-list/types/Lambda.h>
 

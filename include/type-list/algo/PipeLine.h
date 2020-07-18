@@ -16,6 +16,7 @@
 #include <type-list/algo/Filter.h>
 #include <type-list/algo/Transform.h>
 #include <type-list/algo/Curry.h>
+#include <type-list/algo/Compose.h>
 
 TYPE_LIST_NS_BEGIN
 
@@ -27,42 +28,8 @@ TYPE_LIST_NS_BEGIN
 
 /////////////////////////////////////////////////////////////////////////////////////////
 template<typename IN, typename ... OPs>
-class PipeLine final {
-    __TL_lambda(TypeListTrait, typename T) __return_t(TypeList<T>);
-    __TL_lambda(TypeListTrait, TypeListConcept T)
-    <T> __return_t(T);
-
-    template<typename OP>
-    struct ListOperation {
-
-        template<typename COMPOSED_OP>
-        struct Compose {
-            template<typename INPUT>
-            struct Result {
-                using output = typename TypeListTrait<typename OP::template apply<INPUT>>::type;
-                using type = typename COMPOSED_OP::template Result<output>::type;
-            };
-        };
-
-        template<typename INPUT>
-        struct Result {
-            using type = typename OP::template apply<INPUT>;
-        };
-    };
-
-    //////////////////////////////////////////////////////////////////////////
-    __TL_lambda(ComposeAll, typename ... Ts);
-    __TL_lambda(ComposeAll, typename H, typename ... Ts)
-    <H, Ts...> __return_t(
-            __TL_apply(typename ListOperation<H>::template Compose,
-                    __TL_apply_t(ComposeAll, Ts...)));
-
-    __TL_lambda(ComposeAll, typename H)
-    <H> __return_t(ListOperation<H>);
-
-    using result = __TL_apply_t(ComposeAll, OPs...);
-public:
-    using type = __TL_apply_t(result::template Result, IN);
+struct PipeLine final {
+    using type = typename Compose<OPs...>::template apply<IN>;
 };
 
 TYPE_LIST_NS_END

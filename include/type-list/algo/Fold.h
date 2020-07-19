@@ -21,7 +21,7 @@ namespace detail {
     <F, ACC, IN> __return_t(ACC);
 
     __TL_lambda(FoldL, __TL_lambda(F, typename, typename), typename ACC, NonEmptyListConcept IN)
-    <F, ACC, IN> __return_apply_t(FoldL, F, detail::ValueTypeTrait<F<ACC, typename IN::Head>>, typename IN::Tail);
+    <F, ACC, IN> __return_apply_t(FoldL, F, __TL_apply_t(detail::ValueTypeTrait, __TL_apply(F, ACC, typename IN::Head)), typename IN::Tail);
 }
 
 namespace detail {
@@ -32,7 +32,7 @@ namespace detail {
 
     __TL_lambda(FoldR, __TL_lambda(F, typename, typename), NonEmptyListConcept IN)
             <F, IN, std::enable_if_t<(IN::size > 1)>>
-            __return_t(detail::ValueTypeTrait<F<__TL_apply_t(FoldR, F, typename IN::Tail), typename IN::Head>>);
+            __return_apply_t(detail::ValueTypeTrait, F<__TL_apply_t(FoldR, F, typename IN::Tail), typename IN::Head>);
 }
 
 namespace detail {

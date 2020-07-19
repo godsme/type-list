@@ -33,4 +33,9 @@ namespace {
         using type = __TL_FoldL(__TL_list(), Add, 0);
         REQUIRE(type::value == 0);
     }
+
+    SCENARIO("foldl a non-empty list with FoldL") {
+        using type = __TL_FoldL(__TL_list(1,2,3), Add, 0);
+        REQUIRE(type::value == 6);
+    }
 }

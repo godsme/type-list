@@ -17,6 +17,7 @@
 #define __TL_apply_t(f, ...) typename f<__VA_ARGS__>::type
 #define __TL_apply_v(f, ...) f<__VA_ARGS__>::value
 
+#define __TL_call_v(callable, ...) callable::template apply<__VA_ARGS__>::value
 #define __TL_call(callable, ...) typename callable::template apply<__VA_ARGS__>
 #define __return_callable(p, ...) { public : template <p> using apply = __VA_ARGS__; }
 

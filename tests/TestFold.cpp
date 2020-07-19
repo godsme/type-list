@@ -28,6 +28,11 @@ namespace {
         REQUIRE(type::value == 6);
     }
 
+    SCENARIO("foldl a non-empty list by lambda") {
+        using type = __TL_FoldL(__TL_list(1,2,3), ([](auto acc, auto v) { return acc + v; }), 0);
+        REQUIRE(type::value == 6);
+    }
+
     template<typename ... Ts>
     struct Composer {
         template <typename T>

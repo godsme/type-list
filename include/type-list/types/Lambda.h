@@ -21,8 +21,6 @@
 #define __TL_call(callable, ...) typename callable::template apply<__VA_ARGS__>
 #define __return_callable(p, ...) { public : template <p> using apply = __VA_ARGS__; }
 
-#define __TL_params(...) <__VA_ARGS__>
-#define __return_lambda_t(params, ...) { public: template params using apply = __VA_ARGS__; }
 #define __return_apply_t(...) __return_t(__TL_apply_t(__VA_ARGS__))
 #define __return_apply_v(...) __return_v(__TL_apply_v(__VA_ARGS__))
 

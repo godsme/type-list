@@ -36,67 +36,56 @@ namespace detail {
 }
 
 namespace detail {
-    template<bool L = true>
-    struct fold_trait {
+    __TL_lambda(FoldTrait, bool L = true) {
+    public:
         template<__TL_lambda(F, typename, typename), typename IN>
         using apply = typename FoldL<F, typename IN::Head, typename IN::Tail>::type;
     };
 
-    template<>
-    struct fold_trait<false> {
+    __TL_lambda(FoldTrait)
+    <false> {
+    public:
         template<__TL_lambda(F, typename, typename), typename IN>
         using apply = typename FoldR<F, IN>::type;
     };
 
     __TL_lambda(FoldType, bool L, typename F, typename IN);
     __TL_lambda(FoldType, bool L, TypeTemplateConcept F, typename IN)
-    <L, F, IN> __return_t(__TL_apply(fold_trait<L>::template apply, F::template apply, IN));
+    <L, F, IN> __return_t(__TL_apply(FoldTrait<L>::template apply, F::template apply, IN));
     __TL_lambda(FoldType, bool L, ValueTemplateConcept F, typename IN)
     <L, F, IN> {
         __TL_lambda(Acc, __Set(T1), __Set(T2)) __return_t(Value<__TL_call_v(F, T1::value, T2::value)>);
-        __result_t(__TL_apply(fold_trait<L>::template apply, Acc, IN));
+        __result_t(__TL_apply(FoldTrait<L>::template apply, Acc, IN));
     };
     __TL_lambda(FoldType, bool L, ValueConcept F, typename IN)
     <L, F, IN> {
         __TL_lambda(Acc, __Set(T1), __Set(T2)) __return_t(Value<F::value(T1::value, T2::value)>);
-        __result_t(__TL_apply(fold_trait<L>::template apply, Acc, IN));
+        __result_t(__TL_apply(FoldTrait<L>::template apply, Acc, IN));
     };
 }
 
 namespace detail {
-    template<bool L, typename INIT, typename LIST>
-    struct FoldListTrait;
+    __TL_lambda(FoldListTrait, bool L, typename INIT, typename LIST);
 
-    template<typename LIST>
-    struct FoldListTrait<true, void, LIST> {
-        using type = LIST;
-    };
+    __TL_lambda(FoldListTrait, bool L, typename LIST)
+            <L, void, LIST> __return_t(LIST);
 
-    template<typename INIT, typename LIST>
-    struct FoldListTrait<true, INIT, LIST> {
-        using type = typename LIST::template prependType<INIT>;
-    };
+    __TL_lambda(FoldListTrait, typename INIT, typename LIST)
+            <true, INIT, LIST> __return_t(typename LIST::template prependType<INIT>);
 
-    template<typename LIST>
-    struct FoldListTrait<false, void, LIST> {
-        using type = LIST;
-    };
+    __TL_lambda(FoldListTrait, typename INIT, typename LIST)
+            <false, INIT, LIST> __return_t(typename LIST::template appendType<INIT>);
+}
 
-    template<typename INIT, typename LIST>
-    struct FoldListTrait<false, INIT, LIST> {
-        using type = typename LIST::template appendType<INIT>;
-    };
-
-    template<bool L, typename F, FiniteListConcept IN, typename INIT>
-    class FoldTrait {
+namespace detail {
+    __TL_lambda(DoFold, bool L, typename F, FiniteListConcept IN, typename INIT){
         using list = __TL_apply_t(detail::FoldListTrait, L, INIT, List<IN>);
-    public:
-        using type = __TL_apply_t(detail::FoldType, L, F, List<list>);
+        __result_t(__TL_apply_t(detail::FoldType, L, F, List<list>));
     };
 }
 
 template<bool L, typename F, FiniteListConcept IN, typename INIT>
-using Fold_t = __TL_apply_t(detail::FoldTrait, L, F, IN, INIT);
+using Fold_t = __TL_apply_t(detail::DoFold, L, F, IN, INIT);
 
 namespace detail {
     constexpr uint64_t __stupid_secrete_nothing = 0xabcd'ef01'2345'6789;

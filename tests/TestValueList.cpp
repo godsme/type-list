@@ -57,7 +57,7 @@ namespace {
             REQUIRE(ExportableListConcept<type>);
         }
         THEN("it can be export to a template") {
-            REQUIRE(0 == type::exportTo<Result>::Num_Of_Ts);
+            REQUIRE(0 == decltype(type::exportTo<Result>())::Num_Of_Ts);
         }
     }
 

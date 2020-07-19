@@ -31,7 +31,7 @@ template<auto ... Vs>
 struct ValueList : ValueListBase<Vs...> {
 
     template <template <auto ...> typename RESULT>
-    using exportTo = RESULT<Vs...>;
+    static auto exportTo() -> RESULT<Vs...>;
 
     template<auto ... Vs2>
     using append = ValueList<Vs..., Vs2...>;

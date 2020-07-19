@@ -14,6 +14,12 @@ namespace detail {
     template<ValueListConcept LIST>
     struct __ValueListWrapper {
         using type = EmptyList;
+
+        template<template<typename ...> typename RESULT>
+        auto exportTo() -> RESULT<>;
+
+        template<template<auto ...> typename RESULT>
+        auto exportTo() -> RESULT<>;
     };
 
     template<NonEmptyValueListConcept LIST>
@@ -23,6 +29,9 @@ namespace detail {
 
             using Head = Value<LIST::Head>;
             using Tail = typename __ValueListWrapper<typename LIST::Tail>::type;
+
+            template<template<auto ...> typename RESULT>
+            auto exportTo() -> decltype(LIST::template exportTo<RESULT>());
         };
     };
 

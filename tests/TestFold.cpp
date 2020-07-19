@@ -15,6 +15,9 @@ namespace {
     __TL_lambda(Add, size_t ACC, typename T)
     __return_v(ACC + sizeof(T));
 
+    __TL_lambda(AddValue, size_t ACC, size_t V)
+    __return_v(ACC + V);
+
     SCENARIO("foldl an empty list with Raw FOLD_L") {
         using list = List<__TL_list(0)>;
         using type = typename detail::FoldL<__TL_toType(Add)::template apply, typename list::Head, typename list::Tail>::type;
@@ -35,7 +38,7 @@ namespace {
     }
 
     SCENARIO("foldl a non-empty list with FoldL") {
-        using type = __TL_FoldL(__TL_list(1,2,3), Add, 0);
+        using type = __TL_FoldL(__TL_list(1,2,3), AddValue, 0);
         REQUIRE(type::value == 6);
     }
 }

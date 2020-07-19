@@ -51,6 +51,12 @@ namespace detail {
     __TL_lambda(FoldType, bool L, typename F, typename IN);
     __TL_lambda(FoldType, bool L, TypeTemplateConcept F, typename IN)
     <L, F, IN> __return_t(__TL_apply(fold_trait<L>::template apply, F::template apply, IN));
+    __TL_lambda(FoldType, bool L, ValueTemplateConcept F, typename IN)
+    <L, F, IN> {
+        template<typename T1, typename T2>
+        using apply = Value<F::template apply<T1::value, T2::value>::value>;
+        __result_t(__TL_apply(fold_trait<L>::template apply, apply, IN));
+    };
 }
 
 namespace detail {
@@ -91,15 +97,13 @@ using Fold_t = __TL_apply_t(detail::FoldTrait, L, F, IN, INIT);
 namespace detail {
     constexpr uint64_t __stupid_secrete_nothing = 0xabcd'ef01'2345'6789;
 
-    template<auto V> struct __value_trait {
-        using type = Value<V>;
-    };
-
-    template<> struct __value_trait<__stupid_secrete_nothing> {
-        using type = void;
-    };
+    template<auto V> struct __value_trait { using type = Value<V>; };
+    template<> struct __value_trait<__stupid_secrete_nothing> { using type = void; };
 
     template<bool L, typename IN, __TL_lambda(F, auto, typename), auto INIT = __stupid_secrete_nothing>
+    auto deduceFold() -> Fold_t<L, __TL_toType(F), IN, __TL_apply_t(__value_trait, INIT)>;
+
+    template<bool L, typename IN, __TL_lambda(F, auto, auto), auto INIT = __stupid_secrete_nothing>
     auto deduceFold() -> Fold_t<L, __TL_toType(F), IN, __TL_apply_t(__value_trait, INIT)>;
 }
 

@@ -85,7 +85,7 @@ namespace detail {
 
     template<bool L, typename F, FiniteListConcept IN, typename INIT>
     class FoldTrait {
-        using list = __TL_apply_t(detail::FoldListTrait, L, INIT, IN);
+        using list = __TL_apply_t(detail::FoldListTrait, L, INIT, List<IN>);
     public:
         using type = __TL_apply_t(detail::FoldType, L, F, List<list>);
     };
@@ -100,11 +100,20 @@ namespace detail {
     template<auto V> struct __value_trait { using type = Value<V>; };
     template<> struct __value_trait<__stupid_secrete_nothing> { using type = void; };
 
+    template<__TL_lambda(F, typename, auto)>
+    struct Value2TypeAcc : TypeCallableSignature {
+        template<typename T1, typename T2>
+        using apply = F<T1, T2::value>;
+    };
+
     template<bool L, typename IN, __TL_lambda(F, auto, typename), auto INIT = __stupid_secrete_nothing>
     auto deduceFold() -> Fold_t<L, __TL_toType(F), IN, __TL_apply_t(__value_trait, INIT)>;
 
     template<bool L, typename IN, __TL_lambda(F, auto, auto), auto INIT = __stupid_secrete_nothing>
     auto deduceFold() -> Fold_t<L, __TL_toType(F), IN, __TL_apply_t(__value_trait, INIT)>;
+
+    template<bool L, typename IN, __TL_lambda(F, typename, auto), typename INIT = void>
+    auto deduceFold() -> Fold_t<L, Value2TypeAcc<F>, IN, INIT>;
 }
 
 TYPE_LIST_NS_END

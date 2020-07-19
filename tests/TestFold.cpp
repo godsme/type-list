@@ -41,4 +41,41 @@ namespace {
         using type = __TL_FoldL(__TL_list(1,2,3), AddValue, 0);
         REQUIRE(type::value == 6);
     }
+
+    template<typename ... Ts>
+    struct Composer {
+        template <typename T>
+        using append = Composer<Ts..., T>;
+
+        using type = Composer<Ts...>;
+    };
+
+    template<auto V> struct MyTrait {
+        using type = void;
+    };
+
+    template<> struct MyTrait<1> {
+        using type = int;
+    };
+
+    template<> struct MyTrait<2> {
+        using type = long;
+    };
+
+    template<typename T, auto V>
+    struct ToTypeList {
+        using t = typename MyTrait<V>::type;
+        using type = typename T::template append<t>::type;
+    };
+
+    SCENARIO("foldl a non-empty value list to type with FoldL") {
+        using type = __TL_FoldL(__TL_list(1,2,3), ToTypeList, Composer<>);
+        using result = Composer<int, long, void>;
+        ASSERT_EQ_T(type::type, result);
+    }
+
+//    SCENARIO("foldl a non-empty Type list with FoldL") {
+//        using type = __TL_FoldL(__TL_list(int,double,char), Add, 0);
+//        REQUIRE(type::value == sizeof(int) + sizeof(double) + sizeof(char));
+//    }
 }

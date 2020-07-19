@@ -22,6 +22,13 @@ namespace detail {
         auto exportTo() -> RESULT<>;
     };
 
+    template<typename T, typename LIST>
+    struct ComposedList : ListSignature, TypeListSignature {
+        constexpr static size_t size = 1 + LIST::size;
+        using Head = T;
+        using Tail = LIST;
+    };
+
     template<NonEmptyValueListConcept LIST>
     struct __ValueListWrapper<LIST> {
         struct type : ListSignature, TypeListSignature {
@@ -29,6 +36,9 @@ namespace detail {
 
             using Head = Value<LIST::Head>;
             using Tail = typename __ValueListWrapper<typename LIST::Tail>::type;
+
+            template<typename T>
+            using prependType = ComposedList<T, typename __ValueListWrapper<LIST>::type>;
 
             template<template<auto ...> typename RESULT>
             auto exportTo() -> decltype(LIST::template exportTo<RESULT>());

@@ -52,11 +52,13 @@ namespace detail {
     __TL_lambda(FoldType, bool L, typename F, typename IN);
     __TL_lambda(FoldType, bool L, TypeTemplateConcept F, typename IN)
     <L, F, IN> __return_t(__TL_apply(FoldTrait<L>::template apply, F::template apply, IN));
+
     __TL_lambda(FoldType, bool L, ValueTemplateConcept F, typename IN)
     <L, F, IN> {
         __TL_lambda(Acc, __Set(T1), __Set(T2)) __return_t(Value<__TL_call_v(F, T1::value, T2::value)>);
         __result_t(__TL_apply(FoldTrait<L>::template apply, Acc, IN));
     };
+
     __TL_lambda(FoldType, bool L, ValueConcept F, typename IN)
     <L, F, IN> {
         __TL_lambda(Acc, __Set(T1), __Set(T2)) __return_t(Value<F::value(T1::value, T2::value)>);
@@ -66,15 +68,14 @@ namespace detail {
 
 namespace detail {
     __TL_lambda(FoldListTrait, bool L, typename INIT, typename LIST);
-
     __TL_lambda(FoldListTrait, bool L, typename LIST)
-            <L, void, LIST> __return_t(LIST);
+    <L, void, LIST> __return_t(LIST);
 
     __TL_lambda(FoldListTrait, typename INIT, typename LIST)
-            <true, INIT, LIST> __return_t(typename LIST::template prependType<INIT>);
+    <true, INIT, LIST> __return_t(typename LIST::template prependType<INIT>);
 
     __TL_lambda(FoldListTrait, typename INIT, typename LIST)
-            <false, INIT, LIST> __return_t(typename LIST::template appendType<INIT>);
+    <false, INIT, LIST> __return_t(typename LIST::template appendType<INIT>);
 }
 
 namespace detail {

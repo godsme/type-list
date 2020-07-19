@@ -114,6 +114,9 @@ namespace detail {
 
     template<bool L, typename IN, __TL_lambda(F, typename, auto), typename INIT = void>
     auto deduceFold() -> Fold_t<L, Value2TypeAcc<F>, IN, INIT>;
+
+    template<bool L, typename IN, __TL_lambda(F, typename, typename), typename INIT = void>
+    auto deduceFold() -> Fold_t<L, __TL_toType(F), IN, INIT>;
 }
 
 TYPE_LIST_NS_END

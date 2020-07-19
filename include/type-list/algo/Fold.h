@@ -27,11 +27,11 @@ namespace detail {
 namespace detail {
     __TL_lambda(FoldR, __TL_lambda(F, typename, typename), typename IN, typename = void);
     __TL_lambda(FoldR, __TL_lambda(F, typename, typename), NonEmptyListConcept IN)
-            <F, IN, std::enable_if_t<IN::size == 1>>
+    <F, IN, std::enable_if_t<IN::size == 1>>
             __return_t(typename IN::Head);
 
     __TL_lambda(FoldR, __TL_lambda(F, typename, typename), NonEmptyListConcept IN)
-            <F, IN, std::enable_if_t<(IN::size > 1)>>
+    <F, IN, std::enable_if_t<(IN::size > 1)>>
             __return_apply_t(detail::ValueTypeTrait, F<__TL_apply_t(FoldR, F, typename IN::Tail), typename IN::Head>);
 }
 
@@ -106,8 +106,14 @@ namespace detail {
         using apply = F<T1, T2::value>;
     };
 
+    template<__TL_lambda(F, auto, typename)>
+    struct Type2ValueAcc : TypeCallableSignature {
+        template<typename T1, typename ... Ts>
+        using apply = F<T1::value, Ts...>;
+    };
+
     template<bool L, typename IN, __TL_lambda(F, auto, typename), auto INIT = __stupid_secrete_nothing>
-    auto deduceFold() -> Fold_t<L, __TL_toType(F), IN, __TL_apply_t(__value_trait, INIT)>;
+    auto deduceFold() -> Fold_t<L, Type2ValueAcc<F>, IN, __TL_apply_t(__value_trait, INIT)>;
 
     template<bool L, typename IN, __TL_lambda(F, auto, auto), auto INIT = __stupid_secrete_nothing>
     auto deduceFold() -> Fold_t<L, __TL_toType(F), IN, __TL_apply_t(__value_trait, INIT)>;

@@ -18,10 +18,10 @@ TYPE_LIST_NS_BEGIN
 namespace detail {
     __TL_lambda(FoldL, __TL_lambda(F, typename, typename), typename ... IN);
     __TL_lambda(FoldL, __TL_lambda(F, typename, typename), typename ACC)
-            <F, ACC> __return_t(ACC);
+    <F, ACC> __return_t(ACC);
 
     __TL_lambda(FoldL, __TL_lambda(F, typename, typename), typename ACC, typename H, typename ... IN)
-            <F, ACC, H, IN...> __return_apply_t(FoldL, F, __TL_apply_t(F, ACC, H), IN...);
+    <F, ACC, H, IN...> __return_apply_t(FoldL, F, __TL_apply_t(F, ACC, H), IN...);
 }
 
 namespace detail {

@@ -7,25 +7,16 @@
 
 #include <type-list/algo/Unique.h>
 #include <type-list/algo/Fold.h>
+#include <type-list/algo/Concat.h>
 
 struct NodeSignature {};
 
 template<typename NODE, typename ... LINK>
 struct Node : NodeSignature {
-private:
-    template<typename ACC, typename R>
-    struct concat {
-        using type = typename ACC::template appendList<R>;
-    };
-
-    using links = TYPE_LIST_NS::TypeList<typename LINK::NodeList...>;
-    using decendents = __TL_FoldL(links, concat, TYPE_LIST_NS::TypeList<>);
-public:
     using NodeType = NODE;
-    using Decendents = TYPE_LIST_NS::Unique_tl<decendents>;
-
+    using Decendents = __TL_unique(__TL_concat(__TL_list(typename LINK::NodeList...)));
 private:
-    static_assert(!TYPE_LIST_NS::Elem_v<NodeType, Decendents>, "graph should not be cyclic");
+    static_assert(!__TL_elem(NodeType, Decendents), "graph should not be cyclic");
 };
 
 #endif //TYPE_LIST_NODE_H

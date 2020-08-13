@@ -35,4 +35,6 @@ using Unique_tl = decltype(TL::template exportTo<Unique_t>());
 
 TYPE_LIST_NS_END
 
+#define __TL_unique(...) TYPE_LIST_NS::Unique_tl<__VA_ARGS__>
+
 #endif //TYPE_LIST_UNIQUE_H

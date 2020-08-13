@@ -46,4 +46,6 @@ constexpr bool Elem_v = Elem<T, TL>::value;
 
 TYPE_LIST_NS_END
 
+#define __TL_elem(...) TYPE_LIST_NS::Elem_v<__VA_ARGS__>
+
 #endif //TYPE_LIST_ELEM_H

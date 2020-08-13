@@ -8,12 +8,10 @@
 #include <dsl/Node.h>
 #include <type_traits>
 
-template <typename = void, typename ... NODES>
-struct Graph;
-
-template<typename ... NODES>
-struct Graph<std::enable_if_t<(std::is_base_of_v<NodeSignature, NODES> && ...)>, NODES...> {
-    //using AllNodes = TYPE_LIST_NS::TypeList<NODES..., >
+template <typename ... NODES>
+struct Graph {
+    using nodes = __TL_list(typename NODES::NodeType...);
+    using AllNodes = __TL_unique(__TL_concat(__TL_list(nodes, typename NODES::Decendents...)));
 };
 
 #endif //TYPE_LIST_GRAPH_H

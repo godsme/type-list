@@ -6,16 +6,17 @@
 #define TYPE_LIST_NODETRAITS_H
 
 #include <type-list/algo/Unique.h>
+#include <type-list/types/List.h>
 
 template<typename NODE>
 struct NodeTrait {
-    using NodeList = TYPE_LIST_NS::TypeList<NODE>;
+    using NodeList = __TL_list(NODE);
 };
 
 template<typename PRED, typename NODE>
 struct Maybe {
     using PredType = PRED;
-    using NodeList = TYPE_LIST_NS::Unique_tl<typename NodeTrait<NODE>::NodeList>;
+    using NodeList = __TL_unique(typename NodeTrait<NODE>::NodeList);
 };
 
 template<typename COND, typename NODE>
@@ -26,8 +27,8 @@ struct NodeTrait<Maybe<COND, NODE>> {
 template<typename PRED, typename NODE_1, typename NODE_2>
 struct Exclusive {
     using PredType = PRED;
-    using NodeList = TYPE_LIST_NS::Unique_tl<
-            typename NodeTrait<NODE_1>::NodeList::template appendList<typename NodeTrait<NODE_2>::NodeList>>;
+    using NodeList = __TL_unique(
+            typename NodeTrait<NODE_1>::NodeList::template appendList<typename NodeTrait<NODE_2>::NodeList>);
 };
 
 template<typename COND, typename NODE_1, typename NODE_2>

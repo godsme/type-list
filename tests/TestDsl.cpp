@@ -3,10 +3,11 @@
 //
 #include <dsl/Link.h>
 #include <dsl/Node.h>
+#include <dsl/Graph.h>
 #include <type_traits>
 #include <catch.hpp>
 
-namespace {
+
     struct Node_1 {};
     struct Node_2 {};
     struct Node_3 {};
@@ -29,7 +30,10 @@ namespace {
 
     template<typename T> struct S;
 
+namespace {
     TEST_CASE("nodes") {
         REQUIRE(std::is_same_v<node1::Decendents, __TL_list(Node_1, Node_2, Node_3, Node_4)>);
     }
+
+    S<typename Graph<node1>::AllNodes> s;
 }

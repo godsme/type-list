@@ -85,7 +85,7 @@ namespace detail {
     };
 }
 
-template<bool L, typename F, FiniteListConcept IN, typename INIT>
+template<bool L, typename F, typename INIT, FiniteListConcept IN>
 using Fold_t = __TL_apply_t(detail::DoFold, L, F, IN, INIT);
 
 namespace detail {
@@ -106,25 +106,30 @@ namespace detail {
         using apply = F<T1::value, Ts...>;
     };
 
+
+
     template<bool L, typename IN, __TL_lambda(F, auto, typename), auto INIT = __stupid_secrete_nothing>
-    auto deduceFold() -> Fold_t<L, Type2ValueAcc<F>, IN, __TL_apply_t(__value_trait, INIT)>;
+    auto deduceFold() -> Fold_t<L, Type2ValueAcc<F>, __TL_apply_t(__value_trait, INIT), IN>;
 
     template<bool L, typename IN, __TL_lambda(F, auto, auto), auto INIT = __stupid_secrete_nothing>
-    auto deduceFold() -> Fold_t<L, __TL_toType(F), IN, __TL_apply_t(__value_trait, INIT)>;
+    auto deduceFold() -> Fold_t<L, __TL_toType(F), __TL_apply_t(__value_trait, INIT), IN>;
 
     template<bool L, typename IN, auto F, auto INIT = __stupid_secrete_nothing>
-    auto deduceFold() -> Fold_t<L, __TL_toType(F), IN, __TL_apply_t(__value_trait, INIT)>;
+    auto deduceFold() -> Fold_t<L, __TL_toType(F), __TL_apply_t(__value_trait, INIT), IN>;
 
     template<bool L, typename IN, __TL_lambda(F, typename, auto), typename INIT = void>
-    auto deduceFold() -> Fold_t<L, Value2TypeAcc<F>, IN, INIT>;
+    auto deduceFold() -> Fold_t<L, Value2TypeAcc<F>, INIT, IN>;
 
     template<bool L, typename IN, __TL_lambda(F, typename, typename), typename INIT = void>
-    auto deduceFold() -> Fold_t<L, __TL_toType(F), IN, INIT>;
+    auto deduceFold() -> Fold_t<L, __TL_toType(F), INIT, IN>;
 }
 
 TYPE_LIST_NS_END
 
 #define __TL_FoldL(...) \
 decltype(TYPE_LIST_NS::detail::deduceFold<true, __VA_ARGS__>())
+
+#define __TL_FoldR(...) \
+decltype(TYPE_LIST_NS::detail::deduceFold<false, __VA_ARGS__>())
 
 #endif //TYPE_LIST_FOLD_H

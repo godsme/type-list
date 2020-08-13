@@ -52,7 +52,7 @@ namespace {
                 REQUIRE(ListConcept<type>);
             }
             WHEN("export to a template") {
-                using result = type::template exportTo<Result>;
+                using result = decltype(type::template exportTo<Result>());
                 THEN("the num_of_Ts should be 0") {
                     REQUIRE(0 == result::Num_Of_Ts);
                 }

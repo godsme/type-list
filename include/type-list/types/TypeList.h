@@ -29,7 +29,7 @@ struct TypeListBase : TypeListAllSignatures {
 template <typename ... Ts>
 struct TypeList : TypeListBase<Ts...> {
     template <template <typename ...> typename RESULT>
-    using exportTo = RESULT<Ts...>;
+    static auto exportTo() -> RESULT<Ts...>;
 
     template<typename ... Ts2>
     using append = TypeList<Ts..., Ts2...>;

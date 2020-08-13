@@ -22,28 +22,38 @@ struct Port_3 {};
 struct Port_4 {};
 struct Port_5 {};
 struct Port_6 {};
+struct Port_7 {};
+struct Port_8 {};
 
-    struct Pred_1{};
+struct Pred_1{};
 
-    using link1 = Link<auto (Port_1) -> Exclusive<Pred_1, Node_1, Node_2>>;
-    using link2 = Link<auto (Port_2) -> Exclusive<Pred_1, Node_3, Node_2>>;
-    using link3 = Link<auto (Port_3) -> Maybe<Pred_1, Node_3>>;
-    using link4 = Link<auto (Port_4) -> Node_4>;
+using node1 = Node<Node_1,
+  Link<auto (Port_1) -> Exclusive<Pred_1, Node_2, Node_3>>,
+  Link<auto (Port_2) -> Exclusive<Pred_1, Node_4, Node_2>>,
+  Link<auto (Port_3) -> Maybe<Pred_1, Node_5>>,
+  Link<auto (Port_4) -> Node_6>>;
 
-    using link5 = Link<auto (Port_5) -> Maybe<Pred_1, Node_4>>;
-    using link6 = Link<auto (Port_6) -> Node_7>;
+using node3 = Node<Node_3,
+    Link<auto (Port_5) -> Maybe<Pred_1, Node_4>>,
+    Link<auto (Port_6) -> Node_5>>;
 
-    using node1 = Node<Node_5, link1, link2, link3, link4>;
-    using node2 = Node<Node_6, link5, link6>;
+using node5 = Node<Node_4,
+        Link<auto (Port_7) -> Node_6>,
+        Link<auto (Port_8) -> Node_7>>;
 
     template<typename T> struct S;
 
-namespace {
-    TEST_CASE("nodes") {
-        REQUIRE(std::is_same_v<node1::Decendents, __TL_list(Node_1, Node_2, Node_3, Node_4)>);
-    }
+    using type = Graph<node3, node5, node1>;
+    S<Graph<node3, node5, node1>::SortedNodes> s;
 
-    TEST_CASE("graph") {
-        REQUIRE(std::is_same_v<Graph<node1, node2>::AllNodes, __TL_list(Node_5, Node_6, Node_1, Node_2, Node_3, Node_4, Node_7)>);
-    }
+namespace {
+//    TEST_CASE("nodes") {
+//        REQUIRE(std::is_same_v<node5::Decendents, __TL_list(Node_1, Node_2, Node_3, Node_4)>);
+//    }
+//
+//    TEST_CASE("graph") {
+//        REQUIRE(std::is_same_v<type::AllNodes,
+//                __TL_list(Node_5, Node_6, Node_3, Node_1, Node_2, Node_4, Node_7)>);
+//    }
+
 }

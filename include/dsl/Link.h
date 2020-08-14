@@ -16,4 +16,6 @@ struct Link<auto (PORT) -> NODE_LIST> {
     using NodeList = typename NodeTrait<NODE_LIST>::NodeList;
 };
 
+#define __port(p) auto (p)
+
 #endif //TYPE_LIST_LINK_H

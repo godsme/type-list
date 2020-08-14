@@ -27,24 +27,22 @@ struct Port_8 {};
 
 struct Pred_1{};
 
-using node1 = Node<Node_1,
-  Link<auto (Port_1) -> Exclusive<Pred_1, Node_2, Node_3>>,
-  Link<auto (Port_2) -> Exclusive<Pred_1, Node_4, Node_2>>,
-  Link<auto (Port_3) -> Maybe<Pred_1, Node_5>>,
-  Link<auto (Port_4) -> Node_6>>;
-
-using node3 = Node<Node_3,
-    Link<auto (Port_5) -> Maybe<Pred_1, Node_4>>,
-    Link<auto (Port_6) -> Node_5>>;
-
-using node5 = Node<Node_4,
-        Link<auto (Port_7) -> Node_6>,
-        Link<auto (Port_8) -> Node_7>>;
+using graph = __graph(
+    __node( Node_1
+          , __port(Port_1) -> Exclusive<Pred_1, Node_2, Node_3>
+          , __port(Port_2) -> Exclusive<Pred_1, Node_4, Node_2>
+          , __port(Port_3) -> Maybe<Pred_1, Node_5>
+          , __port(Port_4) -> Node_6),
+    __node( Node_3
+          , __port(Port_5) -> __maybe(Pred_1, Node_4)
+          , __port(Port_6) -> Node_5),
+    __node( Node_4
+          , __port(Port_7) -> Node_6
+          , __port(Port_8) -> Node_7));
 
     template<typename T> struct S;
 
-    using type = Graph<node3, node5, node1>;
-
+    S<graph::SortedNodes> s;
 namespace {
 //    TEST_CASE("nodes") {
 //        REQUIRE(std::is_same_v<node5::Decendents, __TL_list(Node_1, Node_2, Node_3, Node_4)>);

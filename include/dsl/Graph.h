@@ -43,4 +43,6 @@ public:
     using SortedNodes = __TL_Sort(LessThan, typename NonEmptyMaps::template appendList<EmptyMaps>);
 };
 
+#define __graph(...) Graph<__VA_ARGS__>
+
 #endif //TYPE_LIST_GRAPH_H

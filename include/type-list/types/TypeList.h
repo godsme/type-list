@@ -72,10 +72,10 @@ struct TypeList<H, Ts...> : TypeListBase<H, Ts...> {
     using prependType = prepend<T>;
 
     template<ExportableTypeListConcept T>
-    using appendList = decltype(T::template exportTo<prepend>());
+    using appendList = decltype(T::template exportTo<append>());
 
     template<FiniteTypeListConcept T>
-    using prependList = decltype(T::template exportTo<append>());
+    using prependList = decltype(T::template exportTo<prepend>());
 };
 
 template<typename T>

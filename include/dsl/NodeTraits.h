@@ -36,4 +36,7 @@ struct NodeTrait<Exclusive<COND, NODE_1, NODE_2>> {
     using NodeList = typename Exclusive<COND, NODE_1, NODE_2>::NodeList;
 };
 
+#define __maybe(...) Maybe<__VA_ARGS__>
+#define __exclusive(...) Exclusive<__VA_ARGS__>
+
 #endif //TYPE_LIST_NODETRAITS_H

@@ -48,15 +48,15 @@ private:
         using type = __TL_pair(typename E::first, result);
     };
 
-    using mapResult = __TL_Map(ToAllDecedents, ThisMap);
+    using AllDecedentsMap = __TL_Map(ToAllDecedents, ThisMap);
 
     template<typename L, typename R>
-    struct LessThan {
+    struct IsDecedentOf {
         constexpr static bool value = \
             __TL_elem(typename L::first, typename R::second);
     };
 
-    using sortResult = __TL_Sort(LessThan, mapResult);
+    using sortResult = __TL_Sort(IsDecedentOf, AllDecedentsMap);
 
     template<typename T>
     struct ToDirectDecedents {

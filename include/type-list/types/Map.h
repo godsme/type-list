@@ -40,4 +40,6 @@ using MapFind_t = typename FindInMap<MAP, K, DEFAULT>::type;
 
 TYPE_LIST_NS_END
 
+#define __TL_map_find(...) TYPE_LIST_NS::MapFind_t<__VA_ARGS__>
+
 #endif //TYPE_LIST_MAP_H

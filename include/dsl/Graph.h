@@ -11,6 +11,7 @@
 #include <type-list/types/Pair.h>
 #include <type-list/algo/Except.h>
 #include <type-list/algo/Sort.h>
+#include <type-list/types/Map.h>
 
 template <typename ... NODES>
 struct Graph {
@@ -34,7 +35,22 @@ private:
     using EmptyMaps = __TL_Map(EmptyDecedentsNode, __TL_except(nodes, AllNodes));
 
 public:
-    using Map = typename NonEmptyMaps::template appendList<EmptyMaps>;
+    using ThisMap = typename NonEmptyMaps::template appendList<EmptyMaps>;
+
+
+    template<typename TL, typename T>
+    struct Result {
+        using decedents = __TL_map_find(T, ThisMap, __TL_list());
+        using type = typename TL::template appendType<T>::template appendList<__TL_FoldL(decedents, Result, __TL_list())>;
+    };
+
+    template<typename E>
+    struct Mapper {
+        using result = __TL_unique(typename E::second::template appendList<__TL_FoldL(typename E::second, Result, __TL_list())>);
+        using type = __TL_pair(typename E::first, result);
+    };
+
+    using result = __TL_Map(Mapper, ThisMap);
 
     template<typename L, typename R>
     struct LessThan {
@@ -42,7 +58,7 @@ public:
             __TL_elem(typename L::first, typename R::second);
     };
 
-    using SortedNodes = __TL_Sort(LessThan, Map);
+    using SortedNodes = __TL_Sort(LessThan, result);
 };
 
 #define __graph(...) Graph<__VA_ARGS__>

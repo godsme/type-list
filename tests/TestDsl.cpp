@@ -44,7 +44,8 @@ using graph = __graph(
 
     template<typename T> struct S;
 
-    S<MapFind_t<Node_1, graph::Map, __TL_list()>> s;
+    //S<MapFind_t<Node_1, graph::ThisMap, __TL_list()>> s;
+    //S<graph::SortedNodes> s;
 namespace {
 //    TEST_CASE("nodes") {
 //        REQUIRE(std::is_same_v<node5::Decendents, __TL_list(Node_1, Node_2, Node_3, Node_4)>);

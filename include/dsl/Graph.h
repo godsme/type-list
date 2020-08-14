@@ -19,7 +19,7 @@ struct Graph {
     static_assert(Nodes::size == __TL_unique(Nodes)::size, "duplicated nodes");
 
     using SortedNodes = typename NodesSort<NODES...>::sortedNodes;
-    static_assert(NodesSort<NODES...>::allDecedentsOfRoot::size == (SortedNodes::size - 1), "unreachable nodes exists");
+    static_assert(NodesSort<NODES...>::allDecedentsOfRoot::size == (SortedNodes::size - 1), "unreachable nodes exist");
 };
 
 #define __graph(...) Graph<__VA_ARGS__>

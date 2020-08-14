@@ -34,13 +34,15 @@ private:
     using EmptyMaps = __TL_Map(EmptyDecedentsNode, __TL_except(nodes, AllNodes));
 
 public:
+    using Map = typename NonEmptyMaps::template appendList<EmptyMaps>;
+
     template<typename L, typename R>
     struct LessThan {
         constexpr static bool value = \
             __TL_elem(typename L::first, typename R::second);
     };
 
-    using SortedNodes = __TL_Sort(LessThan, typename NonEmptyMaps::template appendList<EmptyMaps>);
+    using SortedNodes = __TL_Sort(LessThan, Map);
 };
 
 #define __graph(...) Graph<__VA_ARGS__>

@@ -19,13 +19,14 @@ TYPE_LIST_NS_BEGIN
 namespace detail {
     __TL_lambda(Sort,
             FiniteListConcept IN,
-            __TL_lambda(LT, typename, typename))
-    __return_t(__TL_list());
+            __TL_lambda(LT, typename, typename),
+            typename = void)
+    __return_t(IN);
 
     __TL_lambda(Sort,
             NonEmptyFiniteListConcept IN,
             __TL_lambda(LT, typename, typename))
-    <IN, LT> {
+    <IN, LT, std::enable_if_t<(IN::size > 1)>> {
         using result  = __TL_Partition(__TL_bind(LT, _1_, typename IN::Head), typename IN::Tail);
         using lesser  = __TL_apply_t(Sort, List<typename result::satisfied>, LT);
         using greater = __TL_apply_t(Sort, List<typename result::rest>, LT);

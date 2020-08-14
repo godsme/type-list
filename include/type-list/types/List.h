@@ -33,12 +33,19 @@ namespace detail {
     struct __ValueListWrapper<LIST> {
         struct type : ListSignature, TypeListSignature {
             constexpr static size_t size = LIST::size;
+            using origin = LIST;
 
             using Head = Value<LIST::Head>;
             using Tail = typename __ValueListWrapper<typename LIST::Tail>::type;
 
             template<typename T>
             using prependType = ComposedList<T, typename __ValueListWrapper<LIST>::type>;
+
+            template<typename T>
+            using appendType = typename __ValueListWrapper<typename LIST::Tail::template appendType<T>>::type;
+
+            template<typename T>
+            using appendList = typename __ValueListWrapper<typename LIST::Tail::template appendList<typename T::origin>>::type;
 
             template<template<auto ...> typename RESULT>
             auto exportTo() -> decltype(LIST::template exportTo<RESULT>());

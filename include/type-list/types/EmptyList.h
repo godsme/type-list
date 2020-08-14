@@ -9,6 +9,7 @@
 #include <type-list/types/TypeList.h>
 #include <type-list/types/ValueList.h>
 #include <type-list/concept/NonEmptyListConcept.h>
+#include <type-list/concept/ExportableListConcept.h>
 #include <type-list/types/Lambda.h>
 #include <type-list/types/Value.h>
 
@@ -49,6 +50,7 @@ struct EmptyList
         , detail::ValueListSignature
         , detail::AppendableSignature {
     constexpr static size_t size = 0;
+    using origin = ValueList<>;
 
     template <template <auto ...> typename RESULT>
     static auto exportTo() -> RESULT<>;

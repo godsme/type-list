@@ -4,9 +4,11 @@
 #include <dsl/Link.h>
 #include <dsl/Node.h>
 #include <dsl/Graph.h>
+#include <type-list/types/Map.h>
 #include <type_traits>
 #include <catch.hpp>
 
+using namespace TYPE_LIST_NS;
 
 struct Node_1 {};
 struct Node_2 {};
@@ -42,7 +44,7 @@ using graph = __graph(
 
     template<typename T> struct S;
 
-    S<graph::SortedNodes> s;
+    S<MapFind_t<Node_1, graph::Map, __TL_list()>> s;
 namespace {
 //    TEST_CASE("nodes") {
 //        REQUIRE(std::is_same_v<node5::Decendents, __TL_list(Node_1, Node_2, Node_3, Node_4)>);

@@ -12,6 +12,7 @@
 #include <type-list/algo/Except.h>
 #include <type-list/algo/Sort.h>
 #include <type-list/types/Map.h>
+#include <type-list/algo/Reserve.h>
 
 template<typename ... NODES>
 struct NodesSort {
@@ -56,7 +57,7 @@ private:
             __TL_elem(typename L::first, typename R::second);
     };
 
-    using sortResult = __TL_Sort(IsDecedentOf, AllDecedentsMap);
+    using sortResult = __TL_reverse(__TL_Sort(IsDecedentOf, AllDecedentsMap));
 
     template<typename T>
     struct ToDirectDecedents {
@@ -72,6 +73,7 @@ private:
 public:
     using result = __TL_Map(ToDirectDecedents, sortResult);
     using sortedNodes = __TL_Map(ToNode, sortResult);
+    using allDecedentsOfRoot = typename sortResult::Head::second;
 };
 
 #endif //TYPE_LIST_NODESSORT_H

@@ -44,7 +44,6 @@ using node5 = Node<Node_4,
     template<typename T> struct S;
 
     using type = Graph<node3, node5, node1>;
-    S<Graph<node3, node5, node1>::SortedNodes> s;
 
 namespace {
 //    TEST_CASE("nodes") {

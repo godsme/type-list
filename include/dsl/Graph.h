@@ -26,25 +26,21 @@ private:
     using NonEmptyMaps = __TL_Map(NodeDecedents, __TL_list(NODES...));
 
 private:
-    using NoDescents = __TL_except(nodes, AllNodes);
-
     template<typename T>
-    struct NodeEmptyDecedents {
+    struct EmptyDecedentsNode {
         using type = __TL_pair(T, TYPE_LIST_NS::TypeList<>);
     };
 
-    using EmptyMaps = __TL_Map(NodeEmptyDecedents, NoDescents);
+    using EmptyMaps = __TL_Map(EmptyDecedentsNode, __TL_except(nodes, AllNodes));
 
 public:
-    using Maps = typename NonEmptyMaps::template appendList<EmptyMaps>;
-
     template<typename L, typename R>
     struct LessThan {
         constexpr static bool value = \
             __TL_elem(typename L::first, typename R::second);
     };
 
-    using SortedNodes = __TL_Sort(LessThan, Maps);
+    using SortedNodes = __TL_Sort(LessThan, typename NonEmptyMaps::template appendList<EmptyMaps>);
 };
 
 #endif //TYPE_LIST_GRAPH_H

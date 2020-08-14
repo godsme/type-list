@@ -17,7 +17,7 @@ template <typename ... NODES>
 struct Graph {
     using nodes = __TL_list(typename NODES::NodeType...);
     using AllNodes = __TL_unique(__TL_concat(__TL_list(nodes, typename NODES::Decendents...)));
-    using SortedNodes = typename NodesSort<NODES...>::result;
+    using SortedNodes = typename NodesSort<NODES...>::sortedNodes;
 };
 
 #define __graph(...) Graph<__VA_ARGS__>

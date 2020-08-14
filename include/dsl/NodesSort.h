@@ -64,8 +64,14 @@ private:
         using type = __TL_pair(typename T::first, decedents);
     };
 
+    template<typename T>
+    struct ToNode {
+        using type = typename T::first;
+    };
+
 public:
     using result = __TL_Map(ToDirectDecedents, sortResult);
+    using sortedNodes = __TL_Map(ToNode, sortResult);
 };
 
 #endif //TYPE_LIST_NODESSORT_H

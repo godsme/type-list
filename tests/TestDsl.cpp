@@ -32,7 +32,7 @@ struct Pred_1{};
 using graph = __graph(
     __node( Node_1
           , __port(Port_1) -> __exclusive(Pred_1, Node_2, Node_3)
-          , __port(Port_2) -> __exclusive(Pred_1, Node_4, Node_2)
+          , __port(Port_2) -> __fork(Node_4, Node_2)
           , __port(Port_3) -> __maybe(Pred_1, Node_5)
           , __port(Port_4) -> Node_6),
     __node( Node_3
@@ -44,7 +44,7 @@ using graph = __graph(
 
     template<typename T> struct S;
 
-    //S<MapFind_t<Node_1, graph::ThisMap, __TL_list()>> s;
+    //S<graph::SortedNodes> s;
 namespace {
     TEST_CASE("nodes") {
         REQUIRE(std::is_same_v<__TL_list(Node_6, Node_7, Node_4, Node_5, Node_3, Node_2, Node_1), graph::SortedNodes>);

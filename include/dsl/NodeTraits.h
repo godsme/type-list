@@ -7,6 +7,7 @@
 
 #include <type-list/algo/Unique.h>
 #include <type-list/types/List.h>
+#include <type-list/algo/Concat.h>
 
 template<typename NODE>
 struct NodeTrait {
@@ -36,7 +37,18 @@ struct NodeTrait<Exclusive<COND, NODE_1, NODE_2>> {
     using NodeList = typename Exclusive<COND, NODE_1, NODE_2>::NodeList;
 };
 
-#define __maybe(...) Maybe<__VA_ARGS__>
+template<typename ... NODES>
+struct Fork {
+    using NodeList = __TL_unique(__TL_concat(__TL_list(typename NodeTrait<NODES>::NodeList...)));
+};
+
+template<typename ... NODES>
+struct NodeTrait<Fork<NODES...>> {
+    using NodeList = typename Fork<NODES...>::NodeList;
+};
+
+#define __maybe(...)     Maybe<__VA_ARGS__>
 #define __exclusive(...) Exclusive<__VA_ARGS__>
+#define __fork(...)      Fork<__VA_ARGS__>
 
 #endif //TYPE_LIST_NODETRAITS_H

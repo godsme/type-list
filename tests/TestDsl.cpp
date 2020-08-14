@@ -31,9 +31,9 @@ struct Pred_1{};
 
 using graph = __graph(
     __node( Node_1
-          , __port(Port_1) -> Exclusive<Pred_1, Node_2, Node_3>
-          , __port(Port_2) -> Exclusive<Pred_1, Node_4, Node_2>
-          , __port(Port_3) -> Maybe<Pred_1, Node_5>
+          , __port(Port_1) -> __exclusive(Pred_1, Node_2, Node_3)
+          , __port(Port_2) -> __exclusive(Pred_1, Node_4, Node_2)
+          , __port(Port_3) -> __maybe(Pred_1, Node_5)
           , __port(Port_4) -> Node_6),
     __node( Node_3
           , __port(Port_5) -> __maybe(Pred_1, Node_4)

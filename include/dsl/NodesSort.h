@@ -37,18 +37,18 @@ private:
     using ThisMap = typename NonEmptyMaps::template appendList<EmptyMaps>;
 
     template<typename TL, typename T>
-    struct Result {
+    struct AllDecedents {
         using decedents = __TL_map_find(T, ThisMap, __TL_list());
-        using type = typename TL::template appendType<T>::template appendList<__TL_FoldL(decedents, Result, __TL_list())>;
+        using type = typename TL::template appendType<T>::template appendList<__TL_FoldL(decedents, AllDecedents, __TL_list())>;
     };
 
     template<typename E>
-    struct Mapper {
-        using result = __TL_unique(typename E::second::template appendList<__TL_FoldL(typename E::second, Result, __TL_list())>);
+    struct ToAllDecedents {
+        using result = __TL_unique(typename E::second::template appendList<__TL_FoldL(typename E::second, AllDecedents, __TL_list())>);
         using type = __TL_pair(typename E::first, result);
     };
 
-    using mapResult = __TL_Map(Mapper, ThisMap);
+    using mapResult = __TL_Map(ToAllDecedents, ThisMap);
 
     template<typename L, typename R>
     struct LessThan {
@@ -59,13 +59,13 @@ private:
     using sortResult = __TL_Sort(LessThan, mapResult);
 
     template<typename T>
-    struct MapBack {
+    struct ToDirectDecedents {
         using decedents = __TL_map_find(typename T::first, ThisMap, __TL_list());
         using type = __TL_pair(typename T::first, decedents);
     };
 
 public:
-    using result = __TL_Map(MapBack, sortResult);
+    using result = __TL_Map(ToDirectDecedents, sortResult);
 };
 
 #endif //TYPE_LIST_NODESSORT_H
